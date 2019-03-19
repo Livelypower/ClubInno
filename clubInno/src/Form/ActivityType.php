@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -24,13 +25,16 @@ class ActivityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class)
-            ->add('description', TextareaType::class)
-            ->add('maxAmountStudents', NumberType::class)
-            ->add('registrationDeadline', DateType::class, [
-                'format' => 'dd MMM yyyy',
-                'data' => (new \DateTime('today'))
-            ])
-            ->add('save', SubmitType::class, ['label' => 'Save']);
+            ->add('name', TextType::class, ['label' => 'Nom'])
+            ->add('description', TextareaType::class, ['label' => 'Description'])
+            ->add('maxAmountStudents', NumberType::class, ['label' => 'Max étudiants'])
+            ->add('registrationDeadline', DateType::class,
+                [
+                    'label' => 'Date limite d\'inscription',
+                    'widget' => 'single_text',
+                    'html5' => false,
+                    'format' => 'mm/dd/yyyy'
+                ])
+            ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
     }
 }
