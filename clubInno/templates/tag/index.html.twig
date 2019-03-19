@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All Tags{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <a href="{{ path("tag_new") }}" class="btn green accent-4">Nouveau Tag</a>
+
+    <div class="row">
+        <div class="col s12">
+            <h4>Toutes les tags</h4>
+            <table>
+                <thead>
+                <th>Name</th>
+                <th>Action</th>
+                </thead>
+                <tbody>
+                {% for tag in tags %}
+                    <tr>
+                        <td>
+                            {{ tag.name }}
+                        </td>
+                        <td>
+                            <a href="{{ path('tag_delete', {'id': tag.id}) }}"><i class="material-icons red-text text-accent-4">delete</i></a>
+                            <a href="{{ path('tag_edit', {'id': tag.id}) }}"><i class="material-icons">edit</i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
+{% endblock %}
