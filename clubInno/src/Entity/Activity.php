@@ -47,9 +47,16 @@ class Activity
      */
     private $applications;
 
+    /**
+     * Many Activities have Many Tags.
+     * @ORM\ManyToMany(targetEntity="Tag", inversedBy="activities")
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->applications = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): ?int
