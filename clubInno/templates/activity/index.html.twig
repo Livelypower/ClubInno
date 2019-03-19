@@ -4,7 +4,37 @@
 
 {% block body %}
     {{ parent() }}
-    <a href="{{ path("activity_new") }}" class="btn">New Activity</a>
+    <a href="{{ path("activity_new") }}" class="btn">Nouvelle Activité</a>
+
+    <div class="row">
+        <div class="col s12">
+            <h4>Toutes les activités</h4>
+
+            {% for activity in activities %}
+                <div class="col s12 m4">
+                    <div class="card large blue-grey darken-1">
+                        <div class="card-image">
+                            <img src="http://lorempixel.com/800/400/technics" alt="">
+                        </div>
+                        <div class="card-content white-text">
+                            <span class="card-title">{{ activity.name }}</span>
+                            <div class="row"></div>
+                            <p><b>Inscriptions:</b> 5/{{ activity.maxAmountStudents }}</p>
+                            <br/>
+                            <p>
+                                {{ activity.description }}
+                            </p>
+
+                        </div>
+                        <div class="card-action">
+                            <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
+                        </div>
+                    </div>
+                </div>
+
+            {% endfor %}
+        </div>
+    </div>
 
 {% endblock %}
 

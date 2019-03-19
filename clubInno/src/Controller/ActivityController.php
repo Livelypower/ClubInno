@@ -15,8 +15,20 @@ class ActivityController extends AbstractController
      */
     public function index()
     {
+        $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+
         return $this->render('activity/index.html.twig', [
             'controller_name' => 'ActivityController',
+            'activities' => $activities
+        ]);
+    }
+
+    /**
+     * @Route("/activity/{id}", requirements={"id": "\d+"}, name="activity_show")
+     */
+    public function showActivity(Activity $activity){
+        return $this->render('activity/show.html.twig', [
+            'activity' => $activity
         ]);
     }
 
@@ -30,6 +42,8 @@ class ActivityController extends AbstractController
         $form = $this->createForm(ActivityType::class, $activity);
 
         $form->handleRequest($request);
+
+
 
         if ($form->isSubmitted() && $form->isValid()) {
             $activity = $form->getData();
