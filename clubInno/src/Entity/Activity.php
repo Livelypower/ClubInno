@@ -41,6 +41,17 @@ class Activity
      */
     private $active;
 
+    /**
+     * Many Applications have Many Activities.
+     * @ManyToMany(targetEntity="Application", inversedBy="activities")
+     */
+    private $applications;
+
+    public function __construct()
+    {
+        $this->applications = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
