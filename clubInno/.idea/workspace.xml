@@ -17,13 +17,43 @@
       <file leaf-file-name=".gitignore" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/.gitignore">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="306">
               <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="18" selection-end-column="0" />
+=======
+            <state relative-caret-position="-438">
+              <caret line="8" column="26" lean-forward="false" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+              <folding>
+                <element signature="e#34#99#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ActivityType.php" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/Form/ActivityType.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="465">
+              <caret line="34" column="5" lean-forward="false" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
+              <folding>
+                <element signature="e#112#136#0#PHP" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="new.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/activity/new.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="147">
+              <caret line="7" column="29" lean-forward="false" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
               <folding />
             </state>
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="User.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Entity/User.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -69,6 +99,13 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
               <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+      <file leaf-file-name="base.html.twig" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/templates/base.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="168">
+              <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
               <folding>
                 <marker date="1552988572858" expanded="true" signature="648:966" ph="CREATE TABLE... activity" />
                 <marker date="1552988572858" expanded="true" signature="1282:1301" ph="DROP TABLE a... " />
@@ -77,6 +114,7 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="Version20190319102111.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/Migrations/Version20190319102111.php">
           <provider selected="true" editor-type-id="text-editor">
@@ -128,6 +166,14 @@
               <folding>
                 <marker date="1552990727478" expanded="true" signature="648:966" ph="CREATE TABLE... activity" />
               </folding>
+=======
+      <file leaf-file-name="index.html.twig" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/templates/activity/index.html.twig">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="126">
+              <caret line="6" column="65" lean-forward="false" selection-start-line="6" selection-start-column="65" selection-end-line="6" selection-end-column="65" />
+              <folding />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
             </state>
           </provider>
         </entry>
@@ -138,10 +184,16 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/.env.local" />
-        <option value="$PROJECT_DIR$/templates/activity/index.html.twig" />
         <option value="$PROJECT_DIR$/templates/base.html.twig" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/src/Entity/Application.php" />
         <option value="$PROJECT_DIR$/src/Entity/Activity.php" />
+=======
+        <option value="$PROJECT_DIR$/templates/activity/new.html.twig" />
+        <option value="$PROJECT_DIR$/src/Form/ActivityType.php" />
+        <option value="$PROJECT_DIR$/src/Controller/ActivityController.php" />
+        <option value="$PROJECT_DIR$/templates/activity/index.html.twig" />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
       </list>
     </option>
   </component>
@@ -294,6 +346,7 @@
               <item name="clubInno" type="b2602c69:ProjectViewProjectNode" />
               <item name="clubInno" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="src" type="2a2b976b:PhpTreeStructureProvider$1" />
+<<<<<<< HEAD
             </path>
             <path>
               <item name="clubInno" type="b2602c69:ProjectViewProjectNode" />
@@ -329,6 +382,8 @@
               <item name="clubInno" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="templates" type="2a2b976b:PhpTreeStructureProvider$1" />
               <item name="activity" type="2a2b976b:PhpTreeStructureProvider$1" />
+=======
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
             </path>
           </expand>
           <select />
@@ -344,6 +399,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\downloads\3 ITF\Semester2\STAGE\Project\ClubInno\clubInno\src\Form" />
+      <recent name="D:\downloads\3 ITF\Semester2\STAGE\Project\ClubInno\clubInno\templates\activity" />
       <recent name="D:\downloads\3 ITF\Semester2\STAGE\Project\ClubInno\clubInno\public" />
       <recent name="D:\downloads\3 ITF\Semester2\STAGE\Project\ClubInno\clubInno\public\js" />
     </key>
@@ -373,13 +430,21 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1552985115388</updated>
+<<<<<<< HEAD
       <workItem from="1552985116771" duration="2884000" />
       <workItem from="1552989523199" duration="3295000" />
+=======
+      <workItem from="1552985116771" duration="4128000" />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< HEAD
     <option name="totallyTimeSpent" value="6179000" />
+=======
+    <option name="totallyTimeSpent" value="4128000" />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
@@ -412,7 +477,9 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
-    <breakpoint-manager />
+    <breakpoint-manager>
+      <option name="time" value="1" />
+    </breakpoint-manager>
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
@@ -457,6 +524,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/Controller/ActivityController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -465,6 +533,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
     <entry file="file://$PROJECT_DIR$/public/css/index.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -480,18 +550,48 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/activity/index.html.twig">
+    <entry file="file://$PROJECT_DIR$/src/Controller/ActivityController.php">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-438">
+          <caret line="8" column="26" lean-forward="false" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+          <folding>
+            <element signature="e#34#99#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Form/ActivityType.php">
+      <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="17">
           <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+=======
+        <state relative-caret-position="465">
+          <caret line="34" column="5" lean-forward="false" selection-start-line="34" selection-start-column="5" selection-end-line="34" selection-end-column="5" />
+          <folding>
+            <element signature="e#112#136#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/activity/new.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="7" column="29" lean-forward="false" selection-start-line="7" selection-start-column="29" selection-end-line="7" selection-end-column="29" />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/base.html.twig">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="306">
           <caret line="18" column="68" lean-forward="false" selection-start-line="18" selection-start-column="68" selection-end-line="18" selection-end-column="68" />
+=======
+        <state relative-caret-position="168">
+          <caret line="18" column="0" lean-forward="false" selection-start-line="18" selection-start-column="0" selection-end-line="19" selection-end-column="0" />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
           <folding>
             <element signature="e#1029#2304#0#Twig" expanded="false" />
             <element signature="e#2620#2753#0#Twig" expanded="false" />
@@ -499,6 +599,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
@@ -593,6 +694,12 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="51" column="81" lean-forward="false" selection-start-line="51" selection-start-column="81" selection-end-line="51" selection-end-column="81" />
+=======
+    <entry file="file://$PROJECT_DIR$/templates/activity/index.html.twig">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="6" column="65" lean-forward="false" selection-start-line="6" selection-start-column="65" selection-end-line="6" selection-end-column="65" />
+>>>>>>> 10ff42d2e10a4c1c73f44cb005e67a684ea5d5b3
           <folding />
         </state>
       </provider>

@@ -2,4 +2,9 @@
 
 {% block title %}All Activities{% endblock %}
 
+{% block body %}
+    {{ parent() }}
+    <a href="{{ path("activity_new") }}" class="btn">New Activity</a>
+
+{% endblock %}
 
