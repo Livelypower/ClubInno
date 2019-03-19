@@ -123,4 +123,9 @@ class Activity
 
         return $this;
     }
+
+    public function getTags()
+    {
+        return $this->tags;
+    }
 }

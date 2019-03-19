@@ -18,17 +18,20 @@
                     <img src="http://lorempixel.com/800/400/technics" alt="">
                 </div>
                 <div class="card-content white-text">
-                    <div class="chip">
-                        Electronique
+                    <div class="row">
+
+                        <div class="col s12">
+                            {% for tag in activity.tags %}
+                                <div class="chip">
+                                    {{ tag.name }}
+                                </div>
+                            {% endfor %}
+
+                            <button class="btn green lighten-2 right" id="add">Ajouter au basket</button>
+                        </div>
                     </div>
-                    <div class="chip">
-                        Games
-                    </div>
-                    <div class="chip">
-                        Robot
-                    </div>
-                    <button class="btn green lighten-2 right" id="add">Ajouter au basket</button>
-                    <br/>
+
+                    <p>Date limite d'inscription: {{ activity.registrationDeadline.format('d-m-Y') }}</p>
                     <h5>Description: </h5>
                     <p>
                         {{ activity.description }}
