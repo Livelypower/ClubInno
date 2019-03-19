@@ -43,7 +43,7 @@ class Activity
 
     /**
      * Many Applications have Many Activities.
-     * @ManyToMany(targetEntity="Application", inversedBy="activities")
+     * @ORM\ManyToMany(targetEntity="Application", inversedBy="activities")
      */
     private $applications;
 
