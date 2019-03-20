@@ -60,11 +60,18 @@ class Activity
      */
     private $mainImage;
 
+    /*
+     * One activity has many blogPosts. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="BlogPost", mappedBy="activity")
+     */
+    private $blogPosts;
+
 
     public function __construct()
     {
         $this->applications = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->blogPosts = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): ?int

@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="row">
+        <div class="col s12">
+            <h3>{{ post.title }}</h3>
+            <h5>{{ post.user.firstname }} {{ post.user.lastname }}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <div class="card blue-grey darken-1">
+                <div class="card-image">
+                    <img src="http://lorempixel.com/800/400/technics" alt="">
+                </div>
+                <div class="card-content white-text">
+                    <p>
+                        {{ post.body | raw }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col s12">
+            <a href="{{ path('blog') }}" class="btn red accent-2">Retourner</a>
+        </div>
+    </div>
+
+
+{% endblock %}

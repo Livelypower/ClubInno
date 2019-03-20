@@ -43,6 +43,17 @@ class User implements UserInterface
      */
     private $lastName;
 
+    /**
+     * One user has many blogPosts. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="BlogPost", mappedBy="user")
+     */
+    private $blogPosts;
+
+    public function __construct()
+    {
+        $this->blogPosts = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
