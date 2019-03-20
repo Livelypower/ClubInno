@@ -18,7 +18,7 @@
                 {% for post in blogPosts %}
                     <tr>
                         <td>
-                            {{ post.title }} by {{ post.user.firstname }} {{ post.user.lastname }}
+                            <a href="{{ path('blog_show', {'id': post.id}) }}">{{ post.title }} by {{ post.user.firstname }} {{ post.user.lastname }}</a>
                         </td>
                     </tr>
                 {% endfor %}

@@ -1,0 +1,14 @@
+Hey! There's a new blog post!
+
+Dear admin, a new blogpost titled {{ post.title }} was just added by {{ post.user.firstname }} {{ post.user.lastname }}!
+
+The post was made for activity:
+{{ post.activity.name }}
+
+This is the post content:
+{{ post.body }}
+
+To view the post: click the following link:
+{{ url('blog_show', {'id': post.id}) }}
+
+Cheers!
