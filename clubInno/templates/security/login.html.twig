@@ -1,0 +1,60 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="row">
+        <div class="col m3"></div>
+        <div class="col s12 m6">
+            <div class="card blue-grey darken-1">
+                <div class="card-content">
+                    <span class="card-title white-text">Log in</span>
+                    <form method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                        {% endif %}
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <label for="inputEmail">Email</label>
+                                <input type="email" value="{{ last_username }}" name="email" id="inputEmail"
+                                       class="validate white-text"
+                                       placeholder="Email" required autofocus>
+                            </div>
+                            <div class="input-field col s12">
+                                <label for="inputPassword">Password</label>
+                                <input type="password" name="password" id="inputPassword" class="validate white-text"
+                                       placeholder="Password" required>
+                            </div>
+                            <input type="hidden" name="_csrf_token"
+                                   value="{{ csrf_token('authenticate') }}"
+                            >
+                        </div>
+                        <button class="btn grey lighten-2 black-text text-lighten-2" type="submit">
+                            Log in
+                        </button>
+                    </form>
+                </div>
+                <div class="card-action">
+                    <a href="#">Enregistrez un compte</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    {#
+        Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+        See https://symfony.com/doc/current/security/remember_me.html
+
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox" name="_remember_me"> Remember me
+            </label>
+        </div>
+    #}
+
+{% endblock %}
+
+{% block javascripts %}
+{% endblock %}
