@@ -14,7 +14,11 @@
                 <div class="col s12 m4">
                     <div class="card large blue-grey darken-1">
                         <div class="card-image">
-                            <img src="http://lorempixel.com/800/400/technics" alt="">
+                            {% if activity.mainImage is null %}
+                                <img src="http://lorempixel.com/800/400/technics" alt="">
+                            {% else %}
+                                <img src="{{ asset('uploads/' ~ activity.mainImage) }}" alt="">
+                            {% endif %}
                         </div>
                         <div class="card-content white-text">
                             <span class="card-title">{{ activity.name }}</span>
@@ -28,6 +32,7 @@
                         </div>
                         <div class="card-action">
                             <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
+                            <a href="{{ path("activity_edit", {'id': activity.id})}}">edit</a>
                         </div>
                     </div>
                 </div>

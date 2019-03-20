@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
@@ -52,6 +53,13 @@ class Activity
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="activities")
      */
     private $tags;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Assert\Image()
+     */
+    private $mainImage;
+
 
     public function __construct()
     {
@@ -128,4 +136,18 @@ class Activity
     {
         return $this->tags;
     }
+
+    public function getMainImage(): ?string
+    {
+        return $this->mainImage;
+    }
+
+    public function setMainImage(?string $mainImage): self
+    {
+        $this->mainImage = $mainImage;
+
+        return $this;
+    }
+
+
 }

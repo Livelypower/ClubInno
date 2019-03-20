@@ -15,10 +15,15 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Tag;
+use App\Entity\Image;
+use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\HttpFoundation\File\File;
+
 
 
 class ActivityType extends AbstractType
@@ -36,7 +41,8 @@ class ActivityType extends AbstractType
                 'choice_label' => 'name',
 
                 // used to render a select box, check boxes or radios
-                'multiple' => true
+                'multiple' => true,
+                'required' => false
                 // 'expanded' => true,
             ])
             ->add('maxAmountStudents', NumberType::class, ['label' => 'Max étudiants'])
@@ -47,6 +53,26 @@ class ActivityType extends AbstractType
                     'html5' => false,
                     'format' => 'mm/dd/yyyy'
                 ])
+            ->add('mainImage', FileType::class, [
+                'mapped' => true,
+                'required' => false,
+                'label' => 'Image'
+            ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
+
+        $builder->get('mainImage')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($filename) {
+                    if($filename == null){
+                        return null;
+                    }
+                    $file = new File($filename);
+                    return $file;
+                },
+                function ($file) {
+                   return;
+                }
+            ))
+        ;
     }
 }
