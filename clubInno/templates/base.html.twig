@@ -1,74 +1,84 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}
-            <link rel="stylesheet" type="text/css" href="{{ asset('css/index.css') }}"/>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        {% endblock %}
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" type="text/css" href="{{ asset('css/index.css') }}"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% endblock %}
+</head>
 
 
-    <body>
-        <header>
-            {% block nav %}
-                <section id="navbar" style="padding-bottom:10px">
-                    <nav>
-                        <div class="nav-wrapper teal lighten-3">
-                            <a href="#" class="brand-logo">Club Inno</a>
-                        </div>
-                    </nav>
-                </section>
+<body>
+<header>
+    {% block nav %}
+        <section id="navbar" style="padding-bottom:10px">
+            <nav>
+                <div class="nav-wrapper teal lighten-3">
+                    <a href="{{ path('home') }}" class="brand-logo">Club Inno</a>
+                    <ul class="right hide-on-med-and-down">
+                        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                            <li><a href="{{ path('app_logout') }}" class="btn grey lighten-2 black-text text-lighten-2">Logout</a>
+                            </li>
+                        {% else %}
+                            <li><a href="{{ path('app_login') }}" class="btn grey lighten-2 black-text text-lighten-2">Login</a>
+                            </li>
+                        {% endif %}
 
-            {% endblock %}
-        </header>
 
-        <main>
-            <section>
-                <div class="container">
-                    {% block body %}{% endblock %}
+                    </ul>
                 </div>
-            </section>
-        </main>
+            </nav>
+        </section>
+
+    {% endblock %}
+</header>
+
+<main>
+    <section>
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
+    </section>
+</main>
 
 
-
-        {% block footer %}
-            <footer class="page-footer teal lighten-3">
-                <div class="container">
-                    <div class="row">
-                        <div class="col l6 s12">
-                            <h5 class="white-text">Footer Content</h5>
-                            <p class="grey-text text-lighten-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa
-                                voluptate unde obcaecati,</p>
-                        </div>
-                        <div class="col l4 offset-l2 s12">
-                            <h5 class="white-text">Liens</h5>
-                            <ul>
-                                <li><a class="grey-text text-lighten-3" href="#!">Lien 1</a></li>
-                                <li><a class="grey-text text-lighten-3" href="#!">Lien 2</a></li>
-                            </ul>
-                        </div>
-                    </div>
+{% block footer %}
+    <footer class="page-footer teal lighten-3">
+        <div class="container">
+            <div class="row">
+                <div class="col l6 s12">
+                    <h5 class="white-text">Footer Content</h5>
+                    <p class="grey-text text-lighten-4">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ipsa
+                        voluptate unde obcaecati,</p>
                 </div>
-                <div class="footer-copyright">
-                    <div class="container">
-                        © 2019 Club Innovative
-                        <a class="grey-text text-lighten-4 right" href="#!">Lien</a>
-                    </div>
+                <div class="col l4 offset-l2 s12">
+                    <h5 class="white-text">Liens</h5>
+                    <ul>
+                        <li><a class="grey-text text-lighten-3" href="#!">Lien 1</a></li>
+                        <li><a class="grey-text text-lighten-3" href="#!">Lien 2</a></li>
+                    </ul>
                 </div>
-            </footer>
-        {% endblock %}
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container">
+                © 2019 Club Innovative
+                <a class="grey-text text-lighten-4 right" href="#!">Lien</a>
+            </div>
+        </div>
+    </footer>
+{% endblock %}
 
-        <script src="http://code.jquery.com/jquery-3.3.1.min.js"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-                crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        {% block javascripts %}
+<script src="http://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+{% block javascripts %}
 
-        {% endblock %}
-    </body>
+{% endblock %}
+</body>
 </html>
