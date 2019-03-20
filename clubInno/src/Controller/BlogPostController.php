@@ -26,7 +26,7 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/blog/new", name="blog_new")
      */
-    public function newBlogPost(Request $request)
+    public function newBlogPost(Request $request, \Swift_Mailer $mailer)
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $user = $this->getUser();
@@ -44,6 +44,17 @@ class BlogPostController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($blogPost);
             $em->flush();
+
+            $message = (new \Swift_Message('New Blog Post!'))
+                ->setFrom('kasumiiwamoto69@gmail.com')
+                ->setTo('celpynenborg@gmail.com')
+                ->setBody(
+                    $this->renderView('emails/new_blog_post.html.twig', [
+                        'post' => $blogPost
+                    ])
+                );
+
+            $mailer->send($message);
 
             return $this->redirectToRoute('blog');
         }
