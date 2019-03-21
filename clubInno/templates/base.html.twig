@@ -21,10 +21,10 @@
                     <a href="{{ path('home') }}" class="brand-logo">Club Inno</a>
                     <ul class="right hide-on-med-and-down">
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            <li><a href="{{ path('app_logout') }}" class="btn grey lighten-2 black-text text-lighten-2">Logout</a>
+                            <li><a href="{{ path('app_logout') }}" class="btn grey lighten-2 black-text text-lighten-2">Déconnexion</a>
                             </li>
                         {% else %}
-                            <li><a href="{{ path('app_login') }}" class="btn grey lighten-2 black-text text-lighten-2">Login</a>
+                            <li><a href="{{ path('app_login') }}" class="btn grey lighten-2 black-text text-lighten-2">Connexion</a>
                             </li>
                         {% endif %}
 

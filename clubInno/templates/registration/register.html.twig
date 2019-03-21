@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enregistrez{% endblock %}
+
+{% block body %}
+
+
+    {{ parent() }}
+    <div class="row">
+        <div class="col m3"></div>
+            <div class="col s12 m6">
+                <div class="card blue-grey darken-1">
+                    <div class="card-content">
+                        <span class="card-title white-text">Enregistrez</span>
+                        {{ form_start(registrationForm, {'attr': {'class': 'white-text'}}) }}
+                        {{ form_row(registrationForm.email, {'attr': {'class': 'white-text'}}) }}
+                        {{ form_row(registrationForm.firstname, {'attr': {'class': 'white-text'}}) }}
+                        {{ form_row(registrationForm.lastname, {'attr': {'class': 'white-text'}}) }}
+                        {{ form_row(registrationForm.plainPassword, {'attr': {'class': 'white-text'}}) }}
+
+                        <button class="btn grey lighten-2 black-text text-lighten-2">Enregistrez</button>
+                        {{ form_end(registrationForm) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
