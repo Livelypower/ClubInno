@@ -45,6 +45,26 @@
                     <p>
                         {{ activity.description }}
                     </p>
+
+                    {% if imgs is not empty %}
+                        <h6>Des images</h6>
+                        <div class="carousel carousel-slider">
+                            {% for file in imgs %}
+                                <a href="{{ asset('uploads/' ~ file) }}" class="carousel-item"><img src="{{ asset('uploads/' ~ file) }}"></a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% if files is not empty %}
+                        <h6>Des fichiers ci-joint:</h6>
+                        <div>
+                            <ul>
+                                {% for file in files %}
+                                    <li><a href="{{ asset('uploads/' ~ file) }}" class="orange-text text-lighten-2" download>{{ file }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
             </div>
             </div>
         </div>
@@ -66,10 +86,15 @@
             </div>
         </div>
 
+
         <div class="col s12">
             <a href="{{ path('activity') }}" class="btn red accent-2">Retourner</a>
         </div>
     </div>
 
 
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
 {% endblock %}

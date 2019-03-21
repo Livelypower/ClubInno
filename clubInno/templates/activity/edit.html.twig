@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Activity{% endblock %}
+{% block title %}Modifier d'une activité{% endblock %}
 
 {% block body %}
     {{ parent() }}
@@ -9,7 +9,7 @@
 
             <div class="card blue-grey darken-1">
                 <div class="card-content">
-                    <span class="card-title white-text">Création d'une nouvelle activité</span>
+                    <span class="card-title white-text">Modifier d'une activité</span>
                     {{ form_start(form) }}
                     {{ form_row(form.name, {'attr': {'class': 'white-text'}}) }}
                     {{ form_row(form.description, {'attr': {'class': 'materialize-textarea white-text'}}) }}
@@ -17,6 +17,7 @@
                     {{ form_row(form.maxAmountStudents,{'attr': {'class': 'white-text'}}) }}
                     {{ form_row(form.registrationDeadline, {'attr': {'class': 'datepicker white-text'}}) }}
                     {{ form_row(form.mainImage) }}
+                    {{ form_row(form.files) }}
                     <div class="row">
                         <div class="col s12">
                             {{ form_widget(form.save, {'attr': {'class': 'btn green accent-4'}}) }}

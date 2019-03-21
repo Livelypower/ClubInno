@@ -32,7 +32,10 @@
                         </div>
                         <div class="card-action">
                             <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
-                            <a href="{{ path("activity_edit", {'id': activity.id})}}">edit</a>
+                            <div class="right hide-on-med-and-down">
+                                <a href="{{ path("activity_edit", {'id': activity.id})}}">edit</a>
+                                <a href="{{ path("activity_delete", {'id': activity.id})}}">delete</a>
+                            </div>
                         </div>
                     </div>
                 </div>

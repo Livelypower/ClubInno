@@ -58,6 +58,12 @@ class ActivityType extends AbstractType
                 'required' => false,
                 'label' => 'Image'
             ])
+            ->add('files', FileType::class, [
+                'mapped' => true,
+                'required' => false,
+                'multiple' => true,
+                'label' => 'Files'
+            ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
 
         $builder->get('mainImage')
@@ -71,6 +77,24 @@ class ActivityType extends AbstractType
                 },
                 function ($file) {
                    return;
+                }
+            ))
+        ;
+
+        $builder->get('files')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($filenames) {
+                    $files = array();
+                    if($filenames == null || empty($filenames)){
+                        return null;
+                    }
+                    foreach ($filenames as $filename){
+                        array_push($files, new File($filename));
+                    }
+                    return $files;
+                },
+                function ($files) {
+                    return;
                 }
             ))
         ;
