@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Activity;
 use App\Form\ActivityType;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\Session\Session;
+
 
 
 class ActivityController extends AbstractController
@@ -180,6 +182,22 @@ class ActivityController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $em->remove($activity);
         $em->flush();
+
+        return $this->redirectToRoute('activity');
+    }
+
+    /**
+     * @Route("/activity/addBasket/{id}", requirements={"id": "\d+"}, name="activity_addbasket")
+     */
+    public function addToBasket(Activity $activity){
+        if($session->has("basket")){
+            $basket = $session->get('basket');
+            array_push($basket, $activity);
+            $session->set('name', $basket);
+        }else{
+            $basket = array($activity);
+            $session->set('name', $basket);
+        }
 
         return $this->redirectToRoute('activity');
     }

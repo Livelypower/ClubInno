@@ -37,8 +37,7 @@
 
 
                             {% if is_granted('ROLE_USER') %}
-                                <button class="btn green lighten-2 right" id="add">Ajouter au basket</button>
-
+                                <a class="btn green lighten-2 right" href="{{ path("activity_addbasket", {'id': activity.id})}}" id="add">Ajouter au basket</a>
                             {% endif %}
                         </div>
                     </div>
