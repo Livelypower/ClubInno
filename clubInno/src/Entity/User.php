@@ -49,9 +49,16 @@ class User implements UserInterface
      */
     private $blogPosts;
 
+    /**
+     * One user has many Comments. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="user")
+     */
+    private $comments;
+
     public function __construct()
     {
         $this->blogPosts = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): ?int

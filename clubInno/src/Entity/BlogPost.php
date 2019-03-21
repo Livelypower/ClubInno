@@ -40,6 +40,12 @@ class BlogPost
      */
     private $user;
 
+    /**
+     * One blogpost has many comments. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="blogPost")
+     */
+    private $comments;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -101,4 +107,19 @@ class BlogPost
         $this->user = $user;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param mixed $comments
+     */
+    public function setComments($comments): void
+    {
+        $this->comments = $comments;
+    }
 }
