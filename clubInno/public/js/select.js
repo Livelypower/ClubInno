@@ -18,5 +18,6 @@ $(document).ready(function(){
     var instances = M.FloatingActionButton.init(elems, {
         direction: 'left'
     });
+    $('.materialboxed').materialbox();
 });
 

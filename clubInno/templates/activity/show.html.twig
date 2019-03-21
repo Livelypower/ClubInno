@@ -36,7 +36,10 @@
                             {% endif %}
 
 
-                            <button class="btn green lighten-2 right" id="add">Ajouter au basket</button>
+                            {% if is_granted('ROLE_USER') %}
+                                <button class="btn green lighten-2 right" id="add">Ajouter au basket</button>
+
+                            {% endif %}
                         </div>
                     </div>
 
