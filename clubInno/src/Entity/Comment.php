@@ -27,19 +27,6 @@ class Comment
     private $datetime;
 
     /**
-     * One Comment can have Many child Comments.
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="parentComments")
-     */
-    private $childComments;
-
-    /**
-     * Many child Comments have One parent Comment.
-     * @ORM\ManyToOne(targetEntity="Comment", inversedBy="childComments")
-     * @ORM\JoinColumn(name="parentComment_id", referencedColumnName="id")
-     */
-    private $parentComment;
-
-    /**
      * Many comments have one user. This is the owning side.
      * @ORM\ManyToOne(targetEntity="User", inversedBy="comments")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -52,11 +39,6 @@ class Comment
      * @ORM\JoinColumn(name="BlogPost_id", referencedColumnName="id")
      */
     private $blogPost;
-
-
-    public function __construct() {
-        $this->childComments = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -85,38 +67,6 @@ class Comment
         $this->datetime = $datetime;
 
         return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getChildComments()
-    {
-        return $this->childComments;
-    }
-
-    /**
-     * @param mixed $childComments
-     */
-    public function setChildComments($childComments): void
-    {
-        $this->childComments = $childComments;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getParentComment()
-    {
-        return $this->parentComment;
-    }
-
-    /**
-     * @param mixed $parentComment
-     */
-    public function setParentComment($parentComment): void
-    {
-        $this->parentComment = $parentComment;
     }
 
     /**
