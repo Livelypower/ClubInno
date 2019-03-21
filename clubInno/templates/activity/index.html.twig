@@ -32,7 +32,12 @@
                         </div>
                         <div class="card-action">
                             <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
-                            <a href="{{ path("activity_edit", {'id': activity.id})}}">edit</a>
+                            {% if is_granted('ROLE_ADMIN') %}
+                                <div class="right hide-on-med-and-down">
+                                    <a href="{{ path("activity_edit", {'id': activity.id})}}">edit</a>
+                                    <a href="{{ path("activity_delete", {'id': activity.id})}}">delete</a>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -44,5 +49,6 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
 {% endblock %}

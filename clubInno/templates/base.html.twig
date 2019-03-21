@@ -20,14 +20,25 @@
                 <div class="nav-wrapper teal lighten-3">
                     <a href="{{ path('home') }}" class="brand-logo">Club Inno</a>
                     <ul class="right hide-on-med-and-down">
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path('activity') }}">Gérer les activités</a></li>
+                            <li><a href="{{ path('tag') }}">Gérer les tags</a></li>
+                            <li><a href="{{ path('blog') }}">Gérer les articles de blog</a></li>
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') %}
+                            <li><a href="{{ path('activity') }}">Voir les activités</a></li>
+                        {% endif %}
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-                            <li><a href="{{ path('app_logout') }}" class="btn grey lighten-2 black-text text-lighten-2">Logout</a>
+                            <li>
+                                <a class='dropdown-trigger btn' href='#' data-target='dropdown1'>
+                                    {{ app.user.username }}
+                                    <i class="material-icons right">keyboard_arrow_down</i>
+                                </a>
                             </li>
                         {% else %}
-                            <li><a href="{{ path('app_login') }}" class="btn grey lighten-2 black-text text-lighten-2">Login</a>
+                            <li><a href="{{ path('app_login') }}" class="btn grey lighten-2 black-text text-lighten-2">Connexion</a>
                             </li>
                         {% endif %}
-
 
                     </ul>
                 </div>
@@ -71,14 +82,26 @@
             </div>
         </div>
     </footer>
+
+    <!-- Dropdown Structure -->
+    <ul id='dropdown1' class='dropdown-content'>
+        <li><a href="#">Votre profil <i class="medium material-icons">account_circle</i></a></li>
+        {% if is_granted('ROLE_USER') %}
+            <li><a href="#">Votre panier <i class="medium material-icons">shopping_basket</i></a></li>
+        {% endif %}
+        <li><a href="#">Votre calendrier<i class="medium material-icons">event</i></a></li>
+        <li><a href="{{ path('app_logout') }}">Déconnexion <i class="medium material-icons">keyboard_tab</i></a></li>
+    </ul>
 {% endblock %}
 
 <script src="http://code.jquery.com/jquery-3.3.1.min.js"
         integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-{% block javascripts %}
 
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/header.js') }}"></script>
 {% endblock %}
+
 </body>
 </html>

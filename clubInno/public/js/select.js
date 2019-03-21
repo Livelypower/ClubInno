@@ -1,5 +1,6 @@
 $(document).ready(function(){
     $('select').formSelect();
+    $('.dropdown-trigger').dropdown();
     $('.datepicker').datepicker({
         format: 'mm/dd/yyyy',
         firstDay: 1,
@@ -12,6 +13,11 @@ $(document).ready(function(){
             cancel: 'Fermer',
             clear: 'Réinitialiser'
         }
+    });
+    $('.carousel').carousel();
+    var elems = document.querySelectorAll('.fixed-action-btn');
+    var instances = M.FloatingActionButton.init(elems, {
+        direction: 'left'
     });
 });
 

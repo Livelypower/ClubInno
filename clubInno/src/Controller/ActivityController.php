@@ -10,7 +10,6 @@ use App\Form\ActivityType;
 use Symfony\Component\HttpFoundation\File\File;
 
 
-
 class ActivityController extends AbstractController
 {
     /**
@@ -30,8 +29,23 @@ class ActivityController extends AbstractController
      * @Route("/activity/{id}", requirements={"id": "\d+"}, name="activity_show")
      */
     public function showActivity(Activity $activity){
+        $files = array();
+        $imgs = array();
+
+        foreach ($activity->getFiles() as $file){
+            $pieces = explode(".", $file);
+            $ext = $pieces[1];
+            if($ext == "jpg" || $ext == "png" || $ext == "jpeg"){
+                array_push($imgs, $file);
+            }else{
+                array_push($files, $file);
+            }
+        }
+
         return $this->render('activity/show.html.twig', [
-            'activity' => $activity
+            'activity' => $activity,
+            'imgs' => $imgs,
+            'files' => $files
         ]);
     }
 
@@ -50,16 +64,34 @@ class ActivityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $request->files->get('activity')['mainImage'];
-            $uploads_directory = $this->getParameter('uploads_directory');
-            $filename = md5(uniqid()) . '.' . $file->guessExtension();
+            $files = $request->files->get('activity')['files'];
+            $filenames = array();
+            $filename = null;
 
-            $file->move(
-                $uploads_directory,
-                $filename
-            );
+            $uploads_directory = $this->getParameter('uploads_directory');
+
+            if($file != null){
+                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+
+                foreach($files as $fl){
+                    $name = md5(uniqid()) . '.' . $fl->guessExtension();
+                    array_push($filenames, $name);
+                    $fl->move(
+                        $uploads_directory,
+                        $name
+                    );
+                }
+
+                $file->move(
+                    $uploads_directory,
+                    $filename
+                );
+            }
+
 
             $activity = $form->getData();
             $activity->setMainImage($filename);
+            $activity->setFiles($filenames);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($activity);
@@ -80,15 +112,30 @@ class ActivityController extends AbstractController
     public function editActivity(Request $request, Activity $activity){
 
         $filename = $activity->getMainImage();
+        $filenames = $activity->getFiles();
+
+        $files = array();
         if($filename != null){
             $activity->setMainImage($this->getParameter('uploads_directory').'/'. $filename);
         }
+
+        if($filenames != null && !empty($filenames)){
+            foreach($filenames as $fln){
+                $fl = $this->getParameter('uploads_directory').'/'. $fln;
+                array_push($files, $fl);
+            }
+            $activity->setFiles($files);
+        }else{
+            $filenames = array();
+        }
+
         $form = $this->createForm(ActivityType::class, $activity);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $request->files->get('activity')['mainImage'];
+            $files = $request->files->get('activity')['files'];
             $uploads_directory = $this->getParameter('uploads_directory');
             if($file != null){
                 $filename = md5(uniqid()) . '.' . $file->guessExtension();
@@ -99,9 +146,20 @@ class ActivityController extends AbstractController
                 );
             }
 
+            if($files != null && !empty($files)){
+                foreach ($files as $f){
+                    $fn =  md5(uniqid()) . '.' . $f->guessExtension();
+                    array_push($filenames, $fn);
+                    $f->move(
+                      $uploads_directory,
+                      $fn
+                    );
+                }
+            }
 
             $activity = $form->getData();
             $activity->setMainImage($filename);
+            $activity->setFiles($filenames);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($activity);
@@ -113,5 +171,16 @@ class ActivityController extends AbstractController
         return $this->render('activity/edit.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @Route("/activity/{id}/delete", requirements={"id": "\d+"}, name="activity_delete")
+     */
+    public function deleteActivity(Activity $activity){
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($activity);
+        $em->flush();
+
+        return $this->redirectToRoute('activity');
     }
 }

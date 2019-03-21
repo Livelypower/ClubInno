@@ -8,6 +8,9 @@ main {
     flex: 1 0 auto;
 }
 
-.wit{
-    color: white;
+.dropdown-content{
+    width: max-content !important;
+    height:auto !important;
 }
+
+

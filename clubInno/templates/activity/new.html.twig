@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Activity{% endblock %}
+{% block title %}Nouvelle activité{% endblock %}
 
 {% block body %}
     {{ parent() }}
@@ -17,6 +17,7 @@
                     {{ form_row(form.maxAmountStudents,{'attr': {'class': 'white-text'}}) }}
                     {{ form_row(form.registrationDeadline, {'attr': {'class': 'datepicker white-text'}}) }}
                     {{ form_row(form.mainImage) }}
+                    {{ form_row(form.files) }}
                     <div class="row">
                         <div class="col s12">
                             {{ form_widget(form.save, {'attr': {'class': 'btn green accent-4'}}) }}
@@ -31,5 +32,6 @@
 {% endblock %}
 
 {% block javascripts %}
+    {{ parent() }}
     <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
 {% endblock %}
