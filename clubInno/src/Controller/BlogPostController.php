@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\BlogPost;
+use App\Entity\Comment;
 use App\Form\BlogPostType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -68,8 +69,11 @@ class BlogPostController extends AbstractController
      * @Route("/blog/{id}", requirements={"id": "\d+"}, name="blog_show")
      */
     public function showBlogPost(BlogPost $blogPost){
+
+        $comments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['blogPost' => $blogPost]);
         return $this->render('blog_post/show.html.twig', [
             'post' => $blogPost,
+            'comments' => $comments
         ]);
     }
 }

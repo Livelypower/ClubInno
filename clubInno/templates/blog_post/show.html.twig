@@ -21,17 +21,24 @@
                     <p>
                         {{ post.body | raw }}
                     </p>
-                </div>
-                <div class="card-action">
-                    <div class="row">
+                    <br>
+                    <button class="btn grey lighten-2 black-text" id="openCommentForm">Ajouter un commentaire</button>
+                    <div class="row" id="commentView" hidden style="margin-top: 20px">
+                        <input type="hidden" value="{{ post.id }}" id="postId"/>
+                        <input type="hidden" value="{{ app.user.id }}" id="userId"/>
+                        <div class="input-field col s12">
+                            <input placeholder="Commentaire" id="commentBody" type="text" class="validate">
+                            <label for="commentBody">Ecrivez votre commentaire</label>
+                        </div>
                         <div class="col s12">
-                            <div class="card white">
-                                <div class="card-content black-text">
-                                    <p>This is a test comment</p>
-                                </div>
-                            </div>
+                            <button class="btn green accent-4" id="addComment">
+                                Ajouter
+                            </button>
                         </div>
                     </div>
+                </div>
+                <div class="card-action" id="commentSection">
+
                 </div>
             </div>
         </div>
@@ -39,6 +46,8 @@
             <a href="{{ path('blog') }}" class="btn red accent-2">Retourner</a>
         </div>
     </div>
+{% endblock %}
 
-
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/commentForm.js') }}"></script>
 {% endblock %}
