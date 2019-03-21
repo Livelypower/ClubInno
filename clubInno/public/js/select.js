@@ -1,5 +1,6 @@
 $(document).ready(function(){
     $('select').formSelect();
+    $('.dropdown-trigger').dropdown();
     $('.datepicker').datepicker({
         format: 'mm/dd/yyyy',
         firstDay: 1,
@@ -18,6 +19,5 @@ $(document).ready(function(){
     var instances = M.FloatingActionButton.init(elems, {
         direction: 'left'
     });
-    $('.materialboxed').materialbox();
 });
 
