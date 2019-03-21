@@ -66,24 +66,28 @@ class ActivityController extends AbstractController
             $file = $request->files->get('activity')['mainImage'];
             $files = $request->files->get('activity')['files'];
             $filenames = array();
+            $filename = null;
 
             $uploads_directory = $this->getParameter('uploads_directory');
 
-            $filename = md5(uniqid()) . '.' . $file->guessExtension();
+            if($file != null){
+                $filename = md5(uniqid()) . '.' . $file->guessExtension();
 
-            foreach($files as $fl){
-                $name = md5(uniqid()) . '.' . $fl->guessExtension();
-                array_push($filenames, $name);
-                $fl->move(
+                foreach($files as $fl){
+                    $name = md5(uniqid()) . '.' . $fl->guessExtension();
+                    array_push($filenames, $name);
+                    $fl->move(
+                        $uploads_directory,
+                        $name
+                    );
+                }
+
+                $file->move(
                     $uploads_directory,
-                    $name
+                    $filename
                 );
             }
 
-            $file->move(
-                $uploads_directory,
-                $filename
-            );
 
             $activity = $form->getData();
             $activity->setMainImage($filename);
