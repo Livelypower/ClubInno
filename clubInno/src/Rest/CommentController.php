@@ -64,7 +64,8 @@ class CommentController extends AbstractFOSRestController
      */
     public function getComments(int $blogPostId): View
     {
-        $comments = $this->getDoctrine()->getRepository(Comment::class)->find($blogPostId);
+        //$blogPost = $this->getDoctrine()->getRepository(BlogPost::class)->find($blogPostId);
+        $comments = $this->getDoctrine()->getRepository(BlogPost::class)->find($blogPostId);
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
         return View::create($comments, Response::HTTP_OK);
     }

@@ -46,6 +46,11 @@ class BlogPost
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $datetime;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,5 +126,17 @@ class BlogPost
     public function setComments($comments): void
     {
         $this->comments = $comments;
+    }
+
+    public function getDatetime(): ?\DateTimeInterface
+    {
+        return $this->datetime;
+    }
+
+    public function setDatetime(\DateTimeInterface $datetime): self
+    {
+        $this->datetime = $datetime;
+
+        return $this;
     }
 }
