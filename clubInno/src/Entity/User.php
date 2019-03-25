@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User implements UserInterface
+class User implements UserInterface, JsonSerializable
 {
     /**
      * @ORM\Id()
@@ -177,7 +177,6 @@ class User implements UserInterface
         return $this;
     }
 
-<<<<<<< HEAD
     public function getOrientation(): ?string
     {
         return $this->Orientation;
@@ -186,7 +185,7 @@ class User implements UserInterface
     public function setOrientation(?string $Orientation): self
     {
         $this->Orientation = $Orientation;
-=======
+    }
     /**
      * @return Collection|Application[]
      */
@@ -214,8 +213,9 @@ class User implements UserInterface
                 $application->setUser(null);
             }
         }
->>>>>>> 218c865a864a7a280c2128d5ad6ea78622de56b7
 
         return $this;
     }
+
+    
 }
