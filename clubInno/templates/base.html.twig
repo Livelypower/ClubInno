@@ -89,6 +89,9 @@
         {% if is_granted('ROLE_USER') %}
             <li><a href="{{ path('account_basket') }}">Votre panier <i class="medium material-icons">shopping_basket</i></a></li>
         {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <li><a href="{{ path('admin_application_list') }}">Toutes les applications <i class="medium material-icons">shopping_basket</i></a></li>
+        {% endif %}
         <li><a href="#">Votre calendrier<i class="medium material-icons">event</i></a></li>
         <li><a href="{{ path('app_logout') }}">Déconnexion <i class="medium material-icons">keyboard_tab</i></a></li>
     </ul>

@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -62,11 +64,17 @@ class User implements UserInterface
      */
     private $Orientation;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Application", mappedBy="user")
+     */
+    private $applications;
+
 
     public function __construct()
     {
         $this->blogPosts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->applications = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,6 +177,7 @@ class User implements UserInterface
         return $this;
     }
 
+<<<<<<< HEAD
     public function getOrientation(): ?string
     {
         return $this->Orientation;
@@ -177,6 +186,35 @@ class User implements UserInterface
     public function setOrientation(?string $Orientation): self
     {
         $this->Orientation = $Orientation;
+=======
+    /**
+     * @return Collection|Application[]
+     */
+    public function getApplications(): Collection
+    {
+        return $this->applications;
+    }
+
+    public function addApplication(Application $application): self
+    {
+        if (!$this->applications->contains($application)) {
+            $this->applications[] = $application;
+            $application->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeApplication(Application $application): self
+    {
+        if ($this->applications->contains($application)) {
+            $this->applications->removeElement($application);
+            // set the owning side to null (unless already changed)
+            if ($application->getUser() === $this) {
+                $application->setUser(null);
+            }
+        }
+>>>>>>> 218c865a864a7a280c2128d5ad6ea78622de56b7
 
         return $this;
     }

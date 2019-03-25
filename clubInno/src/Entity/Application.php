@@ -16,10 +16,6 @@ class Application
      */
     private $id;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $userId;
 
     /**
      * @ORM\Column(type="datetime")
@@ -38,6 +34,12 @@ class Application
      */
     private $activities;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="applications")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $user;
+
     public function __construct(){
         $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -47,17 +49,7 @@ class Application
         return $this->id;
     }
 
-    public function getUserId(): ?int
-    {
-        return $this->userId;
-    }
 
-    public function setUserId(int $userId): self
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
 
     public function getDate(): ?\DateTimeInterface
     {
@@ -85,6 +77,18 @@ class Application
 
    public function setActivities($activities){
         $this->activities = $activities;
+   }
+
+   public function getUser(): ?User
+   {
+       return $this->user;
+   }
+
+   public function setUser(?User $user): self
+   {
+       $this->user = $user;
+
+       return $this;
    }
 
 
