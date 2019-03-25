@@ -57,6 +57,11 @@ class User implements UserInterface
      */
     private $comments;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Orientation;
+
 
     public function __construct()
     {
@@ -160,6 +165,18 @@ class User implements UserInterface
     public function setLastName(string $lastName): self
     {
         $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getOrientation(): ?string
+    {
+        return $this->Orientation;
+    }
+
+    public function setOrientation(?string $Orientation): self
+    {
+        $this->Orientation = $Orientation;
 
         return $this;
     }
