@@ -177,7 +177,6 @@ class User implements UserInterface
         return $this;
     }
 
-<<<<<<< HEAD
     public function getOrientation(): ?string
     {
         return $this->Orientation;
@@ -186,7 +185,8 @@ class User implements UserInterface
     public function setOrientation(?string $Orientation): self
     {
         $this->Orientation = $Orientation;
-=======
+
+
     /**
      * @return Collection|Application[]
      */
@@ -214,7 +214,6 @@ class User implements UserInterface
                 $application->setUser(null);
             }
         }
->>>>>>> 218c865a864a7a280c2128d5ad6ea78622de56b7
 
         return $this;
     }
