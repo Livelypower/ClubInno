@@ -5,6 +5,8 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Application;
+use App\Entity\User;
+use App\Entity\Activity;
 
 class AdminController extends AbstractController
 {
@@ -24,9 +26,23 @@ class AdminController extends AbstractController
     public function listApplications(){
 
         $applications = $this->getDoctrine()->getRepository(Application::class)->findAll();
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+
+        $jsonUsers = array();
+        $jsonActi = array();
+
+        foreach ($users as $user){
+            array_push($jsonUsers,$user->jsonSerialize());
+        }
+
+        foreach ($activities as $acti){
+            array_push($jsonActi,$acti->jsonSerialize());
+        }
 
         return $this->render('admin/application_list.html.twig', [
-            'applications' => $applications
+            'applications' => $applications,
+            'users' => $jsonUsers,
         ]);
     }
 
