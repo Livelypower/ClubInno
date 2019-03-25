@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les utilisateurs{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <div class="row">
+        <div class="col s12">
+            <h4>Toutes les utilisateurs</h4>
+            <table>
+                <thead>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Action</th>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>
+                            {{ user.firstname }} {{ user.lastname }}
+                        </td>
+                        <td>
+                            {{ user.email }}
+                        </td>
+                        <td>
+                            <ul>
+                            {% for role in user.roles %}
+                            <li>{{ role }}
+                                {% if role == 'ROLE_ADMIN' %}
+                                    <a href="{{ path('admin_remove_user_admin', {'id': user.id}) }}" class="btn red accent-2"><i class="material-icons">delete</i></a>
+                                {% endif %}
+                                {% if role == 'ROLE_TEACHER' %}
+                                    <a href="{{ path('admin_remove_user_teacher', {'id': user.id}) }}" class="btn red accent-2"><i class="material-icons">delete</i></a>
+                                {% endif %}
+                            </li>
+                            {% endfor %}
+                            </ul>
+                        </td>
+                        <td>
+                            <a href="{{ path('admin_make_user_admin', {'id': user.id}) }}" class="btn blue lighten-2">Make admin</a>
+                            <a href="{{ path('admin_make_user_teacher', {'id': user.id}) }}" class="btn blue lighten-2">Make teacher</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
+{% endblock %}

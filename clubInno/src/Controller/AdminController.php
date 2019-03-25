@@ -54,4 +54,65 @@ class AdminController extends AbstractController
         return $this->render('admin/application_show.html.twig');
     }
 
+    /**
+     * @Route("/admin/listUsers/", name="admin_list_users")
+     */
+    public function listUsers(){
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        return $this->render('admin/list_users.html.twig', [
+            'users' => $users
+        ]);
+    }
+
+    /**
+     * @Route("/admin/editUser/{id}/makeAdmin", requirements={"id": "\d+"}, name="admin_make_user_admin")
+     */
+    public function makeAdmin($id){
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $roles = $user->getRoles();
+        if (!in_array('ROLE_AMDIN', $roles)){
+            array_push($roles, 'ROLE_ADMIN');
+            $user->setRoles($roles);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+        return $this->redirectToRoute('admin_list_users');
+    }
+
+    /**
+     * @Route("/admin/editUser/{id}/makeTeacher", requirements={"id": "\d+"}, name="admin_make_user_teacher")
+     */
+    public function makeTeacher($id){
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $roles = $user->getRoles();
+        if (!in_array('ROLE_TEACHER', $roles)){
+            array_push($roles, 'ROLE_TEACHER');
+            $user->setRoles($roles);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('admin_list_users');
+    }
+
+    /**
+     * @Route("/admin/editUser/{id}/makeTeacher", requirements={"id": "\d+"}, name="admin_remove_user_admin")
+     */
+    public function removeAdmin($id){
+        return $this->redirectToRoute('admin_list_users');
+    }
+
+    /**
+     * @Route("/admin/editUser/{id}/makeTeacher", requirements={"id": "\d+"}, name="admin_remove_user_teacher")
+     */
+    public function removeTeacher($id){
+
+        return $this->redirectToRoute('admin_list_users');
+    }
+
+
 }
