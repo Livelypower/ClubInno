@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $('select').formSelect();
-    $('.dropdown-trigger').dropdown();
+    $('.modal').modal();
     $('.datepicker').datepicker({
         format: 'mm/dd/yyyy',
         firstDay: 1,

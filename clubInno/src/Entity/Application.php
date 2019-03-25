@@ -82,4 +82,10 @@ class Application
 
         return $this;
     }
+
+   public function setActivities($activities){
+        $this->activities = $activities;
+   }
+
+
 }

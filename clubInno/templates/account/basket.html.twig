@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Votre panier{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    {% set basket = app.session.get('basket') %}
+    <div class="row">
+        <div class="col s12">
+            <h3 class="center-align">Votre panier</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12 m8 offset-m2">
+            <div class="card blue-grey darken-1">
+                <div class="card-content white-text">
+                    {% if basket is not empty %}
+                        <h6>Vos activitiés selectionnées: </h6>
+
+                        <ul class="collection black-text">
+                            {% for item in basket %}
+                                <li class="collection-item">
+                                    {{ item.name }}
+                                    <a href="{{ path('account_basket_delete', {'id': item.id}) }}">
+                                        <i class="material-icons red-text accent-2 right">clear</i>
+                                    </a>
+                                    <a href="{{ path('activity_show', {'id': item.id, 'basket': true}) }}">
+                                        <i class="material-icons blue-text lighten-2 right">info</i>
+                                    </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                            <a class="white-text" href="{{ path('account_basket_clear') }}">
+                                <i class="small material-icons orange-text text-lighten-2 left">clear_all</i></a>
+                        <br/>
+
+                    {% else %}
+                        <p class="white-text">Votre panier est vide. Pour voir toutes les activités, pousser ici:
+                            <a class="orange-text text-lighten-2" href="{{ path('activity') }}">Toutes les activités</a></p>
+                    {% endif %}
+
+                    {{ form(form) }}
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="col s12 m8 offset-m2 ">
+            <a href="#" class="btn red accent-2">Retourner</a>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

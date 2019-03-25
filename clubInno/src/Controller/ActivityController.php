@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class ActivityController extends AbstractController
 {
+
     /**
      * @Route("/activity", name="activity")
      */
@@ -28,11 +29,12 @@ class ActivityController extends AbstractController
     }
 
     /**
-     * @Route("/activity/{id}", requirements={"id": "\d+"}, name="activity_show")
+     * @Route("/activity/{id}-{basket}", requirements={"id": "\d+"}, name="activity_show")
      */
-    public function showActivity(Activity $activity){
+    public function showActivity(Activity $activity, bool $basket = false){
         $files = array();
         $imgs = array();
+
 
         foreach ($activity->getFiles() as $file){
             $pieces = explode(".", $file);
@@ -47,7 +49,8 @@ class ActivityController extends AbstractController
         return $this->render('activity/show.html.twig', [
             'activity' => $activity,
             'imgs' => $imgs,
-            'files' => $files
+            'files' => $files,
+            'cameFromBasket' => $basket
         ]);
     }
 
@@ -190,15 +193,30 @@ class ActivityController extends AbstractController
      * @Route("/activity/addBasket/{id}", requirements={"id": "\d+"}, name="activity_addbasket")
      */
     public function addToBasket(Activity $activity){
-        if($session->has("basket")){
+        if(!$this->get('session')->isStarted()){
+            $session = new Session();
+            $session->start();
+        }else{
+            $session = $this->get('session');
+        }
+
+        if($session->has("basket") && !empty($session->get('basket'))){
             $basket = $session->get('basket');
-            array_push($basket, $activity);
-            $session->set('name', $basket);
+            foreach ($basket as $item) {
+                if($item->getId() != $activity->getId()){
+                    array_push($basket, $activity);
+                    $session->set('basket', $basket);
+                    break;
+                }
+            }
         }else{
             $basket = array($activity);
-            $session->set('name', $basket);
+            $session->set('basket', $basket);
         }
+
 
         return $this->redirectToRoute('activity');
     }
+
+
 }

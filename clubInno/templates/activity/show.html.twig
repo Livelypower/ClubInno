@@ -37,8 +37,17 @@
 
 
                             {% if is_granted('ROLE_USER') %}
-                                <a class="btn green lighten-2 right" href="{{ path("activity_addbasket", {'id': activity.id})}}" id="add">Ajouter au basket</a>
+                            {% set inlist = false %}
+                                {% for item in app.session.get('basket') %}
+                                        {% if item.id == activity.id %}
+                                            {% set inlist = true  %}
+                                        {% endif %}
+                                {% endfor %}
+                                {% if not inlist %}
+                                    <a class="btn green lighten-2 right" href="{{ path('activity_addbasket', {'id': activity.id})}}" id="add">Ajouter au basket</a>
+                                {% endif %}
                             {% endif %}
+
                         </div>
                     </div>
 
@@ -90,9 +99,14 @@
 
 
         <div class="col s12">
-            <a href="{{ path('activity') }}" class="btn red accent-2">Retourner</a>
+            {% if cameFromBasket %}
+                <a href="{{ path('account_basket') }}" class="btn red accent-2">Retourner</a>
+            {% else %}
+                <a href="{{ path('activity') }}" class="btn red accent-2">Retourner</a>
+            {% endif %}
         </div>
     </div>
+
 
 
 {% endblock %}
