@@ -12,7 +12,10 @@
             <ul>
                 {% for application in applications %}
                     <li>
-
+                        {{ application.user.firstname }} {{ application.user.lastname }}- {{ application.date.format('d-m-Y') }} -
+                        <a href="{{ asset('uploads/' ~ application.motivationLetterPath) }}" class="orange-text text-lighten-2" download>
+                            {{ application.motivationLetterPath }}
+                        </a>
                     </li>
                 {% endfor %}
             </ul>
