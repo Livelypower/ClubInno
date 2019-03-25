@@ -186,6 +186,7 @@ class User implements UserInterface, JsonSerializable
     {
         $this->Orientation = $Orientation;
     }
+    
     /**
      * @return Collection|Application[]
      */
