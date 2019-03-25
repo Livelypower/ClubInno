@@ -60,6 +60,11 @@ class User implements UserInterface
     private $comments;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $Orientation;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Application", mappedBy="user")
      */
     private $applications;
@@ -172,6 +177,16 @@ class User implements UserInterface
         return $this;
     }
 
+<<<<<<< HEAD
+    public function getOrientation(): ?string
+    {
+        return $this->Orientation;
+    }
+
+    public function setOrientation(?string $Orientation): self
+    {
+        $this->Orientation = $Orientation;
+=======
     /**
      * @return Collection|Application[]
      */
@@ -199,6 +214,7 @@ class User implements UserInterface
                 $application->setUser(null);
             }
         }
+>>>>>>> 218c865a864a7a280c2128d5ad6ea78622de56b7
 
         return $this;
     }

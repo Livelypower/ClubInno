@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Form\ApplicationType;
 use App\Entity\Application;
+use App\Form\RegistrationFormType;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Activity;use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Activity;
 
 
 class AccountController extends AbstractController
@@ -14,10 +17,25 @@ class AccountController extends AbstractController
     /**
      * @Route("/account", name="account")
      */
-    public function index()
+    public function index(Request $request)
     {
+        $user = $this->getUser();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            // do anything else you need here, like send an email
+
+            return $this->redirectToRoute('app_login', array('username' => $user->getEmail()));
+        }
+
         return $this->render('account/index.html.twig', [
-            'controller_name' => 'AccountController',
+            'accountEditForm' => $form->createView(),
         ]);
     }
 

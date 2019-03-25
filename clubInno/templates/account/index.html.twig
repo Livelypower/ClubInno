@@ -1,20 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello AccountController!{% endblock %}
+{% block title %}Détails de Compte{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    {{ parent() }}
+    <div class="row">
+        <div class="col m3"></div>
+        <div class="col s12 m6">
+            <div class="card blue-grey darken-1">
+                <div class="card-content">
+                    <span class="card-title white-text">Changer des détails du Compte</span>
+                        <div class="row">
+                            {{ form_start(accountEditForm, {'attr': {'class': 'white-text'}}) }}
+                            {{ form_row(accountEditForm.email, {'attr': {'class': 'white-text'}}) }}
+                            {{ form_row(accountEditForm.firstname, {'attr': {'class': 'white-text'}}) }}
+                            {{ form_row(accountEditForm.lastname, {'attr': {'class': 'white-text'}}) }}
+                        </div>
+                        <button class="btn green accent-4" type="submit">
+                            Sauvegarder
+                        </button>
+                            {{ form_end(accountEditForm) }}
+                </div>
+                <div class="card-action">
+                    <a href="{{ path('home') }}" class="btn red accent-4">Annuler</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+{% block javascripts %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/downloads/3 ITF/Semester2/STAGE/Project/ClubInno/clubInno/src/Controller/AccountController.php'|file_link(0) }}">src/Controller/AccountController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/downloads/3 ITF/Semester2/STAGE/Project/ClubInno/clubInno/templates/account/index.html.twig'|file_link(0) }}">templates/account/index.html.twig</a></code></li>
-    </ul>
-</div>
 {% endblock %}

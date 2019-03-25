@@ -1,0 +1,33 @@
+1st Year
+	Application Development in C#
+	Internet of Things Essentials
+	IT Essentials
+	Application Development in Java
+	Linux Essentials
+	Networking Essentials (CCNA)
+	Networking: Routing and Switching (CCNA)
+	Data Analysis with SQL
+	Webdesign: Basic
+	Webdesign: HTML 5, Javascript
+	Windows System Administration
+
+2nd Year
+	Business Essentials
+	Requirements Analysis
+	Internet of Things Advanced
+	Linux Webservices
+	PHP (CodeIgniter)
+	Windows Server Essentials
+--- We choose a minor in the second year, we both chose Application Development ---
+	ASP.NET MVC
+	Businessprocesses and ITIL
+	Java Advanced
+	Cordova/Phonegap
+	UML
+	WPF
+
+3rd Year
+	Mobile development (Native Android Apps in Java)
+	React
+	Java Advanced Topics
+	MEAN Stack Development (Angular Development)
