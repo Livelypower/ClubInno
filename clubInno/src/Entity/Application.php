@@ -75,6 +75,15 @@ class Application
         return $this;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getActivities()
+    {
+        return $this->activities;
+    }
+
+
    public function setActivities($activities){
         $this->activities = $activities;
    }
@@ -90,6 +99,8 @@ class Application
 
        return $this;
    }
+
+
 
 
 }

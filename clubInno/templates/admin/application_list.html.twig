@@ -4,40 +4,29 @@
 
 {% block body %}
     {{ parent() }}
-
+    
     <div class="row">
         <div class="col s12">
             <h4>Toutes les applications</h4>
-
-            <ul>
-                {% for application in applications %}
-                    <li>
-                        {{ application.user.firstname }} {{ application.user.lastname }}- {{ application.date.format('d-m-Y') }} -
-                        <a href="{{ asset('uploads/' ~ application.motivationLetterPath) }}" class="orange-text text-lighten-2" download>
-                            {{ application.motivationLetterPath }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-
+            <table id="table" class="responsive-table">
+                <thead>
+                <tr id="tableHead">
+                    <th>Etudiant</th>
+                </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s12">
+            <button class="btn" id="saveConfig">Sauvegarder</button>
         </div>
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col s12">
-                <table id="table" class="responsive-table">
-                    <thead>
-                    <tr id="tableHead">
-                        <th>Etudiant</th>
-                    </tr>
-                    </thead>
-                    <tbody id="tableBody">
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <div id="users" data-users="{{ users|json_encode }}"></div>
+    <div id="acties" data-acties="{{ activities|json_encode }}"></div>
 
 
 {% endblock %}
@@ -46,7 +35,6 @@
     {{ parent() }}
 
     <script type="text/javascript" src="{{ asset('js/divideActivities.js') }}">
-        let students = {{ users|json_encode|raw }}
-        let activities = {{ activities|json_encode|raw }};
     </script>
+
 {% endblock %}

@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity(fields={"email"}, message="There is already an account with this email")
  */
-class User implements UserInterface, JsonSerializable
+class User implements UserInterface
 {
     /**
      * @ORM\Id()
@@ -69,12 +69,19 @@ class User implements UserInterface, JsonSerializable
      */
     private $applications;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Activity", inversedBy="users")
+     * @ORM\JoinTable(name="user_activities")
+     */
+    private $registrations;
+
 
     public function __construct()
     {
         $this->blogPosts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->applications = new ArrayCollection();
+        $this->registrations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -186,7 +193,7 @@ class User implements UserInterface, JsonSerializable
     {
         $this->Orientation = $Orientation;
     }
-    
+
     /**
      * @return Collection|Application[]
      */
@@ -218,5 +225,36 @@ class User implements UserInterface, JsonSerializable
         return $this;
     }
 
-    
+    /**
+     * @return Collection|Activity[]
+     */
+    public function getRegistrations(): Collection
+    {
+        return $this->registrations;
+    }
+
+    public function setRegistrations($registrations)
+    {
+        $this->registrations = $registrations;
+    }
+
+    public function addRegistration(Activity $registration): self
+    {
+        if (!$this->registrations->contains($registration)) {
+            $this->registrations[] = $registration;
+        }
+
+        return $this;
+    }
+
+    public function removeRegistration(Activity $registration): self
+    {
+        if ($this->registrations->contains($registration)) {
+            $this->registrations->removeElement($registration);
+        }
+
+        return $this;
+    }
+
+
 }

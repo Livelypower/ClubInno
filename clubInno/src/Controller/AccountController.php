@@ -66,7 +66,7 @@ class AccountController extends AbstractController
             $application = new Application();
             $application->setMotivationLetterPath($filename);
 
-            $application->setUserId($usr->getId());
+            $application->setUser($usr);
             $application->setDate(new \DateTime('now'));
 
             $session = $this->get('session');

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\Application;
 use App\Entity\User;
 use App\Entity\Activity;
@@ -23,7 +24,7 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/listApplications", name="admin_application_list")
      */
-    public function listApplications(){
+    public function listApplications(SerializerInterface $serializer){
 
         $applications = $this->getDoctrine()->getRepository(Application::class)->findAll();
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
@@ -32,17 +33,28 @@ class AdminController extends AbstractController
         $jsonUsers = array();
         $jsonActi = array();
 
+
         foreach ($users as $user){
-            array_push($jsonUsers,$user->jsonSerialize());
+            array_push($jsonUsers, $serializer->serialize($user, 'json', [
+                'circular_reference_handler' => function ($user) {
+                    return $user->getId();
+                }
+            ]));
+        }
+        foreach ($activities as $acti){
+            array_push($jsonActi, $serializer->serialize($acti, 'json', [
+                'circular_reference_handler' => function ($acti) {
+                    return $acti->getId();
+                }
+            ]));
         }
 
-        foreach ($activities as $acti){
-            array_push($jsonActi,$acti->jsonSerialize());
-        }
+
 
         return $this->render('admin/application_list.html.twig', [
             'applications' => $applications,
             'users' => $jsonUsers,
+            'activities' => $jsonActi
         ]);
     }
 
