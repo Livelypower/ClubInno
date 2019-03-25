@@ -2,14 +2,19 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Form\AccountEditForm;
 use App\Form\ApplicationType;
 use App\Entity\Application;
-use App\Form\RegistrationFormType;
+use App\Form\ChangePasswordForm;
+use App\Form\PasswordForgottenForm;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Activity;
+use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 
 class AccountController extends AbstractController
@@ -20,7 +25,7 @@ class AccountController extends AbstractController
     public function index(Request $request)
     {
         $user = $this->getUser();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(AccountEditForm::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -29,13 +34,55 @@ class AccountController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            // do anything else you need here, like send an email
-
-            return $this->redirectToRoute('app_login', array('username' => $user->getEmail()));
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('account/index.html.twig', [
             'accountEditForm' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/account/changePassword", name="changePassword")
+     */
+    public function changePassword(Request $request, UserPasswordEncoderInterface $passwordEncoder){
+        $user = $this->getUser();
+        $form = $this->createForm(ChangePasswordForm::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $old_pwd = $form->get('old_password')->getData();
+            $new_pwd = $form->get('new_password')->getData();
+            $new_pwd_confirm = $form->get('new_password_confirm')->getData();
+
+            $checkPass = $passwordEncoder->isPasswordValid($user, $old_pwd);
+            if ($checkPass === true && $new_pwd === $new_pwd_confirm){
+               $user->setPassword($passwordEncoder->encodePassword($user, $new_pwd_confirm));
+            } elseif ($checkPass === false && $new_pwd === $new_pwd_confirm){
+                return $this->render('account/changePassword.html.twig', [
+                    'changePasswordForm' => $form->createView(),
+                    'error' => 'Your current password is incorrect.'
+                ]);
+            } elseif ($checkPass === true && $new_pwd !== $new_pwd_confirm){
+                return $this->render('account/changePassword.html.twig', [
+                    'changePasswordForm' => $form->createView(),
+                    'error' => 'Both passwords don\'t match'
+                ]);
+            } else {
+                return $this->render('account/changePassword.html.twig', [
+                    'changePasswordForm' => $form->createView(),
+                    'error' => 'Your current password is incorrect.'
+                ]);
+            }
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
+
+        return $this->render('account/changePassword.html.twig', [
+            'changePasswordForm' => $form->createView(),
+            'error' => null
         ]);
     }
 
@@ -116,5 +163,61 @@ class AccountController extends AbstractController
         }
 
         return $this->redirectToRoute('account_basket');
+    }
+
+    /**
+     * @Route("/account/forgotPassword", name="forgot_password")
+     */
+    public function forgotPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder, \Swift_Mailer $mailer){
+        $user = new User();
+        $form = $this->createForm(PasswordForgottenForm::class, $user);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $form->get('email')->getData()]);
+            if ($user !== null){
+                $new_pass = $this->random_str(32);
+                $user->setPassword($passwordEncoder->encodePassword($user, $new_pass));
+                $entityManager->persist($user);
+
+                $entityManager->flush();
+
+                $message = (new \Swift_Message('Password Changed'))
+                    ->setFrom('kasumiiwamoto69@gmail.com')
+                    ->setTo($form->get('email')->getData())
+                    ->setBody(
+                        $this->renderView('emails/passwordChanged.html.twig', [
+                            'password' => $new_pass,
+                            'user' => $user
+                        ])
+                    );
+                $mailer->send($message);
+                return $this->render('account/mailSent.html.twig', [
+                    'new_pass' => $new_pass,
+                ]);
+            } else {
+                return $this->render('account/passwordForgotten.html.twig', [
+                    'passwordForgottenForm' => $form->createView(),
+                    'error' => 'No user with that email address was found.'
+                ]);
+            }
+
+        }
+        return $this->render('account/passwordForgotten.html.twig', [
+            'passwordForgottenForm' => $form->createView(),
+            'error' => null
+        ]);
+    }
+
+    private function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
+    {
+        $pieces = [];
+        $max = mb_strlen($keyspace, '8bit') - 1;
+        for ($i = 0; $i < $length; ++$i) {
+            $pieces []= $keyspace[random_int(0, $max)];
+        }
+        return implode('', $pieces);
     }
 }

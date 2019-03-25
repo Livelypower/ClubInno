@@ -20,6 +20,7 @@
                             Sauvegarder
                         </button>
                             {{ form_end(accountEditForm) }}
+                        <a class="btn grey lighten-2 black-text" href="{{ path('changePassword') }}">Changer Mot de Passe</a>
                 </div>
                 <div class="card-action">
                     <a href="{{ path('home') }}" class="btn red accent-4">Annuler</a>
@@ -30,5 +31,5 @@
 {% endblock %}
 
 {% block javascripts %}
-
+{{ parent() }}
 {% endblock %}
