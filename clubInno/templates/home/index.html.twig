@@ -35,52 +35,10 @@
                     <img src="http://lorempixel.com/800/400/technics" alt="">
                 </div>
                 <div class="card-content white-text">
-                    <span class="card-title">Blogpost Titre</span>
-                    <span style="font-style:italic">USER 15/03/2019 - 15:39</span>
+                    <span class="card-title">{{ latest_blog_post.title }}</span>
+                    <span style="font-style:italic">{{ latest_blog_post.user.firstName }} {{ latest_blog_post.user.lastName }} {{ latest_blog_post.datetime | date('d/m/y H:i') }}</span>
                     <p>
-                        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Neque doloremque
-                        esse autem voluptates voluptatem quis? At hic porro soluta quas, nihil facere
-                        doloribus quibusdam consequuntur culpa aspernatur? Dolore, pariatur doloremque.
-                        Ea molestias nisi dolorem. Incidunt aspernatur qui reprehenderit ex illo,
-                        repudiandae quibusdam eaque. Ratione neque vitae harum, exercitationem, eum non
-                        incidunt voluptatibus dignissimos voluptates repellendus quo magnam illum,
-                        necessitatibus quae?
-                        Minima fugit dignissimos necessitatibus adipisci enim aut unde nobis
-                        aspernatur eius voluptatibus delectus eligendi a, ratione ipsum fuga harum
-                        vitae quam autem fugiat repudiandae? Ipsum neque vel sunt commodi quibusdam.
-                    </p>
-                    <br>
-                    <p>
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Explicabo saepe
-                        earum sapiente. Libero adipisci suscipit ipsam exercitationem in, possimus
-                        soluta cum repellat neque quaerat odit voluptatem unde tenetur? Rerum,
-                        possimus?
-                        Voluptatem, tempore. Animi quaerat odio veniam quod in tempora architecto
-                        nemo, pariatur amet doloremque veritatis laudantium reiciendis vel atque,
-                        labore voluptatum? Ipsa possimus impedit expedita suscipit, magnam officia
-                        aliquid odio?
-                        Perferendis consequatur similique voluptas, perspiciatis sit quam magnam
-                        dolor rem nam temporibus iste explicabo assumenda dolorum praesentium, fugit,
-                        nulla earum ex provident ut at ea eaque inventore est quia. A?
-                    </p>
-                    <br>
-                    <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Error porro nulla
-                        eaque fugiat repudiandae repellendus harum, voluptas ratione necessitatibus,
-                        accusantium velit obcaecati, adipisci id corporis saepe eos et? Consequatur,
-                        commodi.
-                        Quasi quod accusantium quae aliquam? Beatae laborum eligendi velit minima?
-                        Aliquid adipisci consectetur deserunt, voluptate voluptatibus ad sequi minima,
-                        aperiam labore, recusandae voluptatem error quisquam similique quod. Non,
-                        labore doloremque?
-                        Tempore nobis repellendus ratione cumque, libero maiores laudantium
-                        voluptates commodi voluptatem unde aspernatur quas officia nulla, quam ab fugit
-                        magni pariatur amet architecto. Nulla distinctio iusto laborum officia quasi
-                        inventore!
-                        Rem libero enim aliquid voluptatibus esse asperiores iste debitis autem
-                        delectus? Ea perferendis distinctio earum dicta, porro, optio laudantium
-                        asperiores nam maiores itaque neque officia exercitationem consequuntur
-                        praesentium beatae ut.
+                        {{ latest_blog_post.body | raw }}
                     </p>
                 </div>
                 <div class="card-action">

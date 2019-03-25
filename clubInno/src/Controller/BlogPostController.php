@@ -41,6 +41,7 @@ class BlogPostController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $blogPost = $form->getData();
             $blogPost->setUser($user);
+            $blogPost->setDateTime(new \DateTime('now'));
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($blogPost);
