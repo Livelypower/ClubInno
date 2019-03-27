@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}All Activities{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <a href="{{ path("activity_new") }}" class="btn">Nouvelle Activité</a>
+
+    <div class="row">
+        <div class="col s12">
+            <h4>Toutes les activités</h4>
+
+            {% for activity in activities %}
+            <div class="col s12 m4">
+                <div class="card large blue-grey darken-1">
+                    <div class="card-image">
+                        {% if activity.mainImage is null %}
+                            <img src="http://lorempixel.com/800/400/technics" alt="">
+                        {% else %}
+                            <img src="{{ asset('uploads/' ~ activity.mainImage) }}" alt="">
+                        {% endif %}
+                    </div>
+                    <div class="card-content white-text">
+                        <span class="card-title">{{ activity.name }} {% if activity.active == 1 %} <i class="material-icons green-text accent-2">check</i> {% else %} <i class="material-icons red-text accent-4">cancel</i> {% endif %}</span>
+                        <div class="row"></div>
+                        <p><b>Inscriptions:</b> 5/{{ activity.maxAmountStudents }}</p>
+                        <br/>
+                        <p>
+                            {{ activity.description }}
+                        </p>
+
+                    </div>
+                    <div class="card-action">
+                        <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <div class="right hide-on-med-and-down">
+                                <a href="{{ path("activity_edit", {'id': activity.id})}}">edit</a>
+                                <a href="{{ path("activity_delete", {'id': activity.id})}}">delete</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {% endfor %}
+        </div>
+    </div>
+
+
+{% endblock %}
+
+    {% block javascripts %}
+        {{ parent() }}
+        <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
+    {% endblock %}

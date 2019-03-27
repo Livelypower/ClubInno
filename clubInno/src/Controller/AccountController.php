@@ -211,6 +211,19 @@ class AccountController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/account/applications", name="account_applications")
+     */
+    public function viewApplications(){
+        $user = $this->getUser();
+
+        $applications = $this->getDoctrine()->getRepository(Application::class)->findBy(['user' => $user], ['date' => 'DESC']);
+
+        return $this->render('account/viewApplications.html.twig', [
+            'applications' => $applications
+        ]);
+    }
+
     private function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')
     {
         $pieces = [];

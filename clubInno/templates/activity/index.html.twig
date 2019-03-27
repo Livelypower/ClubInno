@@ -4,7 +4,6 @@
 
 {% block body %}
     {{ parent() }}
-    <a href="{{ path("activity_new") }}" class="btn">Nouvelle Activité</a>
 
     <div class="row">
         <div class="col s12">
@@ -32,12 +31,6 @@
                         </div>
                         <div class="card-action">
                             <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
-                            {% if is_granted('ROLE_ADMIN') %}
-                                <div class="right hide-on-med-and-down">
-                                    <a href="{{ path("activity_edit", {'id': activity.id})}}">edit</a>
-                                    <a href="{{ path("activity_delete", {'id': activity.id})}}">delete</a>
-                                </div>
-                            {% endif %}
                         </div>
                     </div>
                 </div>

@@ -21,7 +21,7 @@
                     <a href="{{ path('home') }}" class="brand-logo" style="margin-left: 10px">Club Inno</a>
                     <ul class="right hide-on-med-and-down">
                         {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('activity') }}">Gérer les activités</a></li>
+                            <li><a href="{{ path('admin_list_activities') }}">Gérer les activités</a></li>
                             <li><a href="{{ path('tag') }}">Gérer les tags</a></li>
                             <li><a href="{{ path('blog') }}">Gérer les articles de blog</a></li>
                         {% endif %}
@@ -85,9 +85,10 @@
 
     <!-- Dropdown Structure -->
     <ul id='dropdown1' class='dropdown-content'>
-        <li><a href="{{ path('account') }}">Votre profil <i class="medium material-icons">account_circle</i></a></li>
+        <li><a href="{{ path('account') }}">Mon profil <i class="medium material-icons">account_circle</i></a></li>
+        <li><a href="{{ path('account_applications') }}">Mes applications <i class="medium material-icons">developer_board</i></a></li>
         {% if is_granted('ROLE_USER') %}
-            <li><a href="{{ path('account_basket') }}">Votre panier <i class="medium material-icons">shopping_basket</i></a></li>
+            <li><a href="{{ path('account_basket') }}">Mon panier <i class="medium material-icons">shopping_basket</i></a></li>
         {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
             <li><a href="{{ path('admin_application_list') }}">Toutes les applications <i class="medium material-icons">shopping_basket</i></a></li>
