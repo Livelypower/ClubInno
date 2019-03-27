@@ -78,8 +78,7 @@ class ActivityType extends AbstractType
                 function ($file) {
                    return;
                 }
-            ))
-        ;
+            ));
 
         $builder->get('files')
             ->addModelTransformer(new CallbackTransformer(
@@ -96,7 +95,6 @@ class ActivityType extends AbstractType
                 function ($files) {
                     return;
                 }
-            ))
-        ;
+            ));
     }
 }

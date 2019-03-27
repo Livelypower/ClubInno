@@ -51,6 +51,11 @@ class BlogPost
      */
     private $datetime;
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $files = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +141,18 @@ class BlogPost
     public function setDatetime(\DateTimeInterface $datetime): self
     {
         $this->datetime = $datetime;
+
+        return $this;
+    }
+
+    public function getFiles(): ?array
+    {
+        return $this->files;
+    }
+
+    public function setFiles(?array $files): self
+    {
+        $this->files = $files;
 
         return $this;
     }

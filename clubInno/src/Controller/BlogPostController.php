@@ -39,8 +39,23 @@ class BlogPostController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $files = $request->files->get('blog_post')['files'];
+            $filenames = array();
+            $uploads_directory = $this->getParameter('uploads_directory');
+
+            foreach($files as $file){
+                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+                array_push($filenames, $filename);
+                $file->move(
+                    $uploads_directory,
+                    $filename
+                );
+            }
+
+
             $blogPost = $form->getData();
             $blogPost->setUser($user);
+            $blogPost->setFiles($filenames);
             $blogPost->setDateTime(new \DateTime('now'));
 
             $em = $this->getDoctrine()->getManager();
@@ -70,11 +85,30 @@ class BlogPostController extends AbstractController
      * @Route("/blog/{id}", requirements={"id": "\d+"}, name="blog_show")
      */
     public function showBlogPost(BlogPost $blogPost){
-
         $comments = $this->getDoctrine()->getRepository(Comment::class)->findBy(['blogPost' => $blogPost]);
+        $files = array();
+        $imgs = array();
+
+        if(!empty($blogPost->getFiles())){
+            foreach ($blogPost->getFiles() as $file){
+                $pieces = explode(".", $file);
+                $ext = $pieces[1];
+                if($ext == "jpg" || $ext == "png" || $ext == "jpeg"){
+                    array_push($imgs, $file);
+                }else{
+                    array_push($files, $file);
+                }
+            }
+        }
+
+
         return $this->render('blog_post/show.html.twig', [
             'post' => $blogPost,
-            'comments' => $comments
+            'comments' => $comments,
+            'imgs' => $imgs,
+            'files' => $files
         ]);
     }
+
+
 }

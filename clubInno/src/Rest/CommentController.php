@@ -59,6 +59,23 @@ class CommentController extends AbstractFOSRestController
     }
 
     /**
+     * Retrieves an Comment resource
+     * @Rest\Delete("/comment/delete/{commentId}")
+     */
+    public function deleteComment(int $commentId): View
+    {
+        $em = $this->getDoctrine()->getManager();
+        $comment = $this->getDoctrine()->getRepository(Comment::class)->find($commentId);
+        // In case our GET was a success we need to return a 200 HTTP OK response with the request object
+        $em->remove($comment);
+        $em->flush();
+
+        return View::create($comment, Response::HTTP_OK);
+    }
+
+
+
+    /**
      * Retrieves all Comment resources belonging to a blogpost
      * @Rest\Get("/blog/{blogPostId}/comments")
      */

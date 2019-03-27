@@ -16,9 +16,23 @@ class HomeController extends AbstractController
     {
         $blogPost = $this->getDoctrine()->getRepository(BlogPost::class)->findOneBy([],
             ['datetime' => 'DESC']);
+
+        $imgs = array();
+
+        if(!empty($blogPost->getFiles())){
+            foreach ($blogPost->getFiles() as $file){
+                $pieces = explode(".", $file);
+                $ext = $pieces[1];
+                if($ext == "jpg" || $ext == "png" || $ext == "jpeg"){
+                    array_push($imgs, $file);
+                }
+            }
+        }
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
-            'latest_blog_post' => $blogPost
+            'latest_blog_post' => $blogPost,
+            'imgs' => $imgs
         ]);
     }
 }

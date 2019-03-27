@@ -15,12 +15,28 @@
         <div class="col s12">
             <div class="card blue-grey darken-1">
                 <div class="card-image">
-                    <img src="http://lorempixel.com/800/400/technics" alt="">
+                    {% if imgs is not empty %}
+                        <div class="carousel carousel-slider">
+                            {% for file in imgs %}
+                                <a href="{{ asset('uploads/' ~ file) }}" class="carousel-item"><img src="{{ asset('uploads/' ~ file) }}"></a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
                 </div>
                 <div class="card-content white-text">
                     <p>
                         {{ post.body | raw }}
                     </p>
+                    {% if files is not empty %}
+                        <h6>Des fichiers ci-joint:</h6>
+                        <div>
+                            <ul>
+                                {% for file in files %}
+                                    <li><a href="{{ asset('uploads/' ~ file) }}" class="orange-text text-lighten-2" download>{{ file }}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
                     <br>
                     <button class="btn grey lighten-2 black-text" id="openCommentForm">Ajouter un commentaire</button>
                     <div class="row" id="commentView" hidden style="margin-top: 20px">
@@ -30,6 +46,7 @@
                             <input placeholder="Commentaire" id="commentBody" type="text" class="validate">
                             <label for="commentBody">Ecrivez votre commentaire</label>
                         </div>
+
                         <div class="col s12">
                             <button class="btn green accent-4" id="addComment">
                                 Ajouter
@@ -37,7 +54,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-action" id="commentSection">
+                <div class="card-action" id="commentSection" data-user="{{ app.user.id }}">
 
                 </div>
             </div>
@@ -51,4 +68,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('js/commentForm.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/carousel.js') }}"></script>
 {% endblock %}

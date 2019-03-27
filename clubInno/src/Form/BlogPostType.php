@@ -11,6 +11,7 @@ namespace App\Form;
 use App\Entity\Activity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,6 +20,9 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Form\CallbackTransformer;
+
 
 class BlogPostType extends AbstractType
 {
@@ -37,6 +41,29 @@ class BlogPostType extends AbstractType
                 'multiple' => false
                 // 'expanded' => true,
             ])
+            ->add('files', FileType::class, [
+                'mapped' => true,
+                'required' => false,
+                'multiple' => true,
+                'label' => 'Files'
+            ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
+
+        $builder->get('files')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($filenames) {
+                    $files = array();
+                    if($filenames == null || empty($filenames)){
+                        return null;
+                    }
+                    foreach ($filenames as $filename){
+                        array_push($files, new File($filename));
+                    }
+                    return $files;
+                },
+                function ($files) {
+                    return;
+                }
+            ));
     }
 }
