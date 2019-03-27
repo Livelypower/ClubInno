@@ -23,7 +23,7 @@
                         <div class="card-content white-text">
                             <span class="card-title">{{ activity.name }}</span>
                             <div class="row"></div>
-                            <p><b>Inscriptions:</b> 5/{{ activity.maxAmountStudents }}</p>
+                            <p><b>Inscriptions:</b> {{ activity.users|length }}/{{ activity.maxAmountStudents }}</p>
                             <br/>
                             <p>
                                 {{ activity.description }}
