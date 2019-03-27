@@ -43,6 +43,11 @@
                                             {% set inlist = true  %}
                                         {% endif %}
                                 {% endfor %}
+                                {% for item in app.user.registrations %}
+                                    {% if item.id == activity.id %}
+                                        {% set inlist = true  %}
+                                    {% endif %}
+                                {% endfor %}
                                 {% if not inlist %}
                                     <a class="btn green lighten-2 right" href="{{ path('activity_addbasket', {'id': activity.id})}}" id="add">Ajouter au basket</a>
                                 {% endif %}
