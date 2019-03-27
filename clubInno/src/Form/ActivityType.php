@@ -8,6 +8,7 @@
 
 namespace App\Form;
 
+use App\Entity\Semester;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -46,13 +47,13 @@ class ActivityType extends AbstractType
                 // 'expanded' => true,
             ])
             ->add('maxAmountStudents', NumberType::class, ['label' => 'Max étudiants'])
-            ->add('registrationDeadline', DateType::class,
-                [
-                    'label' => 'Date limite d\'inscription',
-                    'widget' => 'single_text',
-                    'html5' => false,
-                    'format' => 'mm/dd/yyyy'
-                ])
+            ->add('semester', EntityType::class, [
+                'label' => 'Semester',
+                'class' => Semester::class,
+                'choice_label' => 'stringified',
+                'multiple' => false,
+                'required' => true
+            ])
             ->add('mainImage', FileType::class, [
                 'mapped' => true,
                 'required' => false,

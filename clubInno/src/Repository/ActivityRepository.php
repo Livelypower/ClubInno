@@ -19,6 +19,18 @@ class ActivityRepository extends ServiceEntityRepository
         parent::__construct($registry, Activity::class);
     }
 
+    /**
+     * @return Activity[] Returns an array of Activity objects where the semester_id doesn't equal the added id
+     */
+    public function findWhereSemesterNot($semester) :array
+    {
+        return $this->createQueryBuilder('a')
+            ->andWhere('a.semester != :semester')
+            ->setParameter('semester', $semester)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Activity[] Returns an array of Activity objects
     //  */

@@ -35,11 +35,6 @@ class Activity
     private $maxAmountStudents;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $registrationDeadline;
-
-    /**
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $active;
@@ -77,6 +72,13 @@ class Activity
      * @ORM\ManyToMany(targetEntity="App\Entity\User", mappedBy="registrations")
      */
     private $users;
+
+    /**
+     * Many activities have one semester. This is the owning side.
+     * @ORM\ManyToOne(targetEntity="Semester", inversedBy="activities")
+     * @ORM\JoinColumn(name="semester_id", referencedColumnName="id")
+     */
+    private $semester;
 
 
     public function __construct()
@@ -124,18 +126,6 @@ class Activity
     public function setMaxAmountStudents(int $maxAmountStudents): self
     {
         $this->maxAmountStudents = $maxAmountStudents;
-
-        return $this;
-    }
-
-    public function getRegistrationDeadline(): ?\DateTimeInterface
-    {
-        return $this->registrationDeadline;
-    }
-
-    public function setRegistrationDeadline(?\DateTimeInterface $registrationDeadline): self
-    {
-        $this->registrationDeadline = $registrationDeadline;
 
         return $this;
     }
@@ -208,6 +198,23 @@ class Activity
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSemester()
+    {
+        return $this->semester;
+    }
+
+    /**
+     * @param mixed $semester
+     */
+    public function setSemester($semester): void
+    {
+        $this->semester = $semester;
+    }
+
 
 
 }

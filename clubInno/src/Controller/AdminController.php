@@ -2,12 +2,18 @@
 
 namespace App\Controller;
 
+use App\Entity\Semester;
+use App\Form\ActivityType;
+use App\Form\SetActiveSemesterForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\Application;
 use App\Entity\User;
 use App\Entity\Activity;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class AdminController extends AbstractController
 {
@@ -24,7 +30,8 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/listApplications", name="admin_application_list")
      */
-    public function listApplications(SerializerInterface $serializer){
+    public function listApplications(SerializerInterface $serializer)
+    {
 
         $applications = $this->getDoctrine()->getRepository(Application::class)->findAll();
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
@@ -34,21 +41,20 @@ class AdminController extends AbstractController
         $jsonActi = array();
 
 
-        foreach ($users as $user){
+        foreach ($users as $user) {
             array_push($jsonUsers, $serializer->serialize($user, 'json', [
                 'circular_reference_handler' => function ($user) {
                     return $user->getId();
                 }
             ]));
         }
-        foreach ($activities as $acti){
+        foreach ($activities as $acti) {
             array_push($jsonActi, $serializer->serialize($acti, 'json', [
                 'circular_reference_handler' => function ($acti) {
                     return $acti->getId();
                 }
             ]));
         }
-
 
 
         return $this->render('admin/application_list.html.twig', [
@@ -61,7 +67,8 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/applicationDetail/{id}", requirements={"id": "\d+"}, name="admin_application_show")
      */
-    public function applicationDetail(Application $application){
+    public function applicationDetail(Application $application)
+    {
 
         return $this->render('admin/application_show.html.twig');
     }
@@ -69,7 +76,8 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/listUsers/", name="admin_list_users")
      */
-    public function listUsers(){
+    public function listUsers()
+    {
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         return $this->render('admin/list_users.html.twig', [
             'users' => $users
@@ -79,10 +87,11 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/editUser/{id}/makeAdmin", requirements={"id": "\d+"}, name="admin_make_user_admin")
      */
-    public function makeAdmin($id){
+    public function makeAdmin($id)
+    {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
-        if (!in_array('ROLE_AMDIN', $roles)){
+        if (!in_array('ROLE_AMDIN', $roles)) {
             array_push($roles, 'ROLE_ADMIN');
             $user->setRoles($roles);
 
@@ -96,10 +105,11 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/editUser/{id}/makeTeacher", requirements={"id": "\d+"}, name="admin_make_user_teacher")
      */
-    public function makeTeacher($id){
+    public function makeTeacher($id)
+    {
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
-        if (!in_array('ROLE_TEACHER', $roles)){
+        if (!in_array('ROLE_TEACHER', $roles)) {
             array_push($roles, 'ROLE_TEACHER');
             $user->setRoles($roles);
 
@@ -114,17 +124,201 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/editUser/{id}/makeTeacher", requirements={"id": "\d+"}, name="admin_remove_user_admin")
      */
-    public function removeAdmin($id){
+    public function removeAdmin($id)
+    {
         return $this->redirectToRoute('admin_list_users');
     }
 
     /**
      * @Route("/admin/editUser/{id}/makeTeacher", requirements={"id": "\d+"}, name="admin_remove_user_teacher")
      */
-    public function removeTeacher($id){
+    public function removeTeacher($id)
+    {
 
         return $this->redirectToRoute('admin_list_users');
     }
 
+    /**
+     * @Route("/admin/activities", name="admin_list_activities")
+     */
+    public function listActivities()
+    {
+        $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
 
+        return $this->render('admin/activity_list.html.twig', [
+            'activities' => $activities
+        ]);
+    }
+
+    /**
+     * @Route("admin/activity/new", name="activity_new")
+     */
+    public function newActivity(Request $request)
+    {
+        $activity = new Activity();
+
+        $form = $this->createForm(ActivityType::class, $activity);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $request->files->get('activity')['mainImage'];
+            $files = $request->files->get('activity')['files'];
+            $filenames = array();
+            $filename = null;
+
+            $uploads_directory = $this->getParameter('uploads_directory');
+
+            if ($file != null) {
+                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+
+                foreach ($files as $fl) {
+                    $name = md5(uniqid()) . '.' . $fl->guessExtension();
+                    array_push($filenames, $name);
+                    $fl->move(
+                        $uploads_directory,
+                        $name
+                    );
+                }
+
+                $file->move(
+                    $uploads_directory,
+                    $filename
+                );
+            }
+
+
+            $activity = $form->getData();
+            $activity->setMainImage($filename);
+            $activity->setFiles($filenames);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($activity);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_list_activities');
+        }
+
+        return $this->render('activity/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
+
+    }
+
+    /**
+     * @Route("admin/activity/{id}/edit", requirements={"id": "\d+"}, name="activity_edit")
+     */
+    public function editActivity(Request $request, Activity $activity)
+    {
+
+        $filename = $activity->getMainImage();
+        $filenames = $activity->getFiles();
+
+        $files = array();
+        if ($filename != null) {
+            $activity->setMainImage($this->getParameter('uploads_directory') . '/' . $filename);
+        }
+
+        if ($filenames != null && !empty($filenames)) {
+            foreach ($filenames as $fln) {
+                $fl = $this->getParameter('uploads_directory') . '/' . $fln;
+                array_push($files, $fl);
+            }
+            $activity->setFiles($files);
+        } else {
+            $filenames = array();
+        }
+
+        $form = $this->createForm(ActivityType::class, $activity);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $file = $request->files->get('activity')['mainImage'];
+            $files = $request->files->get('activity')['files'];
+            $uploads_directory = $this->getParameter('uploads_directory');
+            if ($file != null) {
+                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+
+                $file->move(
+                    $uploads_directory,
+                    $filename
+                );
+            }
+
+            if ($files != null && !empty($files)) {
+                foreach ($files as $f) {
+                    $fn = md5(uniqid()) . '.' . $f->guessExtension();
+                    array_push($filenames, $fn);
+                    $f->move(
+                        $uploads_directory,
+                        $fn
+                    );
+                }
+            }
+
+            $activity = $form->getData();
+            $activity->setMainImage($filename);
+            $activity->setFiles($filenames);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($activity);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_list_activities');
+        }
+
+        return $this->render('activity/edit.html.twig', [
+            'form' => $form->createView()
+        ]);
+    }
+
+    /**
+     * @Route("admin/activity/{id}/delete", requirements={"id": "\d+"}, name="activity_delete")
+     */
+    public function deleteActivity(Activity $activity)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($activity);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_list_activities');
+    }
+
+    /**
+     * @Route("admin/semester/setactive", name="admin_semester")
+     */
+    public function semester(Request $request)
+    {
+        $years = $this->getDoctrine()->getRepository(Semester::class)->findAll();
+
+        return $this->render('semester/setactive.html.twig', [
+            'years' => $years
+        ]);
+    }
+
+    /**
+     * @Route("admin/semester/setactive/{id}/", requirements={"id": "\d+"}, name="admin_set_active_semester")
+     */
+    public function setActiveSemester(int $id)
+    {
+        $semester = $this->getDoctrine()->getRepository(Semester::class)->find($id);
+        $activitiesToSetActive = $this->getDoctrine()->getRepository(Activity::class)->findBy(['semester' => $semester]);
+        $activitiesToSetUnActive = $this->getDoctrine()->getRepository(Activity::class)->findWhereSemesterNot($semester);
+
+        foreach ($activitiesToSetActive as $activity){
+            $activity->setActive(true);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($activity);
+            $em->flush();
+        }
+
+        foreach ($activitiesToSetUnActive as $activity){
+            $activity->setActive(false);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($activity);
+            $em->flush();
+        }
+        return $this->redirectToRoute('admin_list_activities');
+    }
 }
