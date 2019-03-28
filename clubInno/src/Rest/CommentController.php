@@ -59,6 +59,24 @@ class CommentController extends AbstractFOSRestController
     }
 
     /**
+     * @Rest\Patch("/comment/update/{commentId}")
+     */
+    public function updateComment(Request $request, int $commentId): View
+    {
+        if($request->get('comment') != null && $request->get('comment') != ""){
+            $comment = $this->getDoctrine()->getRepository(Comment::class)->find($commentId);
+            $comment->setBody($request->get('comment'));
+
+            $em = $this->getDoctrine()->getManager();
+            $comment->setDatetime(new \DateTime('now'));
+            $em->persist($comment);
+            $em->flush();
+
+            return View::create($comment, Response::HTTP_OK);
+        }
+    }
+
+    /**
      * Retrieves an Comment resource
      * @Rest\Delete("/comment/delete/{commentId}")
      */

@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}All Activities{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/activity_list.css') }}"/>
+    {{ parent() }}
+{% endblock %}
 
 {% block body %}
     {{ parent() }}

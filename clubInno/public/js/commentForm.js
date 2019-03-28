@@ -8,9 +8,33 @@ $(document).ready(function(){
         event.stopPropagation();
         event.stopImmediatePropagation();
         var commentId = $(this).data('comment');
-        console.log("hallo");
         deleteComment(commentId);
+    }).on('click', '.edtcmt', function(){
+        var id = $(this).data('comment');
+        var textselector = "#text-" + id;
+        var buttonselector = '#svedit-' + id;
+        var editselector = '#edtcmt-' + id;
+        var text = $(textselector).text();
+        $(textselector).text("");
+        $(textselector).append(
+            "<input id='input-" + id + "' value='" + text + "' data-comment='" + id + "' type='text'>"
+        );
+        $(buttonselector).css('display', 'inline');
+        $(editselector).css('display', 'none');
+    }).on('click', '.svedit', function(){
+        var id = $(this).data('comment');
+        var inputselector = "#input-" + id;
+        var buttonselector = '#svedit-' + id;
+        var editselector = '#edtcmt-' + id;
+        var text = $(inputselector).val();
+
+        $(buttonselector).css('display', 'none');
+        $(editselector).css('display', 'inline');
+
+        editComment(id, text);
     });
+
+
 
     $('#addComment').click(function () {
         var formContent = {
@@ -63,9 +87,12 @@ function getData() {
                         "                                            " + value.user.first_name + " " + value.user.last_name + "<span\n" +
                         "                                                    style=\"font-style: italic\"> "+ dateString + "</span>\n" +
                         "                                        </div>\n" +
-                        "                                        <p>"+ value.body + "\n" +
-                        "                                               <a class='dltcmt' data-comment='" + value.id + "'><i class='material-icons right'>clear</i>\n" +
-                        "                                           </a>\n" +
+                        "                                        <p><span id='text-"+ value.id + "'>" +value.body + "</span>\n" +
+                        "                                               <a class='dltcmt' data-comment='" + value.id + "'><i class='material-icons right'>clear</i></a>\n" +
+                        "                                               <span id='edtcmt-" + value.id +  "' class='edtcmt' data-comment='" + value.id + "'><a><i class='material-icons right'>edit</i>\n" +
+                        "                                           </a></span>\n" +
+                        "                                               <span class='svedit' id='svedit-" + value.id +"' data-comment='" + value.id + "' style='display: none'><a><i class='material-icons right'>done</i>\n" +
+                        "                                           </a></span>\n" +
                         "                                        </p>\n" +
                         "                                    </div>\n" +
                         "                                </div>\n" +
@@ -104,6 +131,28 @@ function deleteComment(commentId){
     $.ajax({
         method: "DELETE",
         url: "http://localhost:8000/api/comment/delete/" + commentId,
+        success: function (response) {
+            console.log(response);
+            $('#commentBody').val("");
+            getData();
+            $('#commentSection').empty();
+        },
+        error: function (response) {
+            console.log(response);
+            console.log('call failed')
+        }
+    });
+}
+
+function editComment(id, text){
+    console.log(text);
+    var formContent = {
+        "comment" : text
+    };
+    $.ajax({
+        method: "PATCH",
+        url: "http://localhost:8000/api/comment/update/" + id,
+        data: formContent,
         success: function (response) {
             console.log(response);
             $('#commentBody').val("");
