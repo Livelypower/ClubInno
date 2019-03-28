@@ -13,6 +13,8 @@ $(document).ready(function(){
         var id = $(this).data('comment');
         var textselector = "#text-" + id;
         var buttonselector = '#svedit-' + id;
+        var deleteselector = '#dltcmt-' + id;
+        var stopselector = '#spedit-' +id;
         var editselector = '#edtcmt-' + id;
         var text = $(textselector).text();
         $(textselector).text("");
@@ -20,18 +22,40 @@ $(document).ready(function(){
             "<input id='input-" + id + "' value='" + text + "' data-comment='" + id + "' type='text'>"
         );
         $(buttonselector).css('display', 'inline');
+        $(stopselector).css('display', 'inline');
         $(editselector).css('display', 'none');
+        $(deleteselector).css('display', 'none');
     }).on('click', '.svedit', function(){
         var id = $(this).data('comment');
         var inputselector = "#input-" + id;
         var buttonselector = '#svedit-' + id;
+        var stopselector = '#spedit-' + id;
         var editselector = '#edtcmt-' + id;
+        var deleteselector = '#dltcmt-' + id;
         var text = $(inputselector).val();
 
         $(buttonselector).css('display', 'none');
+        $(stopselector).css('display', 'none');
         $(editselector).css('display', 'inline');
+        $(deleteselector).css('display', 'inline');
 
         editComment(id, text);
+    }).on('click', '.spedit', function(){
+        var id = $(this).data('comment');
+        var inputselector = "#input-" + id;
+        var buttonselector = '#svedit-' + id;
+        var stopselector = '#spedit-' + id;
+        var editselector = '#edtcmt-' + id;
+        var deleteselector = '#dltcmt-' + id;
+        var textselector = "#text-" + id;
+        var text = $(inputselector).val();
+
+        $(buttonselector).css('display', 'none');
+        $(stopselector).css('display', 'none');
+        $(editselector).css('display', 'inline');
+        $(deleteselector).css('display', 'inline');
+
+        $(textselector).text(text);
     });
 
 
@@ -88,9 +112,10 @@ function getData() {
                         "                                                    style=\"font-style: italic\"> "+ dateString + "</span>\n" +
                         "                                        </div>\n" +
                         "                                        <p><span id='text-"+ value.id + "'>" +value.body + "</span>\n" +
-                        "                                               <a class='dltcmt' data-comment='" + value.id + "'><i class='material-icons right'>clear</i></a>\n" +
+                        "                                               <a id='dltcmt-" + value.id +  "' class='dltcmt' data-comment='" + value.id + "'><i class='material-icons right'>delete</i></a>\n" +
                         "                                               <span id='edtcmt-" + value.id +  "' class='edtcmt' data-comment='" + value.id + "'><a><i class='material-icons right'>edit</i>\n" +
                         "                                           </a></span>\n" +
+                        "                                               <span class='spedit' id='spedit-" + value.id +"' data-comment='" + value.id + "' style='display: none'><a><i class='material-icons right'>clear</i></a></span>\n" +
                         "                                               <span class='svedit' id='svedit-" + value.id +"' data-comment='" + value.id + "' style='display: none'><a><i class='material-icons right'>done</i>\n" +
                         "                                           </a></span>\n" +
                         "                                        </p>\n" +
