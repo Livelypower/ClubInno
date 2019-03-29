@@ -41,7 +41,11 @@
                     <button class="btn grey lighten-2 black-text" id="openCommentForm">Ajouter un commentaire</button>
                     <div class="row" id="commentView" hidden style="margin-top: 20px">
                         <input type="hidden" value="{{ post.id }}" id="postId"/>
-                        <input type="hidden" value="{{ app.user.id }}" id="userId"/>
+                        {% if app.user %}
+                            <input type="hidden" value="{{ app.user.id }}" id="userId"/>
+                        {% else %}
+                            <input type="hidden" value="" id="userId"/>
+                        {% endif %}
                         <div class="input-field col s12">
                             <input placeholder="Commentaire" id="commentBody" type="text" class="validate">
                             <label for="commentBody">Ecrivez votre commentaire</label>
@@ -54,8 +58,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="card-action" id="commentSection" data-user="{{ app.user.id }}">
-
+                {% if app.user %}
+                    <div class="card-action" id="commentSection" data-user="{{ app.user.id }}">
+                {% else %}
+                    <div class="card-action" id="commentSection" data-user="">
+                {% endif %}
                 </div>
             </div>
         </div>
@@ -63,10 +70,28 @@
             <a href="{{ path('blog') }}" class="btn red accent-2">Retourner</a>
         </div>
     </div>
+
+    {{ app.session.set('lastUrl', app.request.uri) }}
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h5>Vous n'êtes pas connecté</h5>
+            <p>Pour ajouter un commentaire à un blog, vous devez être connecté. Voulez-vous vous connecter?</p>
+        </div>
+        <div class="divider"></div>
+        <div class="modal-footer">
+            <a href="{{ path('app_login') }}" class="modal-close waves-effect waves-green btn-flat">Connexion</a>
+            <a href="#" class="modal-close waves-effect waves-red btn-flat">Annulez</a>
+        </div>
+    </div>
+
+
+
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('js/commentForm.js') }}"></script>
     <script type="text/javascript" src="{{ asset('js/carousel.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/modal.js') }}"></script>
 {% endblock %}

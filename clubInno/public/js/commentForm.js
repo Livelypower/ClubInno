@@ -1,6 +1,12 @@
 $(document).ready(function(){
     $('#openCommentForm').click(function(){
-        $('#commentView').toggle();
+        if($('#userId').val() != ""){
+            $('#commentView').toggle();
+        }else{
+            console.log("not logged in");
+            var instance = M.Modal.getInstance($('#loginModal'));
+            instance.open();
+        }
     });
     getData();
 
@@ -76,6 +82,7 @@ $(document).ready(function(){
                 $('#commentBody').val("");
                 getData();
                 $('#commentSection').empty();
+                $('#commentView').toggle();
             },
             error: function (response) {
                 console.log(response)
@@ -190,3 +197,4 @@ function editComment(id, text){
         }
     });
 }
+

@@ -21,7 +21,15 @@ class SecurityController extends AbstractController
 
         if($username != null && $username !="")$lastUsername = $username;
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        $lastUrl = null;
+
+        if($this->get('session')->isStarted()){
+            $session = $this->get('session');
+            $lastUrl = $session->get('lastUrl');
+        }
+
+
+        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error, 'lastUrl' => $lastUrl]);
     }
 
     /**
