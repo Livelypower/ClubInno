@@ -125,5 +125,62 @@ class BlogPostController extends AbstractController
         return $this->redirectToRoute('blog');
     }
 
+    /**
+     * @Route("/blog/{id}/edit", requirements={"id": "\d+"}, name="blog_edit")
+     */
+    public function editBlog(Request $request, BlogPost $blogPost){
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+
+        $filenames = $blogPost->getFiles();
+
+        $files = array();
+
+        if ($filenames != null && !empty($filenames)) {
+            foreach ($filenames as $fln) {
+                $fl = $this->getParameter('uploads_directory') . '/' . $fln;
+                array_push($files, $fl);
+            }
+            $blogPost->setFiles($files);
+        } else {
+            $filenames = array();
+        }
+
+        $form = $this->createForm(BlogPostType::class, $blogPost);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $files = $request->files->get('blog_post')['files'];
+            $uploads_directory = $this->getParameter('uploads_directory');
+
+            if ($files != null && !empty($files)) {
+                foreach ($files as $f) {
+                    $fn = md5(uniqid()) . '.' . $f->guessExtension();
+                    array_push($filenames, $fn);
+                    $f->move(
+                        $uploads_directory,
+                        $fn
+                    );
+                }
+            }
+
+            $blogPost = $form->getData();
+            $blogPost->setUser($user);
+            $blogPost->setFiles($filenames);
+            $blogPost->setDateTime(new \DateTime('now'));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($blogPost);
+            $em->flush();
+
+            return $this->redirectToRoute('blog');
+        }
+
+        return $this->render('blog_post/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
 
 }

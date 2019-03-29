@@ -210,7 +210,6 @@ class AdminController extends AbstractController
      */
     public function editActivity(Request $request, Activity $activity)
     {
-
         $filename = $activity->getMainImage();
         $filenames = $activity->getFiles();
 

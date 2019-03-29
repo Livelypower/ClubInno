@@ -25,8 +25,10 @@
                         {% if app.user %}
                         <td>
                             {% if post.user.id == app.user.id %}
+                                <a href="{{ path('blog_edit', {'id': post.id}) }}"><i class="material-icons">edit</i></a>
                                 <a href="{{ path('blog_delete', {'id': post.id}) }}"><i class="material-icons">delete</i></a>
                             {% else %}
+                                <a class="grey-text lighten-1"><i class="material-icons">edit</i></a>
                                 <a class="grey-text lighten-1"><i class="material-icons">delete</i></a>
                             {% endif %}
                         </td>
