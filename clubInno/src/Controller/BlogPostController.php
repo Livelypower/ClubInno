@@ -110,5 +110,20 @@ class BlogPostController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/blog/{id}/delete", requirements={"id": "\d+"}, name="blog_delete")
+     */
+    public function deleteBlog(BlogPost $blogPost){
+        $em = $this->getDoctrine()->getManager();
+        $comments = $blogPost->getComments();
+        foreach($comments as $comment){
+            $em->remove($comment);
+        }
+        $em->remove($blogPost);
+        $em->flush();
+
+        return $this->redirectToRoute('blog');
+    }
+
 
 }

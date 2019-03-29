@@ -86,6 +86,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         }
 
         if($lastUrl = $request->getSession()->get('lastUrl')){
+            $request->getSession()->remove('lastUrl');
             return new RedirectResponse($lastUrl);
         }
 

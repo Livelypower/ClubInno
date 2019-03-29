@@ -15,10 +15,6 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
-            form_login:
-                default_target_path: activity
-                always_use_default_target_path: true
-                target_path_parameter: redirect_url
             anonymous: true
             guard:
                 authenticators:
