@@ -20,13 +20,26 @@
                 <div class="nav-wrapper teal lighten-3">
                     <a href="{{ path('home') }}" class="brand-logo" style="margin-left: 10px">Club Inno</a>
                     <ul class="right hide-on-med-and-down">
-                        {% if is_granted('ROLE_ADMIN') %}
-                            <li><a href="{{ path('admin_list_activities') }}">Gérer les activités</a></li>
-                            <li><a href="{{ path('tag') }}">Gérer les tags</a></li>
-                            <li><a href="{{ path('blog') }}">Gérer les articles de blog</a></li>
+                        {% if not is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('blog') }}">Voir les blogs</a>
+                            </li>
                         {% endif %}
-                        {% if is_granted('ROLE_USER') %}
-                            <li><a href="{{ path('activity') }}">Voir les activités</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('admin_list_activities') }}">Gérer les activités</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('tag') }}">Gérer les tags</a>
+                            </li>
+                            <li>
+                                <a href="{{ path('blog') }}">Gérer les articles de blog</a>
+                            </li>
+                        {% endif %}
+                        {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
+                            <li>
+                                <a href="{{ path('activity') }}">Voir les activités</a>
+                            </li>
                         {% endif %}
                         {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                             <li>
@@ -36,10 +49,10 @@
                                 </a>
                             </li>
                         {% else %}
-                            <li><a href="{{ path('app_login') }}" class="btn grey lighten-2 black-text text-lighten-2">Connexion</a>
+                            <li>
+                                <a href="{{ path('app_login') }}" class="btn grey lighten-2 black-text text-lighten-2">Connexion</a>
                             </li>
                         {% endif %}
-
                     </ul>
                 </div>
             </nav>
