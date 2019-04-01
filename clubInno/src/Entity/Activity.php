@@ -80,6 +80,11 @@ class Activity
      */
     private $semester;
 
+    /**
+     * One Activity has many ActivityGroups. This is the inverse side.
+     * @ORM\OneToMany(targetEntity="ActivityGroup", mappedBy="activity")
+     */
+    private $activityGroups;
 
     public function __construct()
     {
@@ -87,6 +92,7 @@ class Activity
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->blogPosts = new \Doctrine\Common\Collections\ArrayCollection();
         $this->users = new ArrayCollection();
+        $this->activityGroups = new ArrayCollection();
     }
 
     public function getId(): ?int

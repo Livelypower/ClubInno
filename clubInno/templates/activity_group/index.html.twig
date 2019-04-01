@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Toutes les Groupes{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <a href="{{ path("activity_group_new") }}" class="btn green accent-4">Nouveau Groupe</a>
+
+    <div class="row">
+        <div class="col s12">
+            <h4>Toutes les Groupes</h4>
+            <table>
+                <thead>
+                <th>Nom</th>
+                <th>Action</th>
+                </thead>
+                <tbody>
+                {% for group in groups %}
+                    <tr>
+                        <td>
+                            {{ group.name }}
+                        </td>
+                        <td>
+
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
+{% endblock %}

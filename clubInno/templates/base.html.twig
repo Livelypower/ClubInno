@@ -8,6 +8,10 @@
         <link rel="stylesheet" type="text/css" href="{{ asset('css/index.css') }}"/>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <script src="http://code.jquery.com/jquery-3.3.1.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     {% endblock %}
 </head>
 
@@ -110,11 +114,6 @@
         <li><a href="{{ path('app_logout') }}">Déconnexion <i class="medium material-icons">keyboard_tab</i></a></li>
     </ul>
 {% endblock %}
-
-<script src="http://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
 {% block javascripts %}
     <script type="text/javascript" src="{{ asset('js/header.js') }}"></script>
