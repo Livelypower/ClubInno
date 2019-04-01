@@ -16,19 +16,23 @@ $(document).ready(function () {
 
 
     activities.forEach(function(activity) {
-        $("#tableHead").append('<th>' + activity.name + '</th>');
+        $("#tableHead").append('<th id="' + activity.id + '">' + activity.name + ' (' + activity.users.length + ')</th>');
     });
 
     students.forEach(function(student) {
         if(student.roles[0] === "ROLE_USER"){
-            $("#tableBody").append('<tr id="' + student.id + '"><td>' + student.username + '</td>');
+            if(student.registrations.length !== 0){
+                $("#tableBody").append('<tr id="' + student.id + '" class="registrated"><td>' + student.username + '</td>');
+            }else{
+                $("#tableBody").append('<tr id="' + student.id + '"><td>' + student.username + '</td>');
+            }
         }
         activities.forEach(function(activity) {
-            $("#" + student.id).append('<td data-clickable-cell="true" id="' + student.id + activity.id + '"></td>');
+            $("#" + student.id).append('<td data-clickable-cell="true" id="' + student.id + "-" + activity.id + '"></td>');
             if(student.applications.length !== 0){
                 student.applications[0].activities.forEach(function(application){
                     if(activity.id === application.id){
-                        $("#" + student.id + application.id).addClass("red");
+                        $("#" + student.id + "-" + application.id).addClass("red");
                     }
                 });
             }
@@ -49,9 +53,9 @@ $(document).ready(function () {
                                 }
                             });
                             if(matched){
-                                $("#" + student.id + activity.id).addClass("blue");
+                                $("#" + student.id + "-" + activity.id).addClass("blue");
                             }else{
-                                $("#" + student.id + activity.id).addClass("light-blue lighten-3");
+                                $("#" + student.id + "-" + activity.id).addClass("light-blue lighten-3");
                             }
                         }
                    }
@@ -60,16 +64,36 @@ $(document).ready(function () {
         });
     });
 
+    $("#toggle-button").click(function(){
+        $(".registrated").toggle();
+    });
 
     $("td").click(function () {
         if ($(this).data("clickableCell") === true) {
+            var id = $(this).attr('id');
+            var studentId = id.substr(0, id.indexOf('-'));
+
             if ($(this).hasClass("red")) {
                 $(this).toggleClass("blue");
             } else {
                 $(this).toggleClass("light-blue lighten-3");
             }
+            updateRegistrated(studentId);
+            updateCount();
+
         }
     });
+
+    function updateCount(){
+        activities.forEach(function(activity) {
+            var count = 0;
+            students.forEach(function(student){
+                var selector = "#" + student.id + "-" + activity.id;
+                if($(selector).hasClass("blue") || $(selector).hasClass("light-blue lighten-3"))count++;
+            });
+            $("#" + activity.id).text(activity.name + " (" + count + ")");
+        });
+    }
 
     function saveConfig(){
         $("#autosave-text").show();
@@ -87,7 +111,7 @@ $(document).ready(function () {
                 'activities': []
             };
             activities.forEach(activity => {
-                var className = $("#" + student.id + activity.id).attr('class');
+                var className = $("#" + student.id + "-" + activity.id).attr('class');
             console.log(className);
             if(className == "red blue" || className == "light-blue lighten-3"){
                 studentObj.activities.push(activity.id);
@@ -115,6 +139,20 @@ $(document).ready(function () {
 
     }
 
+    function updateRegistrated(studentId){
+      var hasRegistrated = false;
+
+      activities.forEach(function(activity){
+          var selector = "#" + studentId + "-" + activity.id;
+          if($(selector).hasClass("blue") || $(selector).hasClass("light-blue lighten-3"))hasRegistrated=true;
+      });
+      if(hasRegistrated){
+          $("#"+ studentId).addClass("registrated");
+      }else{
+          $("#"+ studentId).removeClass("registrated");
+      }
+    }
+
     setInterval(function(){
         if(alreadySaved){
             lastSaved++;
@@ -130,8 +168,6 @@ $(document).ready(function () {
         saveConfig();
         M.toast({html: 'Sauvegardé automatiquement'}, 4000);
     }, 240000);
-
-
 
     $('#saveConfig').click(function(){
         saveConfig();
