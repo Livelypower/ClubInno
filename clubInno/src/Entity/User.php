@@ -75,6 +75,13 @@ class User implements UserInterface
      */
     private $registrations;
 
+    /**
+     * Many Users have Many ActivityGroups.
+     * @ORM\ManyToMany(targetEntity="ActivityGroup", inversedBy="users")
+     * @ORM\JoinTable(name="users_groups")
+     */
+    private $activityGroups;
+
 
     public function __construct()
     {
@@ -82,6 +89,7 @@ class User implements UserInterface
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
         $this->applications = new ArrayCollection();
         $this->registrations = new ArrayCollection();
+        $this->activityGroups = new ArrayCollection();
     }
 
     public function getId(): ?int
