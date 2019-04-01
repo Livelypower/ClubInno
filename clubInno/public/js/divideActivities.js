@@ -17,16 +17,20 @@ $(document).ready(function () {
 
     var count = 1;
     activities.forEach(function(activity) {
-        $("#tableHead").append('<th id="' + activity.id + '" data-number="' + count + '">' + activity.name + ' (' + activity.users.length + ')</th>');
+        $("#tableHead").append('<th id="' + activity.id + '" data-number="' + count + '">' + activity.name + ' (' + activity.users.length +
+            '/' + activity.maxAmountStudents + ')</th>');
         count++;
     });
 
     students.forEach(function(student) {
         if(student.roles[0] === "ROLE_USER"){
+            var url = "http://localhost:8000/uploads/" + student.applications[0].motivationLetterPath;
             if(student.registrations.length !== 0){
-                $("#tableBody").append('<tr id="' + student.id + '" class="registrated"><td>' + student.username + '</td>');
+                $("#tableBody").append('<tr id="' + student.id + '" class="registrated"><td>' + student.username
+                   + '<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
             }else{
-                $("#tableBody").append('<tr id="' + student.id + '"><td>' + student.username + '</td>');
+                $("#tableBody").append('<tr id="' + student.id + '"><td>' + student.username
+                    + '<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
             }
         }
         activities.forEach(function(activity) {
@@ -75,7 +79,7 @@ $(document).ready(function () {
             var header = $("#" + activity.id).text();
             var count = header.substring(
                 header.lastIndexOf("(") + 1,
-                header.lastIndexOf(")")
+                header.lastIndexOf("/")
             );
 
             if(count >= activity.maxAmountStudents){
@@ -112,7 +116,7 @@ $(document).ready(function () {
                 var selector = "#" + student.id + "-" + activity.id;
                 if($(selector).hasClass("blue") || $(selector).hasClass("light-blue lighten-3"))count++;
             });
-            $("#" + activity.id).text(activity.name + " (" + count + ")");
+            $("#" + activity.id).text(activity.name + " (" + count + "/" + activity.maxAmountStudents + ")");
         });
     }
 
