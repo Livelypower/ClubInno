@@ -15,8 +15,10 @@ $(document).ready(function () {
     });
 
 
+    var count = 1;
     activities.forEach(function(activity) {
-        $("#tableHead").append('<th id="' + activity.id + '">' + activity.name + ' (' + activity.users.length + ')</th>');
+        $("#tableHead").append('<th id="' + activity.id + '" data-number="' + count + '">' + activity.name + ' (' + activity.users.length + ')</th>');
+        count++;
     });
 
     students.forEach(function(student) {
@@ -64,9 +66,28 @@ $(document).ready(function () {
         });
     });
 
-    $("#toggle-button").click(function(){
+    $("#toggle-students-button").click(function(){
         $(".registrated").toggle();
     });
+
+    $("#toggle-activities-button").click(function(){
+        activities.forEach(function(activity){
+            var header = $("#" + activity.id).text();
+            var count = header.substring(
+                header.lastIndexOf("(") + 1,
+                header.lastIndexOf(")")
+            );
+
+            if(count >= activity.maxAmountStudents){
+                var number = $("#" + activity.id).data('number');
+                number++;
+                $('td:nth-child(' + number  + ')').toggle();
+                $('th:nth-child(' + number + ')').toggle();
+            }
+        });
+    });
+
+
 
     $("td").click(function () {
         if ($(this).data("clickableCell") === true) {

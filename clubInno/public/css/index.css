@@ -15,5 +15,11 @@ main {
 
 
 
+.hidden{
+    visibility: collapse;
+}
+
+
+
 
 
