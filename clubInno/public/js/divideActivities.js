@@ -17,8 +17,10 @@ $(document).ready(function () {
 
     var count = 1;
     activities.forEach(function(activity) {
-        $("#tableHead").append('<th id="' + activity.id + '" data-number="' + count + '">' + activity.name + ' (' + activity.users.length +
-            '/' + activity.maxAmountStudents + ')</th>');
+        $("#tableHead").append('<th id="' + activity.id + '" data-number="' + count + '">' +
+            '<a href="/activity/' + activity.id + '-/admin/listApplications">' + activity.name + '</a>' +
+            ' (' + activity.users.length + '/' + activity.maxAmountStudents + ') ' +
+            '</th>');
         count++;
     });
 
@@ -70,11 +72,15 @@ $(document).ready(function () {
         });
     });
 
-    $("#toggle-students-button").click(function(){
-        $(".registrated").toggle();
+    $("#show-students-button").click(function(){
+        $(".registrated").show();
     });
 
-    $("#toggle-activities-button").click(function(){
+    $("#hide-students-button").click(function(){
+        $(".registrated").hide();
+    });
+
+    $("#show-activities-button").click(function(){
         activities.forEach(function(activity){
             var header = $("#" + activity.id).text();
             var count = header.substring(
@@ -85,8 +91,25 @@ $(document).ready(function () {
             if(count >= activity.maxAmountStudents){
                 var number = $("#" + activity.id).data('number');
                 number++;
-                $('td:nth-child(' + number  + ')').toggle();
-                $('th:nth-child(' + number + ')').toggle();
+                $('td:nth-child(' + number  + ')').show();
+                $('th:nth-child(' + number + ')').show();
+            }
+        });
+    });
+
+    $("#hide-activities-button").click(function(){
+        activities.forEach(function(activity){
+            var header = $("#" + activity.id).text();
+            var count = header.substring(
+                header.lastIndexOf("(") + 1,
+                header.lastIndexOf("/")
+            );
+
+            if(count >= activity.maxAmountStudents){
+                var number = $("#" + activity.id).data('number');
+                number++;
+                $('td:nth-child(' + number  + ')').hide();
+                $('th:nth-child(' + number + ')').hide();
             }
         });
     });
@@ -116,7 +139,15 @@ $(document).ready(function () {
                 var selector = "#" + student.id + "-" + activity.id;
                 if($(selector).hasClass("blue") || $(selector).hasClass("light-blue lighten-3"))count++;
             });
-            $("#" + activity.id).text(activity.name + " (" + count + "/" + activity.maxAmountStudents + ")");
+            $("#" + activity.id).html(
+            '<a href="/activity/' + activity.id + '-/admin/listApplications">' + activity.name + '</a>' +
+            ' (' + count + '/' + activity.maxAmountStudents + ')'
+            );
+
+
+
+
+
         });
     }
 

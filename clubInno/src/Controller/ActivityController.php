@@ -27,9 +27,9 @@ class ActivityController extends AbstractController
     }
 
     /**
-     * @Route("/activity/{id}-{basket}", requirements={"id": "\d+"}, name="activity_show")
+     * @Route("/activity/{id}-{url}", requirements={"id": "\d+", "url"=".+"}, name="activity_show")
      */
-    public function showActivity(Activity $activity, bool $basket = false){
+    public function showActivity(Activity $activity, $url = "/activity"){
         $files = array();
         $imgs = array();
 
@@ -48,7 +48,7 @@ class ActivityController extends AbstractController
             'activity' => $activity,
             'imgs' => $imgs,
             'files' => $files,
-            'cameFromBasket' => $basket
+            'url' => $url
         ]);
     }
 
