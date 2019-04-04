@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,6 +40,16 @@ class ActivityGroup
      * @ORM\ManyToMany(targetEntity="User", mappedBy="activityGroups")
      */
     private $users;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\ActivityMoment", mappedBy="activityGroups")
+     */
+    private $activityMoments;
+
+    public function __construct()
+    {
+        $this->activityMoments = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -98,5 +110,33 @@ class ActivityGroup
     public function setUsers($users): void
     {
         $this->users = $users;
+    }
+
+    /**
+     * @return Collection|ActivityMoment[]
+     */
+    public function getActivityMoments(): Collection
+    {
+        return $this->activityMoments;
+    }
+
+    public function addActivityMoment(ActivityMoment $activityMoment): self
+    {
+        if (!$this->activityMoments->contains($activityMoment)) {
+            $this->activityMoments[] = $activityMoment;
+            $activityMoment->addActivityGroup($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivityMoment(ActivityMoment $activityMoment): self
+    {
+        if ($this->activityMoments->contains($activityMoment)) {
+            $this->activityMoments->removeElement($activityMoment);
+            $activityMoment->removeActivityGroup($this);
+        }
+
+        return $this;
     }
 }
