@@ -28,7 +28,7 @@ class BlogPost
 
     /**
      * Many blogposts have one activity. This is the owning side.
-     * @ORM\ManyToOne(targetEntity="Activity", inversedBy="blogPosts")
+     * @ORM\ManyToOne(targetEntity="Activity", cascade={"persist"}, inversedBy="blogPosts")
      * @ORM\JoinColumn(name="activity_id", referencedColumnName="id")
      */
     private $activity;

@@ -57,7 +57,7 @@ class Activity
      */
     private $mainImage;
 
-    /*
+    /**
      * One activity has many blogPosts. This is the inverse side.
      * @ORM\OneToMany(targetEntity="BlogPost", mappedBy="activity")
      */
@@ -220,6 +220,56 @@ class Activity
     {
         $this->semester = $semester;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getApplications()
+    {
+        return $this->applications;
+    }
+
+    /**
+     * @param mixed $applications
+     */
+    public function setApplications($applications): void
+    {
+        $this->applications = $applications;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBlogPosts()
+    {
+        return $this->blogPosts;
+    }
+
+    /**
+     * @param mixed $blogPosts
+     */
+    public function setBlogPosts($blogPosts): void
+    {
+        $this->blogPosts = $blogPosts;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityGroups()
+    {
+        return $this->activityGroups;
+    }
+
+    /**
+     * @param mixed $activityGroups
+     */
+    public function setActivityGroups($activityGroups): void
+    {
+        $this->activityGroups = $activityGroups;
+    }
+
+
 
 
 

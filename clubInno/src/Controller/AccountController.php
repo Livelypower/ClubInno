@@ -22,8 +22,20 @@ class AccountController extends AbstractController
     /**
      * @Route("/account", name="account")
      */
-    public function index(Request $request)
+    public function index()
     {
+
+
+        return $this->render('account/index.html.twig', [
+
+        ]);
+    }
+
+
+    /**
+     * @Route("/account/editAccount", name="edit_account")
+     */
+    public function editAccount(Request $request){
         $user = $this->getUser();
         $form = $this->createForm(AccountEditForm::class, $user);
         $form->handleRequest($request);
@@ -34,10 +46,10 @@ class AccountController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('home');
+            return $this->redirectToRoute('account');
         }
 
-        return $this->render('account/index.html.twig', [
+        return $this->render('account/edit_account.html.twig', [
             'accountEditForm' => $form->createView(),
         ]);
     }
