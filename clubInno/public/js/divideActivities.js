@@ -15,16 +15,25 @@ $(document).ready(function () {
     });
 
 
+    var count = 1;
     activities.forEach(function(activity) {
-        $("#tableHead").append('<th id="' + activity.id + '">' + activity.name + ' (' + activity.users.length + ')</th>');
+        $("#tableHead").append('<th id="' + activity.id + '" data-number="' + count + '">' +
+            '<a href="/activity/' + activity.id + '-/admin/listApplications">' + activity.name + '</a>' +
+            ' <span id="span-' + activity.id +'">(' + activity.users.length + '/' + activity.maxAmountStudents + ')</span>' +
+            '<span id="mark-' + activity.id + '" class="red-text text-darken-3"></span>'+
+            '</th>');
+        count++;
     });
 
     students.forEach(function(student) {
         if(student.roles[0] === "ROLE_USER"){
+            var url = "http://localhost:8000/uploads/" + student.applications[0].motivationLetterPath;
             if(student.registrations.length !== 0){
-                $("#tableBody").append('<tr id="' + student.id + '" class="registrated"><td>' + student.username + '</td>');
+                $("#tableBody").append('<tr id="' + student.id + '" class="registrated"><td>' + student.username
+                   + '<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
             }else{
-                $("#tableBody").append('<tr id="' + student.id + '"><td>' + student.username + '</td>');
+                $("#tableBody").append('<tr id="' + student.id + '"><td>' + student.username
+                    + '<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
             }
         }
         activities.forEach(function(activity) {
@@ -64,8 +73,38 @@ $(document).ready(function () {
         });
     });
 
-    $("#toggle-button").click(function(){
-        $(".registrated").toggle();
+    $("#show-students-button").click(function(){
+        $(".registrated").show();
+    });
+
+    $("#hide-students-button").click(function(){
+        $(".registrated").hide();
+    });
+
+    $("#show-activities-button").click(function(){
+        activities.forEach(function(activity){
+            var count = getStudentsPerActivity(activity.id);
+
+            if(count >= activity.maxAmountStudents){
+                var number = $("#" + activity.id).data('number');
+                number++;
+                $('td:nth-child(' + number  + ')').show();
+                $('th:nth-child(' + number + ')').show();
+            }
+        });
+    });
+
+    $("#hide-activities-button").click(function(){
+        activities.forEach(function(activity){
+            var count = getStudentsPerActivity(activity.id);
+
+            if(count >= activity.maxAmountStudents){
+                var number = $("#" + activity.id).data('number');
+                number++;
+                $('td:nth-child(' + number  + ')').hide();
+                $('th:nth-child(' + number + ')').hide();
+            }
+        });
     });
 
     $("td").click(function () {
@@ -86,57 +125,119 @@ $(document).ready(function () {
 
     function updateCount(){
         activities.forEach(function(activity) {
-            var count = 0;
-            students.forEach(function(student){
-                var selector = "#" + student.id + "-" + activity.id;
-                if($(selector).hasClass("blue") || $(selector).hasClass("light-blue lighten-3"))count++;
-            });
-            $("#" + activity.id).text(activity.name + " (" + count + ")");
+            var count = getCount(activity.id);
+            $("#span-" + activity.id).html(
+            ' (' + count + '/' + activity.maxAmountStudents + ')'
+            );
         });
     }
 
+    function getCount(activityId){
+        var count = 0;
+        students.forEach(function(student){
+            var selector = "#" + student.id + "-" + activityId;
+            if($(selector).hasClass("blue") || $(selector).hasClass("light-blue lighten-3"))count++;
+        });
+
+        return count;
+    }
+
+    function checkCount(){
+        var errorActivities = [];
+        activities.forEach(function (activity) {
+            var count = getStudentsPerActivity(activity.id);
+
+            if(count > activity.maxAmountStudents){
+                errorActivities.push(activity);
+            }
+        });
+
+        return errorActivities;
+    }
+
     function saveConfig(){
-        $("#autosave-text").show();
-        $("#autosave-text").html('<i class="material-icons left" style="margin-right: 5px;">sync</i>' + 'Dernier sauvegardé maintenant');
-        lastSaved = 0;
-        alreadySaved = true;
+        var errorActivities = checkCount();
+        noErrorCount(errorActivities);
 
-        var registrations = [];
+        if(errorActivities.length === 0) {
+            $("#error-text").html("");
+            $("#autosave-text").show();
+            $("#autosave-text").html('<i class="material-icons left" style="margin-right: 5px;">sync</i>' + 'Dernier sauvegardé maintenant');
+            lastSaved = 0;
+            alreadySaved = true;
 
+            var registrations = [];
 
-        students.forEach(student=>{
-            if(student.roles[0] == "ROLE_USER"){
-            var studentObj = {
-                'userId': student.id,
-                'activities': []
-            };
-            activities.forEach(activity => {
-                var className = $("#" + student.id + "-" + activity.id).attr('class');
-            console.log(className);
-            if(className == "red blue" || className == "light-blue lighten-3"){
-                studentObj.activities.push(activity.id);
-            }
-        });
-            registrations.push(studentObj)
+            students.forEach(function (student) {
+                if (student.roles[0] === "ROLE_USER") {
+                    var studentObj = {
+                        'userId': student.id,
+                        'activities': []
+                    };
+                    activities.forEach(function (activity) {
+                        var className = $("#" + student.id + "-" + activity.id).attr('class');
+                        console.log(className);
+                        if (className === "red blue" || className === "light-blue lighten-3") {
+                            studentObj.activities.push(activity.id);
+                        }
+                    });
+                    registrations.push(studentObj)
+                }
+            });
+
+            registrations.forEach(function(registration) {
+                $.ajax({
+                    method: "POST",
+                    url: "http://localhost:8000/api/registration/add",
+                    data: registration,
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (response) {
+                        console.log(response)
+                    }
+                });
+            });
         }
-    });
+        else{
+            var html = '<p>Trop d\'étudiants assignés aux activités suivantes:<ul class="collection">';
 
+            errorActivities.forEach(function(error){
+               html += '<li class="collection-item">' + error.name + '</li>';
+            });
 
-        registrations.forEach(registration => {
-            $.ajax({
-            method: "POST",
-            url: "http://localhost:8000/api/registration/add",
-            data: registration,
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (response) {
-                console.log(response)
+            html += '</ul>';
+
+            $("#error-text").html(html);
+            errorCount(errorActivities);
+        }
+    }
+
+    function errorCount(eActivities){
+        eActivities.forEach(function (activity) {
+            var selectorCount = "#span-" + activity.id;
+            var selector = "#mark-" + activity.id;
+            $(selector).text("!");
+            $(selectorCount).addClass("red-text text-darken-3");
+        });
+    }
+
+    function noErrorCount(eActivities){
+        activities.forEach(function (activity) {
+            var inError = false;
+            eActivities.forEach(function (error) {
+                if(error.id === activity.id){
+                    inError = true;
+                }
+            });
+            if(!inError){
+                console.log(activity.name);
+                var selectorCount = "#span-" + activity.id;
+                var selector = "#mark-" + activity.id;
+                $(selector).text("");
+                $(selectorCount).removeClass("red-text text-darken-3");
             }
         });
-    });
-
-
     }
 
     function updateRegistrated(studentId){
@@ -151,6 +252,16 @@ $(document).ready(function () {
       }else{
           $("#"+ studentId).removeClass("registrated");
       }
+    }
+
+    function getStudentsPerActivity(activityId){
+        var header = $("#" + activityId).text();
+        var count = header.substring(
+            header.lastIndexOf("(") + 1,
+            header.lastIndexOf("/")
+        );
+
+        return count
     }
 
     setInterval(function(){
@@ -172,4 +283,6 @@ $(document).ready(function () {
     $('#saveConfig').click(function(){
         saveConfig();
     });
+
+
 });

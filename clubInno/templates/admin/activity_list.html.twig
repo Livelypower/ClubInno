@@ -23,7 +23,7 @@
                     <div class="card-content white-text">
                         <span class="card-title">{{ activity.name }} {% if activity.active == 1 %} <i class="material-icons green-text accent-2">check</i> {% else %} <i class="material-icons red-text accent-4">cancel</i> {% endif %}</span>
                         <div class="row"></div>
-                        <p><b>Inscriptions:</b> 5/{{ activity.maxAmountStudents }}</p>
+                        <p><b>Inscriptions:</b> {{ activity.users|length }}/{{ activity.maxAmountStudents }}</p>
                         <br/>
                         <p>
                             {{ activity.description }}

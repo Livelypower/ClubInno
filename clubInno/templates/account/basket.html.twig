@@ -4,6 +4,8 @@
 
 {% block body %}
     {{ parent() }}
+    {% set currentPath = path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')) %}
 
     {% set basket = app.session.get('basket') %}
     <div class="row">
@@ -25,7 +27,7 @@
                                     <a href="{{ path('account_basket_delete', {'id': item.id}) }}">
                                         <i class="material-icons red-text accent-2 right">clear</i>
                                     </a>
-                                    <a href="{{ path('activity_show', {'id': item.id, 'basket': true}) }}">
+                                    <a href="{{ path('activity_show', {'id': item.id, 'url': currentPath}) }}">
                                         <i class="material-icons blue-text lighten-2 right">info</i>
                                     </a>
                                 </li>

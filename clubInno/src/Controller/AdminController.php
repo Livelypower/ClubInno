@@ -13,8 +13,13 @@ use App\Entity\User;
 use App\Entity\Activity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Session;use App\Form\TagType;use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+/**
+ * Require ROLE_ADMIN for *every* controller method in this class.
+ *
+ * @IsGranted("ROLE_ADMIN")
+ */
 class AdminController extends AbstractController
 {
     /**
@@ -32,14 +37,12 @@ class AdminController extends AbstractController
      */
     public function listApplications(SerializerInterface $serializer)
     {
-
         $applications = $this->getDoctrine()->getRepository(Application::class)->findAll();
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
 
         $jsonUsers = array();
         $jsonActi = array();
-
 
         foreach ($users as $user) {
             array_push($jsonUsers, $serializer->serialize($user, 'json', [

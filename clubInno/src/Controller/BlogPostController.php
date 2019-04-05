@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Activity;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
 use App\Form\BlogPostType;
@@ -63,6 +64,9 @@ class BlogPostController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $em->persist($blogPost);
             $em->flush();
+
+
+            $activity = $this->getDoctrine()->getRepository(Activity::class)->find($blogPost->getActivity()->getId());
 
             $message = (new \Swift_Message('New Blog Post!'))
                 ->setFrom('kasumiiwamoto69@gmail.com')

@@ -6,8 +6,19 @@
     {{ parent() }}
 
     <div class="row">
-        <div class="col s12">
-            <a id="toggle-button" class="btn">Toggle registrated students</a>
+        <div class="row">
+            <div class="col s12">
+                <div class="col s6 m5 l4">
+                    <h5>Des étudiants: </h5>
+                    <a id="show-students-button" class="btn"><i class="material-icons">visibility</i></a>
+                    <a id="hide-students-button" class="btn"><i class="material-icons">visibility_off</i></a>
+                </div>
+                <div class="col s6 m5 l4">
+                    <h5>Des activités: </h5>
+                    <a id="show-activities-button" class="btn"><i class="material-icons">visibility</i></a>
+                    <a id="hide-activities-button" class="btn"><i class="material-icons">visibility_off</i></a>
+                </div>
+            </div>
         </div>
         <div class="col s12">
             <h4>Toutes les applications</h4>
@@ -30,6 +41,11 @@
             <div class="col s10">
                 <p id="autosave-text" class="grey-text lighten-2"><i style="margin-right: 5px;" class="material-icons left">sync_disabled</i>Pas encore sauvegardé</p>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div id="error-text" class="col s12 m12 l6 red-text text-darken-3">
+
         </div>
     </div>
 
