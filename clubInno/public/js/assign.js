@@ -8,7 +8,7 @@ $(document).ready(function () {
                 $.each(element.users, function (index2, element2) {
                     $('#group'+(index+1)).append('<li class="chip" value="'+ element.id +'">'+element2.first_name + ' ' + element2.last_name +'</li>');
                 });
-                $("#content").append('<button class="btn green accent-4 button-press" id="saveGroup'+(index+1)+'">Sauvegarder</button></ul>');
+                $("#content").append('<button class="btn green accent-4 button-press button-click" id="saveGroup'+(index+1)+'" name="group'+(index+1)+'">Sauvegarder</button></ul>');
             });
             $.each(response.unassignedUsers, function (index, element) {
                 $("#unassignedUsers").append('<li class="chip" value="'+ element.id +'">'+element.first_name + ' ' + element.last_name +'</li>');
@@ -30,4 +30,27 @@ $(document).ready(function () {
             }
         });
     }
+
+    $("#content").on('click', ':button', function () {
+        var selector = $('#'+$(this).attr('name') + ' li');
+        var userIds = [];
+        selector.each(function (index) {
+           userIds.push($(this).val());
+        });
+        var body = {"users": userIds};
+        console.log(body);
+
+        $.ajax({
+            method: "POST",
+            url: "http://localhost:8000/api/activity/groups/addusers/2/",
+            body: {"users": userIds},
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (response) {
+                console.log("Error posting students");
+                console.log(response);
+            }
+        });
+    })
 });
