@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "friendsofsymfony/rest-bundle": "^2.5",
+        "jms/serializer": "^1.13",
         "jms/serializer-bundle": "^2.4",
         "knplabs/knp-paginator-bundle": "^3.0",
         "nelmio/api-doc-bundle": "^3.4",

@@ -41,7 +41,7 @@ class Activity
 
     /**
      * Many Applications have Many Activities.
-     * @ORM\ManyToMany(targetEntity="Application", inversedBy="activities")
+     * @ORM\ManyToMany(targetEntity="Application", mappedBy="activities")
      */
     private $applications;
 
@@ -268,9 +268,4 @@ class Activity
     {
         $this->activityGroups = $activityGroups;
     }
-
-
-
-
-
 }
