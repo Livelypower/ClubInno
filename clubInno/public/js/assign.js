@@ -59,10 +59,12 @@ $(document).ready(function () {
                 data: {"users": userIds},
                 success: function (response) {
                     console.log(response);
+                    M.toast({html: 'Sauvegardé'});
                 },
                 error: function (response) {
                     console.log("Error posting students");
                     console.log(response);
+                    M.toast({html: 'Erreur en sauvegardant'});
                 }
             });
         });
