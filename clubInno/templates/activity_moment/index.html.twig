@@ -1,20 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ActivityMomentController!{% endblock %}
+{% block title %}Toutes les moments des activités{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    {{ parent() }}
+    <a href="{{ path("activity_moment_new") }}" class="btn green accent-4">Nouveau Moment</a>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="row">
+        <div class="col s12">
+            <h4>Toutes les moments des activités</h4>
+            <div>
+                {{ knp_pagination_render(activityMoments) }}
+            </div>
+            <table>
+                <thead>
+                <th>Name and location</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Action</th>
+                </thead>
+                <tbody>
+                {% for moment in activityMoments %}
+                    <tr>
+                        <td>
+                            {{ moment.name }} - {{ moment.location }}
+                        </td>
+                        <td>{{ moment.startDate | date('d/m/Y') }} - {{ moment.startTime | date('H:i') }}</td>
+                        <td>{{ moment.endDate | date('d/m/Y') }} - {{ moment.endTime | date('H:i') }}</td>
+                        <td>
+                            <a href=""><i class="material-icons red-text text-accent-4">delete</i></a>
+                            <a href=""><i class="material-icons">edit</i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div>
+                {{ knp_pagination_render(activityMoments) }}
+            </div>
+        </div>
+    </div>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'D:/downloads/3 ITF/Semester2/STAGE/Project/ClubInno/clubInno/src/Controller/ActivityMomentController.php'|file_link(0) }}">src/Controller/ActivityMomentController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'D:/downloads/3 ITF/Semester2/STAGE/Project/ClubInno/clubInno/templates/activity_moment/index.html.twig'|file_link(0) }}">templates/activity_moment/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
 {% endblock %}

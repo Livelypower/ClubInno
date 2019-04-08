@@ -1,4 +1,40 @@
 $(document).ready(function() {
+    var userId = $("#data").html();
+    $.ajax({
+        url: 'http://localhost:8000/api/calendar/'+userId,
+        method: 'GET',
+        success: function (response) {
+            eventsArray = [];
+            console.log(response);
+            $.each(response, function (index, responseObject) {
+                $.each(responseObject, function (index, element) {
+                    var startDate = new Date(Date.parse(element.start_date));
+                    var dateStringStart_Date =  startDate.getFullYear()+ "-" + (startDate.getMonth() + 1) + "-" + startDate.getDate() ;
+                    var endDate = new Date(Date.parse(element.end_date));
+                    var dateStringEnd_Date = startDate.getFullYear()+ "-" + (startDate.getMonth() + 1) + "-" + startDate.getDate() ;
+                    var startTime = new Date(Date.parse(element.start_time));
+                    var dateStringStart_Time = startTime.getHours() + ":" + (startTime.getMinutes()<10?'0':'') + startTime.getMinutes();
+                    var endTime = new Date(Date.parse(element.end_time));
+                    var dateStringEnd_Time = endTime.getHours() + ":" + (endTime.getMinutes()<10?'0':'') + endTime.getMinutes();
+                    eventsArray.push({
+                        title: element.location + " - " + element.name,
+                        start: dateStringStart_Date + " " + dateStringStart_Time,
+                        end: dateStringEnd_Date + " " + dateStringEnd_Time,
+                        classNames: ['teal']
+                    });
+                });
+            });
+            console.log(eventsArray);
+            buildCalendar(eventsArray);
+        },
+        error: function (response) {
+            console.log('Error getting calendar');
+            console.log(response);
+        }
+    });
+});
+
+function buildCalendar (eventsArray) {
     var calendarElement = document.getElementById('calendar');
 
     var calendar = new FullCalendar.Calendar(calendarElement, {
@@ -10,16 +46,8 @@ $(document).ready(function() {
         plugins: ['dayGrid', 'timeGrid'],
         defaultView: 'timeGridWeek',
         eventBorderColor: 'transparent',
-        events: [
-            {
-                title: 'The Title - 306',
-                start: '2019-03-29 15:00',
-                end: '2019-03-29 16:00',
-                classNames: ['red']
-
-            }
-        ]
+        events: eventsArray
     });
 
     calendar.render();
-});
+}
