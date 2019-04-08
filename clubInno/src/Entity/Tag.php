@@ -24,7 +24,6 @@ class Tag
     /**
      * Many Activities have Many Tags.
      * @ORM\ManyToMany(targetEntity="Activity", inversedBy="tags")
-     * @ORM\JoinTable(name="tags_activities")
      */
     private $activities;
 

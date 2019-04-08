@@ -18,8 +18,10 @@ class ActivityGroupController extends AbstractController
     public function index()
     {
         $groups = $this->getDoctrine()->getRepository(ActivityGroup::class)->findAll();
+        $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
         return $this->render('activity_group/index.html.twig', [
-            'groups' => $groups
+            'groups' => $groups,
+            'activities' => $activities
         ]);
     }
 
@@ -48,10 +50,11 @@ class ActivityGroupController extends AbstractController
     }
 
     /**
-     * @Route("/admin/activities/groups/assign", name="activity_group_assign")
+     * @Route("/admin/activities/groups/assign/{id}", name="activity_group_assign")
      */
-    public function assign(){
+    public function assign(Activity $activity){
         return $this->render('activity_group/assign.html.twig', [
+            'activity' => $activity
         ]);
     }
 }

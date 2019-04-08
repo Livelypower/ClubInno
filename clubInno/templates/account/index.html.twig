@@ -79,8 +79,8 @@
                     {% endif %}
                 </div>
                 <div id="calendier" class="col s12">
-                    {% if user.registrations|first %}
-                        {% for moment in user.registrations|first.activityGroups|first.activityMoments  %}
+                    {% if user.activityGroups|first %}
+                        {% for moment in user.activityGroups|first.activityMoments  %}
                             <div class="card blue-grey darken-1">
                                 <div class="card-content white-text">
                                     <span class="card-title">{{ moment.name }}</span>
@@ -88,11 +88,9 @@
 
                                     </p>
                                 </div>
-
                             </div>
                         {% endfor %}
                     {% endif %}
-
                 </div>
             </div>
         </div>

@@ -44,17 +44,19 @@ class AdminController extends AbstractController
         $jsonUsers = array();
         $jsonActi = array();
 
-        foreach ($users as $user) {
-            array_push($jsonUsers, $serializer->serialize($user, 'json', [
-                'circular_reference_handler' => function ($user) {
-                    return $user->getId();
-                }
-            ]));
-        }
+
         foreach ($activities as $acti) {
             array_push($jsonActi, $serializer->serialize($acti, 'json', [
                 'circular_reference_handler' => function ($acti) {
                     return $acti->getId();
+                }
+            ]));
+        }
+
+        foreach ($users as $user) {
+            array_push($jsonUsers, $serializer->serialize($user, 'json', [
+                'circular_reference_handler' => function ($user) {
+                    return $user->getId();
                 }
             ]));
         }

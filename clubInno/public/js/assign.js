@@ -1,14 +1,18 @@
 $(document).ready(function () {
+    var activityId = $("#activityId").val();
+    var groupIds = [];
+
     $.ajax({
         method: "GET",
-        url: "http://localhost:8000/api/activity/groups/2/",
+        url: "http://localhost:8000/api/activity/groups/" + activityId + "/",
         success: function (response) {
             $.each(response.groups, function (index, element) {
-                $("#content").append('<ul id="group'+(index+1)+'" class="sortable"><h4 class="white-text">'+element.name+'</h4><p class="white-text">Drag here</p>');
+                groupIds.push(element.id);
+                $("#content").append('<ul class="group sortable" id="' + element.id + '" data-id="' + element.id + '"><h5 class="white-text">'+element.name+'</h5><p class="white-text">Drag here</p>');
                 $.each(element.users, function (index2, element2) {
-                    $('#group'+(index+1)).append('<li class="chip" value="'+ element.id +'">'+element2.first_name + ' ' + element2.last_name +'</li>');
+                    $('#' + element.id).append('<li class="chip" value="'+ element2.id +'">'+element2.first_name + ' ' + element2.last_name +'</li>');
                 });
-                $("#content").append('<button class="btn green accent-4 button-press button-click" id="saveGroup'+(index+1)+'" name="group'+(index+1)+'">Sauvegarder</button></ul>');
+                $("#content").append('</ul>');
             });
             $.each(response.unassignedUsers, function (index, element) {
                 $("#unassignedUsers").append('<li class="chip" value="'+ element.id +'">'+element.first_name + ' ' + element.last_name +'</li>');
@@ -22,35 +26,46 @@ $(document).ready(function () {
     });
 
     function createSortable() {
+        var connectString = "#unassignedUsers, ";
+
+        for (var i = 0; i < groupIds.length; i++) {
+            connectString += "#" + groupIds[i];
+            if(i !== groupIds.length-1){
+                connectString += ", ";
+            }
+        }
+
         $("#unassignedUsers, .sortable" ).sortable({
             items: "> li",
-            connectWith: "#unassignedUsers, #group1, #group2",
+            connectWith: connectString,
             receive: function( event, ui ) {
-                console.log("dropped! " + ui.item.val());
             }
         });
     }
 
-    $("#content").on('click', ':button', function () {
-        var selector = $('#'+$(this).attr('name') + ' li');
-        var userIds = [];
-        selector.each(function (index) {
-           userIds.push($(this).val());
-        });
-        var body = {"users": userIds};
-        console.log(body);
+    $("#saveGroup").click(function () {
+        $(".group").each(function(){
+            var userIds = [];
+            $(this).find('li').each(function () {
+                userIds.push($(this).val());
+            });
 
-        $.ajax({
-            method: "POST",
-            url: "http://localhost:8000/api/activity/groups/addusers/2/",
-            body: {"users": userIds},
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (response) {
-                console.log("Error posting students");
-                console.log(response);
-            }
+            var groupId = $(this).data('id');
+            console.log(userIds);
+
+            $.ajax({
+                method: "POST",
+                url: "http://localhost:8000/api/activity/groups/addusers/" + groupId + "/",
+                data: {"users": userIds},
+                success: function (response) {
+                    console.log(response);
+                },
+                error: function (response) {
+                    console.log("Error posting students");
+                    console.log(response);
+                }
+            });
         });
+
     })
 });

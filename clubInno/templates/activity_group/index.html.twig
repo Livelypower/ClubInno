@@ -9,24 +9,39 @@
     <div class="row">
         <div class="col s12">
             <h4>Toutes les Groupes</h4>
-            <table>
-                <thead>
-                <th>Nom</th>
-                <th>Action</th>
-                </thead>
-                <tbody>
-                {% for group in groups %}
-                    <tr>
-                        <td>
-                            {{ group.name }}
-                        </td>
-                        <td>
 
-                        </td>
-                    </tr>
+            <ul class="collapsible popout">
+                {% for activity in activities %}
+                    {% if activity.activityGroups is not empty %}
+                        <li>
+                            <div class="collapsible-header teal lighten-3 white-text">
+                                {{ activity.name }}
+                            </div>
+                            <div class="collapsible-body">
+                                <a class='btn green accent-4' href='{{ path('activity_group_assign',  {'id': activity.id}) }}' >Assign Students</a>
+                                <table>
+                                    <thead>
+                                    <th>Nom</th>
+                                    <th>Action</th>
+                                    </thead>
+                                    <tbody>
+                                    {% for group in activity.activityGroups %}
+                                        <tr>
+                                            <td>
+                                                {{ group.name }}
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </li>
+                    {% endif %}
                 {% endfor %}
-                </tbody>
-            </table>
+            </ul>
         </div>
     </div>
 
@@ -35,4 +50,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/collapse.js') }}"></script>
 {% endblock %}

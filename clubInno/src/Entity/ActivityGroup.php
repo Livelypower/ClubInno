@@ -37,7 +37,7 @@ class ActivityGroup
 
     /**
      * Many ActivityGroups have Many Users.
-     * @ORM\ManyToMany(targetEntity="User", mappedBy="activityGroups")
+     * @ORM\ManyToMany(targetEntity="User", inversedBy="activityGroups")
      */
     private $users;
 

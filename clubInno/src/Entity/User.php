@@ -77,8 +77,7 @@ class User implements UserInterface
 
     /**
      * Many Users have Many ActivityGroups.
-     * @ORM\ManyToMany(targetEntity="ActivityGroup", inversedBy="users")
-     * @ORM\JoinTable(name="users_groups")
+     * @ORM\ManyToMany(targetEntity="ActivityGroup", mappedBy="users")
      */
     private $activityGroups;
 
@@ -263,6 +262,24 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getActivityGroups()
+    {
+        return $this->activityGroups;
+    }
+
+    /**
+     * @param mixed $activityGroups
+     */
+    public function setActivityGroups($activityGroups): void
+    {
+        $this->activityGroups = $activityGroups;
+    }
+
+
 
 
 }
