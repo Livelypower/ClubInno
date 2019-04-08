@@ -30,7 +30,6 @@ class Application
     /**
      * Many Applications have Many Activities.
      * @ORM\ManyToMany(targetEntity="Activity", inversedBy="applications")
-     * @ORM\JoinTable(name="applications_activities")
      */
     private $activities;
 

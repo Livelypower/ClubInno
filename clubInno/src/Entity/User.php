@@ -71,7 +71,6 @@ class User implements UserInterface
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Activity", inversedBy="users")
-     * @ORM\JoinTable(name="user_activities")
      */
     private $registrations;
 
@@ -278,6 +277,39 @@ class User implements UserInterface
     {
         $this->activityGroups = $activityGroups;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getBlogPosts()
+    {
+        return $this->blogPosts;
+    }
+
+    /**
+     * @param mixed $blogPosts
+     */
+    public function setBlogPosts($blogPosts): void
+    {
+        $this->blogPosts = $blogPosts;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * @param mixed $comments
+     */
+    public function setComments($comments): void
+    {
+        $this->comments = $comments;
+    }
+
 
 
 

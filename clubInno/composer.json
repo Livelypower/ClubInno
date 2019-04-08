@@ -6,6 +6,7 @@
         "ext-ctype": "*",
         "ext-iconv": "*",
         "friendsofsymfony/rest-bundle": "^2.5",
+        "jms/serializer": "^1.13",
         "jms/serializer-bundle": "^2.4",
         "nelmio/api-doc-bundle": "^3.4",
         "sensio/framework-extra-bundle": "^5.1",

@@ -9,6 +9,7 @@
 namespace App\Rest;
 
 
+use App\Entity\Activity;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
 use App\Entity\User;
@@ -104,6 +105,31 @@ class CommentController extends AbstractFOSRestController
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
         return View::create($comments, Response::HTTP_OK);
     }
+
+    /**
+     * Retrieves all Comment resources belonging to a blogpost
+     * @Rest\Get("/activities")
+     */
+    public function getActis(): View
+    {
+        //$blogPost = $this->getDoctrine()->getRepository(BlogPost::class)->find($blogPostId);
+        $actis = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+        // In case our GET was a success we need to return a 200 HTTP OK response with the request object
+        return View::create($actis, Response::HTTP_OK);
+    }
+
+    /**
+     * Retrieves all Comment resources belonging to a blogpost
+     * @Rest\Get("/users")
+     */
+    public function getUsers(): View
+    {
+        //$blogPost = $this->getDoctrine()->getRepository(BlogPost::class)->find($blogPostId);
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        // In case our GET was a success we need to return a 200 HTTP OK response with the request object
+        return View::create($users, Response::HTTP_OK);
+    }
+
 
 
 }

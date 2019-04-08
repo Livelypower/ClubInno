@@ -5,8 +5,12 @@ namespace App\Controller;
 use App\Entity\Semester;
 use App\Form\ActivityType;
 use App\Form\SetActiveSemesterForm;
+use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\Application;
 use App\Entity\User;
@@ -14,6 +18,7 @@ use App\Entity\Activity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Session\Session;use App\Form\TagType;use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 
 /**
  * Require ROLE_ADMIN for *every* controller method in this class.
@@ -35,38 +40,9 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/listApplications", name="admin_application_list")
      */
-    public function listApplications(SerializerInterface $serializer)
+    public function listApplications()
     {
-        $applications = $this->getDoctrine()->getRepository(Application::class)->findAll();
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
-        $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
-
-        $jsonUsers = array();
-        $jsonActi = array();
-
-
-        foreach ($activities as $acti) {
-            array_push($jsonActi, $serializer->serialize($acti, 'json', [
-                'circular_reference_handler' => function ($acti) {
-                    return $acti->getId();
-                }
-            ]));
-        }
-
-        foreach ($users as $user) {
-            array_push($jsonUsers, $serializer->serialize($user, 'json', [
-                'circular_reference_handler' => function ($user) {
-                    return $user->getId();
-                }
-            ]));
-        }
-
-
-        return $this->render('admin/application_list.html.twig', [
-            'applications' => $applications,
-            'users' => $jsonUsers,
-            'activities' => $jsonActi
-        ]);
+        return $this->render('admin/application_list.html.twig');
     }
 
     /**
