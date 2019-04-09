@@ -43,6 +43,12 @@ class RegistrationController  extends AbstractFOSRestController
 
         $user->setRegistrations($activities);
 
+        foreach($user->getActivityGroups() as $userGroup){
+            if(!in_array($user->getRegistrations(), $userGroup->getActivity())){
+                $user->removeActivityGroup($userGroup);
+            }
+        }
+
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
         $em->flush();

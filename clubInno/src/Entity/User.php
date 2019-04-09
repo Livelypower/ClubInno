@@ -278,6 +278,14 @@ class User implements UserInterface
         $this->activityGroups = $activityGroups;
     }
 
+    public function removeActivityGroup(ActivityGroup $group)
+    {
+        if ($this->activityGroups->contains($group)) {
+            $this->activityGroups->removeElement($group);
+        }
+
+    }
+
     /**
      * @return mixed
      */

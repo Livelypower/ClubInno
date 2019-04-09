@@ -24,10 +24,32 @@ class AccountController extends AbstractController
      */
     public function index()
     {
+        $activeActivities = $this->getDoctrine()->getRepository(Activity::class)->findBy(array('active' => true));
+        $activeSemester = $activeActivities[0]->getSemester();
+
+        $user = $this->getUser();
+        $activeGroup = null;
+        $activeRegistration = null;
+
+        foreach($user->getRegistrations() as $registration){
+            if($registration->getSemester() == $activeSemester){
+                $activeRegistration = $registration;
+            }
+        }
+
+        if($activeRegistration != null){
+            foreach($user->getActivityGroups() as $group){
+                if($group->getActivity() == $activeRegistration){
+                    $activeGroup = $group;
+                }
+            }
+        }
+
 
 
         return $this->render('account/index.html.twig', [
-
+            'activity' => $activeRegistration,
+            'group' => $activeGroup
         ]);
     }
 

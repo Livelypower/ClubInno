@@ -117,6 +117,26 @@ class BlogPostController extends AbstractController
     }
 
     /**
+     * @Route("/blog/activity/{id}", requirements={"id": "\d+"}, name="blog_activity")
+     */
+    public function showBlogsPostsPerActivity(Activity $activity){
+        $allBlogs = $this->getDoctrine()->getRepository(BlogPost::class)->findAll();
+        $blogs = array();
+
+        foreach ($allBlogs as $blog){
+            if($blog->getActivity()->getId() == $activity->getId()){
+                array_push($blogs, $blog);
+            }
+        }
+
+
+        return $this->render('blog_post/index.html.twig', [
+            'blogPosts' => $blogs
+        ]);
+    }
+
+
+    /**
      * @Route("/blog/{id}/delete", requirements={"id": "\d+"}, name="blog_delete")
      */
     public function deleteBlog(BlogPost $blogPost){
