@@ -45,11 +45,18 @@ class AccountController extends AbstractController
             }
         }
 
-
+        if(in_array('ROLE_ADMIN', $user->getRoles())){
+            $role = 'ROLE_ADMIN';
+        }elseif(in_array('ROLE_TEACHER', $user->getRoles())){
+            $role = 'ROLE_TEACHER';
+        }else{
+            $role = 'ROLE_USER';
+        }
 
         return $this->render('account/index.html.twig', [
             'activity' => $activeRegistration,
-            'group' => $activeGroup
+            'group' => $activeGroup,
+            'role' => $role
         ]);
     }
 
@@ -62,6 +69,8 @@ class AccountController extends AbstractController
         $form = $this->createForm(AccountEditForm::class, $user);
         $form->handleRequest($request);
 
+
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -71,8 +80,10 @@ class AccountController extends AbstractController
             return $this->redirectToRoute('account');
         }
 
+
+
         return $this->render('account/edit_account.html.twig', [
-            'accountEditForm' => $form->createView(),
+            'accountEditForm' => $form->createView()
         ]);
     }
 
@@ -125,6 +136,7 @@ class AccountController extends AbstractController
      */
     public function basket(Request $request)
     {
+
 
         $form = $this->createForm(ApplicationType::class);
 

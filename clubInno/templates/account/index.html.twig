@@ -15,6 +15,7 @@
             </div>
         </div>
     </div>
+
     <div class="row">
         <div class="col s12">
             <div class="col s4">
@@ -22,10 +23,21 @@
                     <div class="card-content white-text">
                         <span class="card-title">Menu</span>
                         <div class="card-action">
-                            <ul>
-                                <li><a href="{{ path('edit_account') }}" class="orange-text text-lighten-2">Modifier profil</a></li>
-                                <li><a href="{{ path('calendar') }}" class="orange-text text-lighten-2">Calendier</a></li>
-                            </ul>
+                            {% if role == 'ROLE_USER' %}
+                                <ul>
+                                    <li><a href="{{ path('edit_account') }}" class="orange-text text-lighten-2">Modifier profil</a></li>
+                                    <li><a href="{{ path('calendar') }}" class="orange-text text-lighten-2">Calendier</a></li>
+                                </ul>
+                            {% elseif role == 'ROLE_ADMIN' %}
+                                <ul>
+                                    <li><a href="{{ path('edit_account') }}" class="orange-text text-lighten-2">Modifier profil</a></li>
+                                    <li><a href="{{ path('admin_calendar') }}" class="orange-text text-lighten-2">Calendier</a></li>
+                                    <li><a href="{{ path('admin_list_users') }}" class="orange-text text-lighten-2">Utilisateurs</a></li>
+                                    <li><a href="{{ path('admin_list_activities') }}" class="orange-text text-lighten-2">Activités</a></li>
+                                    <li><a href="{{ path('admin_semester') }}" class="orange-text text-lighten-2">Semestres</a></li>
+                                </ul>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>

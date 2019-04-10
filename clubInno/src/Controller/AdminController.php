@@ -32,9 +32,7 @@ class AdminController extends AbstractController
      */
     public function index()
     {
-        return $this->render('admin/index.html.twig', [
-            'controller_name' => 'AdminController',
-        ]);
+        return $this->render('admin/index.html.twig');
     }
 
     /**
@@ -282,9 +280,10 @@ class AdminController extends AbstractController
      */
     public function setActiveSemester(int $id)
     {
-        $semester = $this->getDoctrine()->getRepository(Semester::class)->find($id);
-        $activitiesToSetActive = $this->getDoctrine()->getRepository(Activity::class)->findBy(['semester' => $semester]);
-        $activitiesToSetUnActive = $this->getDoctrine()->getRepository(Activity::class)->findWhereSemesterNot($semester);
+        $activeSemester = $this->getDoctrine()->getRepository(Semester::class)->find($id);
+        $allSemesters = $this->getDoctrine()->getRepository(Semester::class)->findAll();
+        $activitiesToSetActive = $this->getDoctrine()->getRepository(Activity::class)->findBy(['semester' => $activeSemester]);
+        $activitiesToSetUnActive = $this->getDoctrine()->getRepository(Activity::class)->findWhereSemesterNot($activeSemester);
 
         foreach ($activitiesToSetActive as $activity){
             $activity->setActive(true);
@@ -299,6 +298,19 @@ class AdminController extends AbstractController
             $em->persist($activity);
             $em->flush();
         }
+
+        foreach($allSemesters as $semester){
+            if($semester->getId() != $activeSemester->getId()){
+                $semester->setActive(false);
+            }else{
+                $activeSemester->setActive(true);
+            }
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($semester);
+            $em->flush();
+        }
+
+
         return $this->redirectToRoute('admin_list_activities');
     }
 }

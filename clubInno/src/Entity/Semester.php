@@ -35,6 +35,11 @@ class Semester
 
     private $stringified;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $active;
+
     public function __construct() {
         $this->activities = new ArrayCollection();
     }
@@ -74,6 +79,18 @@ class Semester
     public function getStringified()
     {
         return $this->startYear . " - " . $this->endYear;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): self
+    {
+        $this->active = $active;
+
+        return $this;
     }
 
 }
