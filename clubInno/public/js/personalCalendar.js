@@ -5,7 +5,6 @@ $(document).ready(function() {
         method: 'GET',
         success: function (response) {
             eventsArray = [];
-            console.log(response);
             $.each(response, function (index, responseObject) {
                 $.each(responseObject, function (index, element) {
                     var startDate = new Date(Date.parse(element.start_date));
@@ -24,7 +23,6 @@ $(document).ready(function() {
                     });
                 });
             });
-            console.log(eventsArray);
             buildCalendar(eventsArray);
         },
         error: function (response) {

@@ -8,6 +8,7 @@
 
 namespace App\Rest;
 
+use App\Entity\ActivityMoment;
 use App\Entity\User;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\View\View;
@@ -22,7 +23,7 @@ class ActivityMomentController extends AbstractFOSRestController
      * Retrieves ActivityMoment objects that belong to a specified user
      * @Rest\Get("/calendar/{userId}")
      */
-    public function getUnassignedUsers(int $userId): View
+    public function getActivityMomentsByUser(int $userId): View
     {
         $user = $this->getDoctrine()->getRepository(User::class)->find($userId);
         $activityGroups = $user->getActivityGroups();
@@ -35,4 +36,18 @@ class ActivityMomentController extends AbstractFOSRestController
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
         return View::create($activityMoments, Response::HTTP_OK);
     }
+
+    /**
+     * Retrieves all ActivityMoment objects
+     * @Rest\Get("/admin/calendar")
+     */
+    public function getActivityMoments(): View
+    {
+        $activityMoments = $this->getDoctrine()->getRepository(ActivityMoment::class)->findAll();
+
+        // In case our GET was a success we need to return a 200 HTTP OK response with the request object
+        return View::create($activityMoments, Response::HTTP_OK);
+    }
+
+
 }

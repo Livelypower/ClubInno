@@ -31,7 +31,6 @@ class CalendarController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('calendar/admin.html.twig', [
-            'controller_name' => 'CalendarController',
         ]);
     }
 
