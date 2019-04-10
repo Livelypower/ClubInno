@@ -24,6 +24,7 @@
                         <div class="card-action">
                             <ul>
                                 <li><a href="{{ path('edit_account') }}" class="orange-text text-lighten-2">Modifier profil</a></li>
+                                <li><a href="{{ path('calendar') }}" class="orange-text text-lighten-2">Calendier</a></li>
                             </ul>
                         </div>
                     </div>
@@ -36,62 +37,87 @@
                     <li class="tab col s4"><a href="#calendier">Calendier</a></li>
                 </ul>
                 <div id="activity" class="col s12">
-                    {% set activity =  user.registrations|first %}
-                    <div class="card  blue-grey darken-1">
-                        <div class="card-image">
-                            {% if activity.mainImage is null %}
-                                <img src="http://lorempixel.com/800/400/technics" alt="">
-                            {% else %}
-                                <img src="{{ asset('uploads/' ~ activity.mainImage) }}" alt="">
-                            {% endif %}
-                        </div>
-                        <div class="card-content white-text">
-                            <span class="card-title">{{ activity.name }}</span>
-                            <div class="row"></div>
-                            <p><b>Inscriptions:</b> {{ activity.users|length }}/{{ activity.maxAmountStudents }}</p>
-                            <br/>
-                            <p>
-                                {{ activity.description }}
-                            </p>
+                    {% if activity is not null %}
+                        <div class="card  blue-grey darken-1">
+                            <div class="card-image">
+                                {% if activity.mainImage is null %}
+                                    <img src="http://lorempixel.com/800/400/technics" alt="">
+                                {% else %}
+                                    <img src="{{ asset('uploads/' ~ activity.mainImage) }}" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="card-content white-text">
+                                <span class="card-title">{{ activity.name }} - {{ group.name }}</span>
+                                <div class="row"></div>
+                                <p><b>Inscriptions:</b> {{ activity.users|length }}/{{ activity.maxAmountStudents }}</p>
+                                <br/>
+                                <p>
+                                    {{ activity.description }}
+                                </p>
 
+                            </div>
+                            <div class="card-action">
+                                <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
+                            </div>
                         </div>
-                        <div class="card-action">
-                            <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
-                        </div>
-                    </div>
+                    {% else %}
+                        <p>Aucune activité pour le semestre actif.</p>
+                    {% endif %}
                 </div>
                 <div id="blogs" class="col s12">
-                    {% if user.registrations|first %}
-                        {% for blog in user.registrations|first.blogPosts|reverse(true)  %}
-                            <div class="card blue-grey darken-1">
-                                <div class="card-content white-text">
-                                    <span class="card-title">{{ blog.title }}</span>
-                                    <span style="font-style:italic">{{ blog.user.firstName }} {{ blog.user.lastName }} {{ blog.datetime | date('d/m/y H:i') }}</span>
-                                    <p>
-                                        {{ blog.body | raw }}
-                                    </p>
+                    {% if activity is not null %}
+                        {% if user.registrations|first %}
+                            {% for blog in user.registrations|first.blogPosts|reverse(true)  %}
+                                <div class="card blue-grey darken-1">
+                                    <div class="card-content white-text">
+                                        <span class="card-title">{{ blog.title }}</span>
+                                        <span style="font-style:italic">{{ blog.user.firstName }} {{ blog.user.lastName }} {{ blog.datetime | date('d/m/y H:i') }}</span>
+                                        <p>
+                                            {{ blog.body | raw }}
+                                        </p>
+                                    </div>
+                                    <div class="card-action">
+                                        <a href="{{ path("blog_show", {'id': blog.id})}}">Regardez le post</a>
+                                    </div>
                                 </div>
-                                <div class="card-action">
-                                    <a href="{{ path("blog_show", {'id': blog.id})}}">Regardez le post</a>
-                                </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        <p>Aucune activité pour le semestre actif.</p>
                     {% endif %}
                 </div>
                 <div id="calendier" class="col s12">
-                    {% if user.activityGroups|first %}
-                        {% for moment in user.activityGroups|first.activityMoments  %}
-                            <div class="card blue-grey darken-1">
-                                <div class="card-content white-text">
-                                    <span class="card-title">{{ moment.name }}</span>
-                                    <p>{{ moment.startDate | date('d/m/Y') }} - {{ moment.startTime | date('H:i') }}</p>
-                                    <p>{{ moment.endDate | date('d/m/Y') }} - {{ moment.endTime | date('H:i') }}</p>
-                                    <p>
-                                        {{ moment.description }}
-                                    </p>
+                    {% if activity is not null %}
+                        {% if user.activityGroups|first %}
+                            {% for moment in user.activityGroups|first.activityMoments  %}
+                                <div class="card blue-grey darken-1">
+                                    <div class="card-content white-text">
+                                        <span class="card-title">{{ moment.name }}</span>
+                                        <table>
+                                            <thead>
+                                            <th>Commence à</th>
+                                            <th>Fini à</th>
+                                            <th>Lieu</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ moment.startDate | date('d/m/Y') }} - {{ moment.startTime | date('H:i') }}</td>
+                                                <td>{{ moment.endDate | date('d/m/Y') }} - {{ moment.endTime | date('H:i') }}</td>
+                                                <td>{{ moment.location }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <br>
+                                        <b>Description</b>
+                                        <p>
+                                            {{ moment.description }}
+                                        </p>
+                                    </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        <p>Aucune activité pour le semestre actif.</p>
                     {% endif %}
                 </div>
             </div>

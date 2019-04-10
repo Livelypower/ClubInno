@@ -48,10 +48,8 @@ $(document).ready(function () {
         });
 
         students.forEach(function(student) {
-            if(student.roles[0] === "ROLE_USER"){
-                if(student.applications.length !== 0){
-                    var url = "http://localhost:8000/uploads/" + student.applications[0].motivation_letter_path;
-                }
+            if(student.roles[0] === "ROLE_USER" && student.applications.length !== 0){
+                var url = "http://localhost:8000/uploads/" + student.applications[0].motivation_letter_path;
                 if(student.registrations.length !== 0){
                     $("#tableBody").append('<tr id="' + student.id + '" class="registrated"><td>' + student.email
                         + '<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');

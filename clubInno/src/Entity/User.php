@@ -76,7 +76,7 @@ class User implements UserInterface
 
     /**
      * Many Users have Many ActivityGroups.
-     * @ORM\ManyToMany(targetEntity="ActivityGroup", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="ActivityGroup", mappedBy="users", cascade={"remove"}, orphanRemoval=true)
      */
     private $activityGroups;
 
@@ -276,6 +276,14 @@ class User implements UserInterface
     public function setActivityGroups($activityGroups): void
     {
         $this->activityGroups = $activityGroups;
+    }
+
+    public function removeActivityGroup(ActivityGroup $group)
+    {
+        if ($this->activityGroups->contains($group)) {
+            $this->activityGroups->removeElement($group);
+        }
+
     }
 
     /**

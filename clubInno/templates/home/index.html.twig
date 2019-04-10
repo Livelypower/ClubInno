@@ -6,24 +6,18 @@
     {{ parent() }}
     <div class="row">
         <div class="col s12 m3">
-            <div class="card blue-grey darken-1 pushpin">
+            <div class="card blue-grey darken-1">
                 <div class="card-content white-text">
                     <span class="card-title">Blog</span>
                     <div class="card-action">
                         <ul>
-                            <li><a href="" class="orange-text text-lighten-2">Lorem</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Ipsum</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Dolor</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Sit</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Amet</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Consectetur</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Adipisicing</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Elit</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Neque</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Dolermenque</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Esse</a></li>
-                            <li><a href="" class="orange-text text-lighten-2">Autem</a></li>
-                            </li>
+                            {% for activity in activities %}
+                                {% if activity.active %}
+                                    <li>
+                                        <a href="{{ path("blog_activity", {'id': activity.id})}}" class="orange-text text-lighten-2">{{ activity.name }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
                         </ul>
                     </div>
                 </div>

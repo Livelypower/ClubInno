@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Activity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\BlogPost;
@@ -29,9 +30,12 @@ class HomeController extends AbstractController
             }
         }
 
+        $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+
         return $this->render('home/index.html.twig', [
             'controller_name' => 'HomeController',
             'latest_blog_post' => $blogPost,
+            'activities' => $activities,
             'imgs' => $imgs
         ]);
     }

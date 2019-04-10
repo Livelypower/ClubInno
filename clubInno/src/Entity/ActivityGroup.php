@@ -112,6 +112,9 @@ class ActivityGroup
         $this->users = $users;
     }
 
+
+
+
     /**
      * @return Collection|ActivityMoment[]
      */
