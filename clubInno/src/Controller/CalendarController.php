@@ -25,7 +25,6 @@ class CalendarController extends AbstractController
     public function adminCalendar()
     {
         return $this->render('calendar/admin.html.twig', [
-            'controller_name' => 'CalendarController',
         ]);
     }
 
