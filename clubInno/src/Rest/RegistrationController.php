@@ -8,6 +8,7 @@
 
 namespace App\Rest;
 
+use App\Entity\ActivityGroup;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
 use App\Entity\User;
@@ -31,7 +32,8 @@ class RegistrationController  extends AbstractFOSRestController
         $user = $this->getDoctrine()->getRepository(User::class)->find($request->get('userId'));
         $assignedActs = $request->get('activities');
         $activities = array();
-
+        $groups = array();
+        $em = $this->getDoctrine()->getManager();
 
         if(!empty($assignedActs)){
             foreach ($assignedActs as $acts){
@@ -40,16 +42,27 @@ class RegistrationController  extends AbstractFOSRestController
             }
         }
 
-
-        $user->setRegistrations($activities);
-
         foreach($user->getActivityGroups() as $userGroup){
-            if(!in_array($user->getRegistrations(), $userGroup->getActivity())){
-                $user->removeActivityGroup($userGroup);
+            foreach($activities as $activity){
+                if($activity->getId() == $userGroup->getActivity()->getId()){
+                    $group = $this->getDoctrine()->getRepository(ActivityGroup::class)->find($userGroup->getId());
+                    array_push($groups, $group);
+                    $users = array();
+                    foreach($userGroup->getUsers() as $groupUser){
+                        if($groupUser->getId() != $user->getId()){
+                            array_push($users, $groupUser);
+                        }
+                    }
+                    $userGroup->setUsers($users);
+                    $em->persist($userGroup);
+                    $em->flush();
+                }
             }
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $user->setRegistrations($activities);
+        $user->setActivityGroups($groups);
+
         $em->persist($user);
         $em->flush();
 
