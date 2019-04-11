@@ -1,7 +1,5 @@
 $(document).ready(function(){
-    $('select').formSelect();
-    $('.modal').modal();
-    $('.datepicker').datepicker({
+    var datePickerObj = {
         format: 'mm/dd/yyyy',
         firstDay: 1,
         i18n: {
@@ -13,15 +11,37 @@ $(document).ready(function(){
             cancel: 'Fermer',
             clear: 'Réinitialiser'
         }
-    });
+    };
+    $('select').formSelect();
+    $('.modal').modal();
+    $('.firstDate').datepicker(datePickerObj);
+    $('.secondDate').datepicker(datePickerObj);
+
     $('.timepicker').timepicker({
         twelveHour: false
-
     });
+
     $('.carousel').carousel();
     var elems = document.querySelectorAll('.fixed-action-btn');
     var instances = M.FloatingActionButton.init(elems, {
         direction: 'left'
     });
+
+    $('.firstDate').change(function(){
+        var restrictedDateObj = jQuery.extend({}, datePickerObj);
+        var restrictedDate = $(this).val().split("/");
+        restrictedDateObj.minDate = new Date(restrictedDate[2], restrictedDate[0]-1, restrictedDate[1]);
+
+        $(".secondDate").datepicker(restrictedDateObj);
+    });
+
+    $('.secondDate').change(function(){
+        var restrictedDateObj = jQuery.extend({}, datePickerObj);
+        var restrictedDate = $(this).val().split("/");
+        restrictedDateObj.maxDate = new Date(restrictedDate[2], restrictedDate[0]-1, restrictedDate[1]);
+
+        $(".firstDate").datepicker(restrictedDateObj);
+    });
+
 });
 
