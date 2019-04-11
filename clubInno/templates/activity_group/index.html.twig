@@ -18,7 +18,7 @@
                                 {{ activity.name }}
                             </div>
                             <div class="collapsible-body">
-                                <a class='btn green accent-4' href='{{ path('activity_group_assign',  {'id': activity.id}) }}' >Assign Students</a>
+                                <a class='btn green accent-4' href='{{ path('activity_group_assign',  {'id': activity.id}) }}' >Assigner des étudiants</a>
                                 <table>
                                     <thead>
                                     <th>Nom</th>
@@ -31,7 +31,8 @@
                                                 {{ group.name }}
                                             </td>
                                             <td>
-
+                                                <a href="{{ path("activity_group_edit", {'id': group.id}) }}"><i class="material-icons">edit</i></a>
+                                                <a href="{{ path("activity_group_delete", {'id': group.id}) }}"><i class="material-icons red-text text-accent-4">delete</i></a>
                                             </td>
                                         </tr>
                                     {% endfor %}
