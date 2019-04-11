@@ -80,6 +80,11 @@ class User implements UserInterface
      */
     private $activityGroups;
 
+    /**
+     * @ORM\Column(type="string", unique=true)
+     */
+    private $apiToken;
+
 
     public function __construct()
     {
@@ -316,6 +321,18 @@ class User implements UserInterface
     public function setComments($comments): void
     {
         $this->comments = $comments;
+    }
+
+    public function getApiToken(): ?string
+    {
+        return $this->apiToken;
+    }
+
+    public function setApiToken(string $apiToken): self
+    {
+        $this->apiToken = $apiToken;
+
+        return $this;
     }
 
 

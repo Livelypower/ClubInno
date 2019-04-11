@@ -7,7 +7,6 @@
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
         <a href="{{ path("blog_new") }}" class="btn green accent-4">Nouveau BlogPost</a>
     {% endif %}
-
     <div class="row">
         <div class="col s12">
             <h4>Toutes les blogs</h4>
@@ -41,7 +40,7 @@
             </table>
         </div>
     </div>
-
+    <div id="data" hidden>{{ apiToken }}</div>
 {% endblock %}
 
 {% block javascripts %}

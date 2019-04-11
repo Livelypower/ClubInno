@@ -1,12 +1,16 @@
 $(document).ready(function () {
     var students;
     var activities;
+    var apiToken = $("#data").html();
     getUsers();
 
     function getUsers() {
         $.ajax({
             method: "GET",
             url: "http://localhost:8000/api/users",
+            headers: {
+                'X-AUTH-TOKEN':apiToken
+            },
             success: function (response) {
                 students = response;
                 getActis();
@@ -22,6 +26,9 @@ $(document).ready(function () {
         $.ajax({
             method: "GET",
             url: "http://localhost:8000/api/activities",
+            headers: {
+                'X-AUTH-TOKEN':apiToken
+            },
             success: function (response) {
                 activities = response;
                 all()
@@ -212,6 +219,9 @@ $(document).ready(function () {
                         method: "POST",
                         url: "http://localhost:8000/api/registration/add",
                         data: registration,
+                        headers: {
+                            'X-AUTH-TOKEN':apiToken
+                        },
                         success: function (response) {
                             console.log(response);
                         },

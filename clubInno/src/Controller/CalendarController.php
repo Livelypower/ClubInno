@@ -17,7 +17,8 @@ class CalendarController extends AbstractController
         $user = $this->getUser();
         if(in_array('ROLE_USER', $user->getRoles()) && !in_array('ROLE_TEACHER', $user->getRoles()) && !in_array('ROLE_ADMIN', $user->getRoles())){
              return $this->render('calendar/index.html.twig', [
-                 'userId' => $user->getId()
+                 'userId' => $user->getId(),
+                 'apiToken' => $user->getApiToken()
              ]);
         }else{
             throw new AccessDeniedException();
@@ -29,8 +30,10 @@ class CalendarController extends AbstractController
      */
     public function adminCalendar()
     {
+        $user = $this->getUser();
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         return $this->render('calendar/admin.html.twig', [
+            'apiToken' => $user->getApiToken()
         ]);
     }
 
