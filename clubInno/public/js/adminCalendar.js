@@ -1,7 +1,11 @@
 $(document).ready(function () {
+    var apiToken = $("#data").html();
     $.ajax({
         url: 'http://localhost:8000/api/admin/calendar',
         method: 'GET',
+        headers: {
+            'X-AUTH-TOKEN':apiToken
+        },
         success: function (response) {
             console.log(response);
             eventsArray = [];

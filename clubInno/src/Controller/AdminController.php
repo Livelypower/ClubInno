@@ -40,7 +40,10 @@ class AdminController extends AbstractController
      */
     public function listApplications()
     {
-        return $this->render('admin/application_list.html.twig');
+        $user = $this->getUser();
+        return $this->render('admin/application_list.html.twig',[
+            'apiToken' => $user->getApiToken()
+        ]);
     }
 
     /**

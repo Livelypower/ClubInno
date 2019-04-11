@@ -1,10 +1,14 @@
 $(document).ready(function () {
     var activityId = $("#activityId").val();
     var groupIds = [];
+    var apiToken = $("#data").html();
 
     $.ajax({
         method: "GET",
         url: "http://localhost:8000/api/activity/groups/" + activityId + "/",
+        headers: {
+            'X-AUTH-TOKEN':apiToken
+        },
         success: function (response) {
             $.each(response.groups, function (index, element) {
                 groupIds.push(element.id);

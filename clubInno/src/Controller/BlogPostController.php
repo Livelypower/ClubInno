@@ -95,6 +95,7 @@ class BlogPostController extends AbstractController
         $files = array();
         $imgs = array();
 
+        $user = $this->getUser();
         if(!empty($blogPost->getFiles())){
             foreach ($blogPost->getFiles() as $file){
                 $pieces = explode(".", $file);
@@ -112,7 +113,8 @@ class BlogPostController extends AbstractController
             'post' => $blogPost,
             'comments' => $comments,
             'imgs' => $imgs,
-            'files' => $files
+            'files' => $files,
+            'apiToken'=> $user->getApiToken()
         ]);
     }
 
