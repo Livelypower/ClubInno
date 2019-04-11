@@ -28,8 +28,8 @@
                         <td>{{ moment.startDate | date('d/m/Y') }} - {{ moment.startTime | date('H:i') }}</td>
                         <td>{{ moment.endDate | date('d/m/Y') }} - {{ moment.endTime | date('H:i') }}</td>
                         <td>
-                            <a href=""><i class="material-icons red-text text-accent-4">delete</i></a>
-                            <a href=""><i class="material-icons">edit</i></a>
+                            <a href="{{ path("activity_moment_edit", {'id': moment.id}) }}"><i class="material-icons">edit</i></a>
+                            <a href="{{ path("activity_moment_delete", {'id': moment.id}) }}"><i class="material-icons red-text text-accent-4">delete</i></a>
                         </td>
                     </tr>
                 {% endfor %}
