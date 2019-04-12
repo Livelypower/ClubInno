@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     $.ajax({
         method: "GET",
-        url: "http://localhost:8000/api/activity/groups/" + activityId + "/",
+        url: "http://localhost:8000/api/admin/activity/groups/" + activityId + "/",
         headers: {
             'X-AUTH-TOKEN':apiToken
         },
@@ -59,7 +59,7 @@ $(document).ready(function () {
 
             $.ajax({
                 method: "POST",
-                url: "http://localhost:8000/api/activity/groups/addusers/" + groupId + "/",
+                url: "http://localhost:8000/api/admin/activity/groups/addusers/" + groupId + "/",
                 data: {"users": userIds},
                 success: function (response) {
                     console.log(response);

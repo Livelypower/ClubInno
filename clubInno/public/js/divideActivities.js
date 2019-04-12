@@ -7,7 +7,7 @@ $(document).ready(function () {
     function getUsers() {
         $.ajax({
             method: "GET",
-            url: "http://localhost:8000/api/users",
+            url: "http://localhost:8000/api/admin/users",
             headers: {
                 'X-AUTH-TOKEN':apiToken
             },
@@ -25,7 +25,7 @@ $(document).ready(function () {
     function getActis() {
         $.ajax({
             method: "GET",
-            url: "http://localhost:8000/api/activities",
+            url: "http://localhost:8000/api/admin/activities",
             headers: {
                 'X-AUTH-TOKEN':apiToken
             },
@@ -217,7 +217,7 @@ $(document).ready(function () {
                 registrations.forEach(function(registration) {
                     $.ajax({
                         method: "POST",
-                        url: "http://localhost:8000/api/registration/add",
+                        url: "http://localhost:8000/api/admin/registration/add",
                         data: registration,
                         headers: {
                             'X-AUTH-TOKEN':apiToken

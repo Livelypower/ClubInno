@@ -19,10 +19,18 @@ class BlogPostController extends AbstractController
     public function index()
     {
         $blogPosts = $this->getDoctrine()->getRepository(BlogPost::class)->findAll();
+        $user = $this->getUser();
+
+        if ($user == null){
+            $apiTokenoken = null;
+        } else {
+            $apiToken = $user->getApiToken();
+        }
 
         return $this->render('blog_post/index.html.twig', [
             'controller_name' => 'BlogPostController',
-            'blogPosts' => $blogPosts
+            'blogPosts' => $blogPosts,
+            'apiToken' => $apiToken
         ]);
     }
 
@@ -96,6 +104,12 @@ class BlogPostController extends AbstractController
         $imgs = array();
 
         $user = $this->getUser();
+
+        if ($user == null){
+            $apitoken = null;
+        } else {
+            $apitoken = $user->getApiToken();
+        }
         if(!empty($blogPost->getFiles())){
             foreach ($blogPost->getFiles() as $file){
                 $pieces = explode(".", $file);
@@ -114,7 +128,7 @@ class BlogPostController extends AbstractController
             'comments' => $comments,
             'imgs' => $imgs,
             'files' => $files,
-            'apiToken'=> $user->getApiToken()
+            'apiToken' => $apitoken
         ]);
     }
 
@@ -125,6 +139,14 @@ class BlogPostController extends AbstractController
         $allBlogs = $this->getDoctrine()->getRepository(BlogPost::class)->findAll();
         $blogs = array();
 
+        $user = $this->getUser();
+
+        if ($user == null){
+            $apitoken = null;
+        } else {
+            $apitoken = $user->getApiToken();
+        }
+
         foreach ($allBlogs as $blog){
             if($blog->getActivity()->getId() == $activity->getId()){
                 array_push($blogs, $blog);
@@ -133,7 +155,8 @@ class BlogPostController extends AbstractController
 
 
         return $this->render('blog_post/index.html.twig', [
-            'blogPosts' => $blogs
+            'blogPosts' => $blogs,
+            'apiToken' => $apitoken
         ]);
     }
 

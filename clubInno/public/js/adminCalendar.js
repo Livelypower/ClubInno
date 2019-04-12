@@ -46,7 +46,8 @@ function buildCalendar(eventsArray) {
         plugins: ['dayGrid', 'timeGrid'],
         defaultView: 'timeGridWeek',
         eventBorderColor: 'transparent',
-        events: eventsArray
+        events: eventsArray,
+        nowIndicator: true
     });
 
     calendar.render();

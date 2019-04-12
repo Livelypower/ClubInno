@@ -22,8 +22,8 @@ use FOS\RestBundle\View\View;
 class RegistrationController  extends AbstractFOSRestController
 {
     /**
-     * Creates an Comment resource
-     * @Rest\Post("/registration/add")
+     * Creates a Registration resource
+     * @Rest\Post("/admin/registration/add")
      * @param Request $request
      * @return View
      */
