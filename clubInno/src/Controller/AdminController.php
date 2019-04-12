@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Semester;
 use App\Form\ActivityType;
+use App\Form\NewSemesterType;
 use App\Form\SetActiveSemesterForm;
 use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -264,6 +265,46 @@ class AdminController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('admin_list_activities');
+    }
+
+    /**
+     * @Route("admin/activity/{id}/toggle", requirements={"id": "\d+"}, name="activity_toggle")
+     */
+    public function toggleActivity(Activity $activity)
+    {
+        if ($activity->getActive() == 1){
+            $activity->setActive(0);
+        } else {
+            $activity->setActive(1);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($activity);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_list_activities');
+    }
+
+    /**
+     * @Route("admin/semester/new", name="admin_semester_new")
+     */
+    public function newSemester(Request $request)
+    {
+        $semester = new Semester();
+        $form = $this->createForm(NewSemesterType::class, $semester);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $semester = $form->getData();
+            $semester->setActive(0);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($semester);
+            $em->flush();
+
+            return $this->redirectToRoute('account');
+        }
+        return $this->render('semester/new.html.twig', [
+            'form' => $form->createView(),
+        ]);
     }
 
     /**

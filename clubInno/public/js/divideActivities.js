@@ -46,7 +46,7 @@ $(document).ready(function () {
 
         var count = 1;
         activities.forEach(function(activity) {
-            $("#tableHead").append('<th id="' + activity.id + '" data-number="' + count + '">' +
+            $("#tableHead").append('<th id="a' + activity.id + '" data-number="' + count + '">' +
                 '<a href="/activity/' + activity.id + '-/admin/listApplications">' + activity.name + '</a>' +
                 ' <span id="span-' + activity.id +'">(' + activity.users.length + '/' + activity.max_amount_students + ')</span>' +
                 '<span id="mark-' + activity.id + '" class="red-text text-darken-3"></span>'+
@@ -57,16 +57,17 @@ $(document).ready(function () {
         students.forEach(function(student) {
             if(student.roles[0] === "ROLE_USER" && student.applications.length !== 0){
                 var url = "http://localhost:8000/uploads/" + student.applications[0].motivation_letter_path;
+                console.log(student._orientation);
                 if(student.registrations.length !== 0){
-                    $("#tableBody").append('<tr id="' + student.id + '" class="registrated"><td>' + student.email
-                        + '<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
+                    $("#tableBody").append('<tr id="s' + student.id + '" class="registrated"><td>' + student.email + " (" + student._orientation
+                        + ')<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
                 }else{
-                    $("#tableBody").append('<tr id="' + student.id + '"><td>' + student.email
-                        + '<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
+                    $("#tableBody").append('<tr id="s' + student.id + '"><td>' + student.email + " (" + student._orientation
+                        + ')<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
                 }
             }
             activities.forEach(function(activity) {
-                $("#" + student.id).append('<td data-clickable-cell="true" id="' + student.id + "-" + activity.id + '"></td>');
+                $("#s" + student.id).append('<td data-clickable-cell="true" id="' + student.id + "-" + activity.id + '"></td>');
                 if(student.applications.length !== 0){
                     student.applications[0].activities.forEach(function(application){
                         if(activity.id === application.id){

@@ -53,7 +53,7 @@ class BlogPostController extends AbstractController
             $files = $request->files->get('blog_post')['files'];
             $filenames = array();
             $uploads_directory = $this->getParameter('uploads_directory');
-
+            var_dump($files);
             foreach($files as $file){
                 $filename = md5(uniqid()) . '.' . $file->guessExtension();
                 array_push($filenames, $filename);
