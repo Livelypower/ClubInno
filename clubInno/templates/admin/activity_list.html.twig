@@ -34,6 +34,7 @@
                         <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
                         {% if is_granted('ROLE_ADMIN') %}
                             <div class="right hide-on-med-and-down">
+                                <a href="{{ path("activity_toggle", {'id': activity.id}) }}">toggle</a>
                                 <a href="{{ path("activity_edit", {'id': activity.id})}}">edit</a>
                                 <a href="{{ path("activity_delete", {'id': activity.id})}}">delete</a>
                             </div>

@@ -22,6 +22,7 @@ class UserFixtures extends Fixture
         $user->setFirstName('Cel');
         $user->setLastName('Pynenborg');
         $user->setPassword($this->passwordEncoder->encodePassword($user, 'admin'));
+        $user->setApiToken('Ymf0zrZmEvvnlymSBO7p8o61adwkAmB0');
 
         $manager->persist($user);
 

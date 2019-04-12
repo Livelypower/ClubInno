@@ -22,7 +22,7 @@ class ActivityController extends AbstractFOSRestController
 {
     /**
      * Retrieves user objects registered to a specific activity but not assigned to any groups of that activity
-     * @Rest\Get("/activity/groups/{activityId}")
+     * @Rest\Get("/admin/activity/groups/{activityId}")
      */
     public function getUnassignedUsers(int $activityId): View
     {
@@ -58,8 +58,8 @@ class ActivityController extends AbstractFOSRestController
     }
 
     /**
-     * Creates an Comment resource
-     * @Rest\Post("/activity/groups/addusers/{groupId}")
+     * Adds users to specified groups
+     * @Rest\Post("/admin/activity/groups/addusers/{groupId}")
      * @param Request $request
      * @return View
      */

@@ -107,8 +107,8 @@ class CommentController extends AbstractFOSRestController
     }
 
     /**
-     * Retrieves all Comment resources belonging to a blogpost
-     * @Rest\Get("/activities")
+     * Retrieves all Activity Objects
+     * @Rest\Get("/admin/activities")
      */
     public function getActis(): View
     {
@@ -119,8 +119,8 @@ class CommentController extends AbstractFOSRestController
     }
 
     /**
-     * Retrieves all Comment resources belonging to a blogpost
-     * @Rest\Get("/users")
+     * Retrieves all User Objects
+     * @Rest\Get("/admin/users")
      */
     public function getUsers(): View
     {
