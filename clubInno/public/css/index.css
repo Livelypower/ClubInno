@@ -28,6 +28,10 @@ input:-webkit-autofill:active  {
     -webkit-text-fill-color: white !important;
 }
 
+.error-message{
+    color: red;
+}
+
 
 
 

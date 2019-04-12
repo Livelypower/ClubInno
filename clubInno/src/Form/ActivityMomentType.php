@@ -31,30 +31,32 @@ class ActivityMomentType extends AbstractType
             ->add('startDate', DateType::class, [
                 'label' => 'start date',
                 'widget' => 'single_text',
-                'format'=> 'MM/dd/yyyy',
+                'format'=> 'MM/dd/yyyy'
             ])
             ->add('startTime', TimeType::class, [
                 'label' => 'start time',
                 'html5' => false,
                 'with_seconds' => false,
-                'widget' => 'single_text'
+                'widget' => 'single_text',
             ])
             ->add('endDate', DateType::class, [
                 'label' => 'end date',
                 'widget' => 'single_text',
                 'format'=> 'MM/dd/yyyy',
+                'required' => false
             ])
             ->add('endTime', TimeType::class, [
                 'label' => 'end time',
                 'html5' => false,
                 'with_seconds' => false,
+                'required' => false,
                 'widget' => 'single_text'
             ])
             ->add('activityGroups', EntityType::class, [
                 'class' => ActivityGroup::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'required' => true
+                'empty_data' => '',
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
     }

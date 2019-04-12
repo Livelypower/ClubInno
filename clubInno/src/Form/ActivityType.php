@@ -43,7 +43,8 @@ class ActivityType extends AbstractType
 
                 // used to render a select box, check boxes or radios
                 'multiple' => true,
-                'required' => false
+                'required' => false,
+                'empty_data' => ''
             ])
             ->add('maxAmountStudents', NumberType::class, ['label' => 'Max étudiants'])
             ->add('semester', EntityType::class, [
@@ -51,7 +52,8 @@ class ActivityType extends AbstractType
                 'class' => Semester::class,
                 'choice_label' => 'stringified',
                 'multiple' => false,
-                'required' => true
+                'required' => true,
+                'empty_data' => ''
             ])
             ->add('mainImage', FileType::class, [
                 'mapped' => true,

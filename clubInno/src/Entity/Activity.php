@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
@@ -21,6 +22,7 @@ class Activity
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
@@ -31,6 +33,8 @@ class Activity
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank()
+     * @Assert\Type(type="integer", message="The value {{ value }} is not a valid {{ type }}.")
      */
     private $maxAmountStudents;
 
@@ -42,12 +46,14 @@ class Activity
     /**
      * Many Applications have Many Activities.
      * @ORM\ManyToMany(targetEntity="Application", mappedBy="activities")
+     * @Assert\NotBlank()
      */
     private $applications;
 
     /**
      * Many Activities have Many Tags.
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="activities")
+     * @Assert\NotBlank()
      */
     private $tags;
 
@@ -59,7 +65,7 @@ class Activity
 
     /**
      * One activity has many blogPosts. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="BlogPost", mappedBy="activity")
+     * @ORM\OneToMany(targetEntity="BlogPost", cascade={"persist", "remove"}, mappedBy="activity")
      */
     private $blogPosts;
 
@@ -77,12 +83,14 @@ class Activity
      * Many activities have one semester. This is the owning side.
      * @ORM\ManyToOne(targetEntity="Semester", inversedBy="activities")
      * @ORM\JoinColumn(name="semester_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      */
     private $semester;
 
     /**
      * One Activity has many ActivityGroups. This is the inverse side.
-     * @ORM\OneToMany(targetEntity="ActivityGroup", mappedBy="activity")
+     * @ORM\OneToMany(targetEntity="ActivityGroup", cascade={"persist", "remove"}, mappedBy="activity")
+     * @Assert\NotBlank()
      */
     private $activityGroups;
 

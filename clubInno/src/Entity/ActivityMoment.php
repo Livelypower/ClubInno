@@ -6,11 +6,45 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Component\Security\Core\Validator\Constraints\UserPassword;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityMomentRepository")
  */
 class ActivityMoment
 {
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        // somehow you have an array of "fake names"
+        $firstDate = $this->getStartDate();
+        $secondDate = $this->getEndDate();
+        $firstTime = $this->getStartTime();
+        $secondTime = $this->getEndTime();
+
+        if($firstDate != null && $secondDate != null){
+            if ($firstDate > $secondDate) {
+                $context->buildViolation('end date must be later than start date')
+                    ->atPath('endDate')
+                    ->addViolation();
+            }
+        }
+
+        if($firstTime != null && $secondTime != null){
+            if ($firstTime > $secondTime && $firstDate === $secondDate) {
+                $context->buildViolation('If on the same day, end time must be later than start time')
+                    ->atPath('endTime')
+                    ->addViolation();
+            }
+        }
+    }
+
+
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -20,39 +54,45 @@ class ActivityMoment
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $location;
 
 
-
-
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\ActivityGroup", inversedBy="activityMoments")
+     * @Assert\NotBlank()
      */
     private $activityGroups;
 
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotBlank()
+     * @Assert\Date()
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="time")
+     * @Assert\NotBlank()
      */
     private $startTime;
 
     /**
      * @ORM\Column(type="date", nullable=true)
+     * @Assert\Date()
      */
     private $endDate;
 
@@ -107,29 +147,7 @@ class ActivityMoment
         return $this;
     }
 
-    public function getStartDateTime(): ?\DateTimeInterface
-    {
-        return $this->startDateTime;
-    }
 
-    public function setStartDateTime(\DateTimeInterface $startDateTime): self
-    {
-        $this->startDateTime = $startDateTime;
-
-        return $this;
-    }
-
-    public function getEndDateTime(): ?\DateTimeInterface
-    {
-        return $this->endDateTime;
-    }
-
-    public function setEndDateTime(?\DateTimeInterface $endDateTime): self
-    {
-        $this->endDateTime = $endDateTime;
-
-        return $this;
-    }
 
     /**
      * @return Collection|ActivityGroup[]
@@ -162,7 +180,7 @@ class ActivityMoment
         return $this->startDate;
     }
 
-    public function setStartDate(\DateTimeInterface $startDate): self
+    public function setStartDate(\DateTimeInterface $startDate = null): self
     {
         $this->startDate = $startDate;
 
@@ -174,7 +192,7 @@ class ActivityMoment
         return $this->startTime;
     }
 
-    public function setStartTime(\DateTimeInterface $startTime): self
+    public function setStartTime(\DateTimeInterface $startTime = null): self
     {
         $this->startTime = $startTime;
 
