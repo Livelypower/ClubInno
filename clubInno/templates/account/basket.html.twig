@@ -43,7 +43,7 @@
                             <a class="orange-text text-lighten-2" href="{{ path('activity') }}">Toutes les activités</a></p>
                     {% endif %}
 
-                    {{ form(form) }}
+                    {{ form(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
                 </div>
             </div>

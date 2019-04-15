@@ -136,23 +136,26 @@ class AccountController extends AbstractController
      */
     public function basket(Request $request)
     {
-
-
         $form = $this->createForm(ApplicationType::class);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $request->files->get('application')['motivationLetterPath'];
-            $filename = null;
+            var_dump($request->get('application')['motivationLetterPath']);
+            $filename = $request->get('application')['motivationLetterPath'];
             $uploads_directory = $this->getParameter('uploads_directory');
 
-            $filename = md5(uniqid()) . '.' . $file->guessExtension();
 
-            $file->move(
-                $uploads_directory,
-                $filename
-            );
+            if($file != null){
+                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+
+                $file->move(
+                    $uploads_directory,
+                    $filename
+                );
+            }
+
 
             $usr= $this->getUser();
 
@@ -164,9 +167,11 @@ class AccountController extends AbstractController
 
             $session = $this->get('session');
             $activities = array();
-            foreach($session->get('basket') as $item){
-                $activity = $this->getDoctrine()->getRepository(Activity::class)->findOneBy(array('id'=>$item->getId()));
-                array_push($activities, $activity);
+            if($session->has('basket')){
+                foreach($session->get('basket') as $item){
+                    $activity = $this->getDoctrine()->getRepository(Activity::class)->findOneBy(array('id'=>$item->getId()));
+                    array_push($activities, $activity);
+                }
             }
             $application->setActivities($activities);
 

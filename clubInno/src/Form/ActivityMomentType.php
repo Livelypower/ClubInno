@@ -56,7 +56,7 @@ class ActivityMomentType extends AbstractType
                 'class' => ActivityGroup::class,
                 'choice_label' => 'name',
                 'multiple' => true,
-                'empty_data' => '',
+                'empty_data' => ''
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
     }

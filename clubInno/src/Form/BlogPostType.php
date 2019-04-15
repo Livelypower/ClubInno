@@ -29,8 +29,14 @@ class BlogPostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, ['label' => 'Titre'])
-            ->add('body', TextareaType::class, ['label' => 'Contenu'])
+            ->add('title', TextType::class, [
+                'label' => 'Titre',
+                'empty_data' => ''
+                ])
+            ->add('body', TextareaType::class, [
+                'label' => 'Contenu',
+                'empty_data' => ''
+                ])
             ->add('activity', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Activity::class,
