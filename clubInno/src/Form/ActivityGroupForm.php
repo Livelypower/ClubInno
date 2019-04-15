@@ -22,13 +22,17 @@ class ActivityGroupForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'Nom'])
+            ->add('name', TextType::class, [
+                'label' => 'Nom',
+                'empty_data' => ''
+            ])
             ->add('description', TextareaType::class, ['label' => 'Description'])
             ->add('activity', EntityType::class, [
                 'class' => Activity::class,
                 'choice_label' => 'name',
                 'multiple' => false,
-                'required' => true
+                'required' => true,
+                'empty_data' => ''
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
     }
