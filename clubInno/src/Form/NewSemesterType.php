@@ -11,15 +11,29 @@ namespace App\Form;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class NewSemesterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $years = array();
+
+        for($i = 2018; $i < 2040; $i++){
+            $years[$i] = $i;
+        }
+
+
         $builder
-            ->add('startYear', TextType::class, ['label' => 'Début'])
-            ->add('endYear', TextType::class, ['label' => 'Fin'])
+            ->add('startYear', ChoiceType::class, [
+                'label' => 'Début',
+                'choices' => $years
+            ])
+            ->add('endYear', ChoiceType::class, [
+                'label' => 'Fin',
+                'choices' => $years
+            ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
     }
 }

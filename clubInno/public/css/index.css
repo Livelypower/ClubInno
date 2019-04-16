@@ -11,9 +11,12 @@ main {
 .dropdown-content{
     width: max-content !important;
     height:auto !important;
+    max-height: 250px;
 }
 
-
+.select-dropdown{
+    overflow-y: auto !important;
+}
 
 .hidden{
     visibility: collapse;

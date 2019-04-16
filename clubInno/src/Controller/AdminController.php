@@ -300,11 +300,43 @@ class AdminController extends AbstractController
             $em->persist($semester);
             $em->flush();
 
-            return $this->redirectToRoute('account');
+            return $this->redirectToRoute('admin_semester');
         }
         return $this->render('semester/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("admin/semester/edit/{id}", name="admin_semester_edit")
+     */
+    public function editSemester(Semester $semester, Request $request){
+        $form = $this->createForm(NewSemesterType::class, $semester);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $semester = $form->getData();
+            $semester->setActive(0);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($semester);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_semester');
+        }
+        return $this->render('semester/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("admin/semester/delete/{id}", name="admin_semester_delete")
+     */
+    public function deleteSemester(Semester $semester){
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($semester);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_semester');
     }
 
     /**
@@ -314,8 +346,8 @@ class AdminController extends AbstractController
     {
         $years = $this->getDoctrine()->getRepository(Semester::class)->findAll();
 
-        return $this->render('semester/setactive.html.twig', [
-            'years' => $years
+        return $this->render('semester/index.html.twig', [
+            'semesters' => $years
         ]);
     }
 

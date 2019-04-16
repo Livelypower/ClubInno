@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\TagRepository")
@@ -18,6 +19,8 @@ class Tag
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="'Nom' ne doit pas être vide."
+    )
      */
     private $name;
 
