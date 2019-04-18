@@ -3,11 +3,15 @@
 namespace App\Controller;
 
 use App\Entity\Semester;
+use App\Entity\Tag;
 use App\Form\ActivityType;
 use App\Form\NewSemesterType;
 use App\Form\SetActiveSemesterForm;
 use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
@@ -127,9 +131,29 @@ class AdminController extends AbstractController
     public function listActivities()
     {
         $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
+        $user = $this->getUser();
+
+        $filterForm = $this->createFormBuilder();
+        $i = 0;
+        foreach ($tags as $tag)
+        {
+            $name = $tag->getName();
+            $formBuilder = $this->get('form.factory')->createNamedBuilder($i++, FormType::class, null);
+            $formBuilder
+                ->add($name, CheckboxType::class, array(
+                    'label' => $name,
+                    'value' => $name,
+                    'required' => false));
+            $filterForm->add($formBuilder);
+        }
+        $filterForm->add('Filter', SubmitType::class);
 
         return $this->render('admin/activity_list.html.twig', [
-            'activities' => $activities
+            'activities' => $activities,
+            'tags' => $tags,
+            'apiToken' => $user->getApiToken(),
+            'form' => $filterForm->getForm()->createView(),
         ]);
     }
 

@@ -9,7 +9,17 @@
     <div class="row">
         <div class="col s12">
             <h4>Toutes les activités</h4>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col s12">
+            {{ form(form) }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12" id="activities">
             {% for activity in activities %}
             <div class="col s12 m4">
                 <div class="card large blue-grey darken-1">
@@ -47,10 +57,12 @@
         </div>
     </div>
 
+    <div id="data" hidden>{{ apiToken }}</div>
 
 {% endblock %}
 
     {% block javascripts %}
         {{ parent() }}
         <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/filterActivities.js') }}"></script>
     {% endblock %}

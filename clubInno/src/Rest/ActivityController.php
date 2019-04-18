@@ -103,4 +103,35 @@ class ActivityController extends AbstractFOSRestController
         return View::create($group, Response::HTTP_CREATED);
 
     }
+
+    /**
+     * Returns all users
+     * @Rest\Get("/activities")
+     * @param Request $request
+     * @return View
+     */
+    public function getActivities(Request $request): View
+    {
+        $filters = $request->get('filters');
+
+        $allActivities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+        $activities = array();
+
+        foreach ($allActivities as $activity){
+            $tags = array();
+            foreach ($activity->getTags() as $tag){
+                array_push($tags, $tag->getName());
+            }
+            if(count(array_intersect($filters, $tags)) <= count($filters) && count(array_intersect($filters, $tags)) != 0){
+                array_push($activities, $activity);
+            }
+        }
+
+
+
+        // In case our GET was a success we need to return a 200 HTTP OK response with the request object
+        return View::create($activities, Response::HTTP_OK);
+
+    }
+
 }
