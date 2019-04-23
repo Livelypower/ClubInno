@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,11 +19,13 @@ class ActivityController extends AbstractController
      */
     public function index()
     {
-        $activities = $this->getDoctrine()->getRepository(Activity::class)->findBy(['active' => 1]);
+        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
+        $user = $this->getUser();
 
         return $this->render('activity/index.html.twig', [
             'controller_name' => 'ActivityController',
-            'activities' => $activities
+            'tags' => $tags,
+            'apiToken' => $user->getApiToken(),
         ]);
     }
 

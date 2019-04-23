@@ -4,7 +4,7 @@
 
 {% block body %}
     {{ parent() }}
-    <a href="{{ path("activity_new") }}" class="btn">Nouvelle Activité</a>
+    <a href="{{ path("activity_new") }}" class="btn green accent-4">Nouvelle Activité</a>
 
     <div class="row">
         <div class="col s12">
@@ -14,17 +14,23 @@
 
     <div class="row">
         <div class="col s12">
-            <form action="#">
-                {% for tag in tags %}
-                <p>
-                    <label>
-                        <input type="checkbox" id="{{ tag.name }}" value="{{ tag.name }}" />
-                        <span>{{ tag.name }}</span>
-                    </label>
-                </p>
-                {% endfor %}
-                <a href="#" class="btn" id="filterActivities">Filter</a>
+            <a href="#" class="btn" id="hideFilters">Hide Filters</a>
+            <form id="filterForm" action="#">
+                <ul>
+                    {% for tag in tags %}
+                        <li>
+                            <label>
+                                <input type="checkbox" id="{{ tag.name }}" value="{{ tag.name }}" />
+                                <span>{{ tag.name }}</span>
+                            </label>
+                        </li>
+                    {% endfor %}
+                    <li>
+                        <a href="#" class="btn grey lighten-1" id="filterActivities">Filter</a>
+                    </li>
+                </ul>
             </form>
+            <a href="#" class="btn" id="showFilters">Show Filters</a>
         </div>
     </div>
 
@@ -41,5 +47,5 @@
     {% block javascripts %}
         {{ parent() }}
         <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
-        <script type="text/javascript" src="{{ asset('js/filterActivities.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('js/filterAdminActivities.js') }}"></script>
     {% endblock %}

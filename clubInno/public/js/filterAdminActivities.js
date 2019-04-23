@@ -1,7 +1,9 @@
 $(document).ready(function(){
+    $("#filterForm").hide();
+    $("#hideFilters").hide();
     var filters = [];
-    if (localStorage.getItem('filters') !== null) {
-        filters = JSON.parse(localStorage.getItem('filters'));
+    if (localStorage.getItem('adminFilters') !== null) {
+        filters = JSON.parse(localStorage.getItem('adminFilters'));
     }
     checkFilters(filters);
     var apiToken = $("#data").html();
@@ -17,10 +19,24 @@ $(document).ready(function(){
         });
         console.log(filters);
         checkFilters(filters);
-        localStorage.setItem('filters',JSON.stringify(filters));
+        localStorage.setItem('adminFilters',JSON.stringify(filters));
         data = {'filters': filters};
         ajaxCall(data, apiToken);
     });
+
+    $('#showFilters').click(function () {
+        $(this).hide();
+        $("#filterForm").show();
+        $("#hideFilters").show();
+    });
+
+    $('#hideFilters').click(function(){
+       $(this).hide();
+       $("#filterForm").hide();
+       $("#showFilters").show();
+    });
+
+
 });
 
 function ajaxCall(data, apiToken){
@@ -107,4 +123,9 @@ function checkFilters(filters){
        $("#"+filter).prop("checked", true);
        console.log($("#"+filter).val());
     });
+    if(filters.length !== 0){
+        $("#filterForm").show();
+        $("#hideFilters").show();
+        $("#showFilters").hide();
+    }
 }

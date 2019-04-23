@@ -130,12 +130,10 @@ class AdminController extends AbstractController
      */
     public function listActivities()
     {
-        $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
         $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
         $user = $this->getUser();
 
         return $this->render('admin/activity_list.html.twig', [
-            'activities' => $activities,
             'tags' => $tags,
             'apiToken' => $user->getApiToken(),
         ]);

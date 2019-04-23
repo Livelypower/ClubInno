@@ -35,6 +35,18 @@ input:-webkit-autofill:active  {
     color: red;
 }
 
+#filterForm > ul > li {
+    display: inline-block;
+    /* You can also add some margins here to make it look prettier */
+    zoom:1;
+    *display:inline;
+    /* this fix is needed for IE7- */
+    margin-right: 15px;
+}
+
+#filterForm > ul > li > label > span{
+    padding-left: 20px;
+}
 
 
 
