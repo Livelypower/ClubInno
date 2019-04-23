@@ -134,26 +134,10 @@ class AdminController extends AbstractController
         $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
         $user = $this->getUser();
 
-        $filterForm = $this->createFormBuilder();
-        $i = 0;
-        foreach ($tags as $tag)
-        {
-            $name = $tag->getName();
-            $formBuilder = $this->get('form.factory')->createNamedBuilder($i++, FormType::class, null);
-            $formBuilder
-                ->add($name, CheckboxType::class, array(
-                    'label' => $name,
-                    'value' => $name,
-                    'required' => false));
-            $filterForm->add($formBuilder);
-        }
-        $filterForm->add('Filter', SubmitType::class);
-
         return $this->render('admin/activity_list.html.twig', [
             'activities' => $activities,
             'tags' => $tags,
             'apiToken' => $user->getApiToken(),
-            'form' => $filterForm->getForm()->createView(),
         ]);
     }
 

@@ -117,15 +117,22 @@ class ActivityController extends AbstractFOSRestController
         $allActivities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
         $activities = array();
 
-        foreach ($allActivities as $activity){
-            $tags = array();
-            foreach ($activity->getTags() as $tag){
-                array_push($tags, $tag->getName());
-            }
-            if(count(array_intersect($filters, $tags)) <= count($filters) && count(array_intersect($filters, $tags)) != 0){
-                array_push($activities, $activity);
+        if(empty($filters)){
+            $activities = $allActivities;
+        }else{
+            foreach ($allActivities as $activity){
+                $tags = array();
+                foreach ($activity->getTags() as $tag){
+                    array_push($tags, $tag->getName());
+                }
+                if(count(array_intersect($filters, $tags)) <= count($filters) && count(array_intersect($filters, $tags)) != 0){
+                    array_push($activities, $activity);
+                }
             }
         }
+
+
+
 
 
 
