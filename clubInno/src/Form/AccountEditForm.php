@@ -32,6 +32,12 @@ class AccountEditForm extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un prénom s\'il vous plaît'
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Votre prénom doit comporter au moins 2 caractères.',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
                     ])
                 ]
                 ])
@@ -41,6 +47,12 @@ class AccountEditForm extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un nom s\'il vous plaît'
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Votre prénom doit comporter au moins 2 caractères.',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
                     ])
                 ]
                 ]);

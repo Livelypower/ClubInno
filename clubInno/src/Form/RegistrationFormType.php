@@ -21,7 +21,7 @@ class RegistrationFormType extends AbstractType
                 'label' => 'Adresse email',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Entrez un Nom s\'il vous plaît'
+                        'message' => 'Entrez un adresse email s\'il vous plaît'
                     ])
                 ]
             ])
@@ -30,6 +30,12 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un prénom s\'il vous plaît'
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Votre prénom doit comporter au moins 2 caractères.',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
                     ])
                 ]
             ])
@@ -38,6 +44,12 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un nom s\'il vous plaît'
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Votre nom doit comporter au moins 2 caractères.',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
                     ])
                 ]
             ])
@@ -52,7 +64,7 @@ class RegistrationFormType extends AbstractType
                     ]),
                     new Length([
                         'min' => 3,
-                        'minMessage' => 'Votre mot de passe doit comporter au moins 5 caractères.',
+                        'minMessage' => 'Votre mot de passe doit comporter au moins 3 caractères.',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
                     ]),

@@ -48,5 +48,8 @@ input:-webkit-autofill:active  {
     padding-left: 20px;
 }
 
+.datepicker-table {
+    color: black;
+}
 
 

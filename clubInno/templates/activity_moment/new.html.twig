@@ -9,7 +9,7 @@
             <div class="card blue-grey darken-1">
                 <div class="card-content">
                     <span class="card-title white-text">Création d'un nouveau moment</span>
-                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}})}}
+                    {{ form_start(form, {'attr': {'class': 'white-text', 'novalidate': 'novalidate'}})}}
                     {{ form_row(form.name, {'attr': {'class': 'white-text'}}) }}
                     {{ form_row(form.location, {'attr': {'class': 'white-text'}}) }}
                     {{ form_row(form.description, {'attr': {'class': 'white-text'}}) }}

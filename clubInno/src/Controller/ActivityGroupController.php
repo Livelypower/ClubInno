@@ -55,12 +55,14 @@ class ActivityGroupController extends AbstractController
     public function editActivityGroup(Request $request, ActivityGroup $activityGroup)
     {
         $form = $this->createForm(ActivityGroupForm::class, $activityGroup);
+        $group = $this->getDoctrine()->getRepository(ActivityGroup::class)->find($activityGroup->getId());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $activityGroup = $form->getData();
 
+            var_dump($activityGroup);
             $em = $this->getDoctrine()->getManager();
             $em->persist($activityGroup);
             $em->flush();
@@ -69,7 +71,7 @@ class ActivityGroupController extends AbstractController
         }
         return $this->render('activity_group/edit.html.twig', [
             'form' => $form->createView(),
-            'group' => $activityGroup
+            'group' => $group
         ]);
     }
 

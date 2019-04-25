@@ -28,19 +28,17 @@ class ActivityMoment
 
         if($firstDate != null && $secondDate != null){
             if ($firstDate > $secondDate) {
-                $context->buildViolation('end date must be later than start date')
+                $context->buildViolation('La date de fin doit être plus tard que la date de début.')
                     ->atPath('endDate')
                     ->addViolation();
             }
         }
 
-        if($firstTime != null && $secondTime != null){
-            if ($firstTime > $secondTime && $firstDate === $secondDate) {
-                $context->buildViolation('If on the same day, end time must be later than start time')
+            if ($firstTime > $secondTime && $firstDate == $secondDate) {
+                $context->buildViolation('Si le même jour, l\'heure de fin doit être plus tard que l\'heure de début')
                     ->atPath('endTime')
                     ->addViolation();
             }
-        }
     }
 
 
@@ -54,19 +52,15 @@ class ActivityMoment
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
      */
     private $name;
-
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank()
      */
     private $description;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
      */
     private $location;
 
@@ -79,14 +73,12 @@ class ActivityMoment
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\NotBlank()
      * @Assert\Date()
      */
     private $startDate;
 
     /**
      * @ORM\Column(type="time")
-     * @Assert\NotBlank()
      */
     private $startTime;
 
