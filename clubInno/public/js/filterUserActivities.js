@@ -42,7 +42,7 @@ $(document).ready(function(){
 function ajaxCall(data, apiToken){
     $.ajax({
         method: "GET",
-        url: "http://localhost:8000/api/activities",
+        url: "http://localhost:8000/api/activeActivities",
         data: data,
         headers: {
             'X-AUTH-TOKEN':apiToken
@@ -76,12 +76,6 @@ function showActivities(activities){
         card +=  "               </div>\n" +
             "                    <div class=\"card-content white-text\">\n" +
             "                        <span class=\"card-title\">" + activity.name;
-
-        if(activity.active === true){
-            card +=  " <i class=\"material-icons green-text accent-2\">check</i>";
-        }else{
-            card += " <i class=\"material-icons red-text accent-4\">cancel</i>";
-        }
 
         var activityShowUrl = "http://localhost:8000/activity/" + activity.id;
         card += "</span>\n" +
