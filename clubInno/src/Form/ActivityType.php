@@ -24,7 +24,10 @@ use App\Entity\Tag;
 use App\Entity\Image;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\HttpFoundation\File\File;
-
+use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Type;
 
 
 class ActivityType extends AbstractType
@@ -32,8 +35,25 @@ class ActivityType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, ['label' => 'Nom'])
-            ->add('description', TextareaType::class, ['label' => 'Description'])
+            ->add('name', TextType::class, [
+                'label' => 'Nom',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez un nom s\'il vous plaît'
+                    ]),
+                    new Length([
+                        'min' => 3,
+                        'minMessage' => 'Le nom de l\'activité doit comporter au moins 3 caractères.',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
+                    ])
+                ]
+            ])
+            ->add('description', TextareaType::class, [
+                'label' => 'Description',
+                'empty_data' => ''
+            ])
             ->add('tags', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Tag::class,
@@ -44,9 +64,24 @@ class ActivityType extends AbstractType
                 // used to render a select box, check boxes or radios
                 'multiple' => true,
                 'required' => false,
-                'empty_data' => ''
+                'empty_data' => '',
+                'invalid_message' => 'Sélectionnez au moins un tag.'
+
             ])
-            ->add('maxAmountStudents', NumberType::class, ['label' => 'Max étudiants'])
+            ->add('maxAmountStudents', NumberType::class, [
+                'label' => 'Max étudiants',
+                'empty_data' => null,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez le nombre maximum d\'étudiants  s\'il vous plaît'
+                    ]),
+                    new GreaterThan([
+                        'value' => 0,
+                        'message' => 'Entrez le nombre maximum d\'étudiants  s\'il vous plaît'
+                    ])
+                ],
+                'invalid_message' => 'Entrez un nombre entier valide.'
+            ])
             ->add('semester', EntityType::class, [
                 'label' => 'Semester',
                 'class' => Semester::class,

@@ -12,6 +12,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 class TagType extends AbstractType
 {
@@ -20,7 +22,18 @@ class TagType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom',
-                'empty_data' => ''
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez un nom s\'il vous plaît'
+                    ]),
+                    new Length([
+                        'min' => 2,
+                        'minMessage' => 'Le nom du tag doit comporter au moins 2 caractères.',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
+                    ])
+                ]
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
     }

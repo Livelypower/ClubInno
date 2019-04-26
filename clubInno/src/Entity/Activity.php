@@ -22,7 +22,6 @@ class Activity
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
      */
     private $name;
 
@@ -33,8 +32,6 @@ class Activity
 
     /**
      * @ORM\Column(type="integer")
-     * @Assert\NotBlank()
-     * @Assert\Type(type="integer", message="The value {{ value }} is not a valid {{ type }}.")
      */
     private $maxAmountStudents;
 
@@ -46,14 +43,12 @@ class Activity
     /**
      * Many Applications have Many Activities.
      * @ORM\ManyToMany(targetEntity="Application", mappedBy="activities")
-     * @Assert\NotBlank()
      */
     private $applications;
 
     /**
      * Many Activities have Many Tags.
      * @ORM\ManyToMany(targetEntity="Tag", inversedBy="activities")
-     * @Assert\NotBlank()
      */
     private $tags;
 

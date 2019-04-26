@@ -111,7 +111,7 @@ class AccountController extends AbstractController
             } elseif ($checkPass === true && $new_pwd !== $new_pwd_confirm){
                 return $this->render('account/changePassword.html.twig', [
                     'changePasswordForm' => $form->createView(),
-                    'error' => 'Both passwords don\'t match'
+                    'error' => 'Les mots de passe ne correspondent pas.'
                 ]);
             } else {
                 return $this->render('account/changePassword.html.twig', [
@@ -123,6 +123,7 @@ class AccountController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
+            return $this->redirectToRoute('edit_account');
         }
 
         return $this->render('account/changePassword.html.twig', [

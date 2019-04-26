@@ -27,11 +27,11 @@ class NewSemesterType extends AbstractType
 
         $builder
             ->add('startYear', ChoiceType::class, [
-                'label' => 'Début',
+                'label' => 'L\'année de début',
                 'choices' => $years
             ])
             ->add('endYear', ChoiceType::class, [
-                'label' => 'Fin',
+                'label' => 'L\'année de fin',
                 'choices' => $years
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);

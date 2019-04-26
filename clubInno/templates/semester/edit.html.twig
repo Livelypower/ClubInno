@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mise à jour semestre{% endblock %}
+{% block title %}Modifier le semestre{% endblock %}
 
 {% block body %}
     {{ parent() }}
@@ -8,8 +8,8 @@
         <div class="col s12">
             <div class="card blue-grey darken-1">
                 <div class="card-content">
-                    <span class="card-title white-text">Mise à jour semestre</span>
-                    {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                    <span class="card-title white-text">Modifier le semestre</span>
+                    {{ form_start(form, {'attr': {'class': 'white-text', 'novalidate': 'novalidate'}}) }}
                     {{ form_row(form.startYear, {'attr': {'class': 'white-text'}}) }}
                     {{ form_row(form.endYear, {'attr': {'class': 'white-text'}}) }}
                     <div class="row">

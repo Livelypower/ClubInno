@@ -22,8 +22,9 @@ class Semester
         $startYear = $this->getStartYear();
         $endYear = $this->getEndYear();
 
+
         if($startYear+1 != $endYear){
-            $context->buildViolation("'Fin' doit être exactement une année plus tard que 'Début'.")
+            $context->buildViolation("L'année de fin doit être exactement une année plus tard que l'année de début.")
                 ->atPath('endYear')
                 ->addViolation();
         }

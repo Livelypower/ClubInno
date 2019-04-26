@@ -19,8 +19,6 @@ class Tag
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="'Nom' ne doit pas être vide."
-    )
      */
     private $name;
 
