@@ -41,6 +41,7 @@ class ActivityGroupForm extends AbstractType
             ])
             ->add('description', TextareaType::class, ['label' => 'Description'])
             ->add('activity', EntityType::class, [
+                'label' => 'Activité',
                 'class' => Activity::class,
                 'choice_label' => 'name',
                 'multiple' => false,

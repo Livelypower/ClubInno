@@ -56,6 +56,7 @@ class ActivityType extends AbstractType
             ])
             ->add('tags', EntityType::class, [
                 // looks for choices from this entity
+                'label' => 'Des tags',
                 'class' => Tag::class,
 
                 // uses the User.username property as the visible option string
@@ -83,7 +84,7 @@ class ActivityType extends AbstractType
                 'invalid_message' => 'Entrez un nombre entier valide.'
             ])
             ->add('semester', EntityType::class, [
-                'label' => 'Semester',
+                'label' => 'Semestre',
                 'class' => Semester::class,
                 'choice_label' => 'stringified',
                 'multiple' => false,
@@ -99,7 +100,7 @@ class ActivityType extends AbstractType
                 'mapped' => true,
                 'required' => false,
                 'multiple' => true,
-                'label' => 'Files'
+                'label' => 'Des fichiers'
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
 

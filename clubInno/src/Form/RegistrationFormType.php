@@ -9,8 +9,11 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\Regex;
+use Symfony\Component\Validator\Constraints\Type;
 
 class RegistrationFormType extends AbstractType
 {
@@ -22,6 +25,9 @@ class RegistrationFormType extends AbstractType
                 'constraints' => [
                     new NotBlank([
                         'message' => 'Entrez un adresse email s\'il vous plaît'
+                    ]),
+                    new Email([
+                        'message' => 'Entrez un adresse email valide s\'il vous plaît'
                     ])
                 ]
             ])
@@ -36,6 +42,10 @@ class RegistrationFormType extends AbstractType
                         'minMessage' => 'Votre prénom doit comporter au moins 2 caractères.',
                         // max length allowed by Symfony for security reasons
                         'max' => 255,
+                    ]),
+                    new Regex([
+                        'pattern' => "/^[a-zA-Z'-]+$/",
+                        'message' => 'Votre prénom doit comporter seulement des lettres et les tirets'
                     ])
                 ]
             ])
@@ -50,6 +60,10 @@ class RegistrationFormType extends AbstractType
                         'minMessage' => 'Votre nom doit comporter au moins 2 caractères.',
                         // max length allowed by Symfony for security reasons
                         'max' => 255,
+                    ]),
+                    new Regex([
+                        'pattern' => "/^[a-zA-Z' -]+$/",
+                        'message' => 'Votre nom doit comporter seulement des lettres, des espaces et les tirets'
                     ])
                 ]
             ])

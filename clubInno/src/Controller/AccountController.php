@@ -8,6 +8,7 @@ use App\Form\ApplicationType;
 use App\Entity\Application;
 use App\Form\ChangePasswordForm;
 use App\Form\PasswordForgottenForm;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -69,8 +70,6 @@ class AccountController extends AbstractController
         $form = $this->createForm(AccountEditForm::class, $user);
         $form->handleRequest($request);
 
-
-
         if ($form->isSubmitted() && $form->isValid()) {
 
             $entityManager = $this->getDoctrine()->getManager();
@@ -79,8 +78,6 @@ class AccountController extends AbstractController
 
             return $this->redirectToRoute('account');
         }
-
-
 
         return $this->render('account/edit_account.html.twig', [
             'accountEditForm' => $form->createView()
@@ -137,84 +134,99 @@ class AccountController extends AbstractController
      */
     public function basket(Request $request)
     {
-        $form = $this->createForm(ApplicationType::class);
+        $roles = $this->getUser()->getRoles();
 
-        $form->handleRequest($request);
+        if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)){
+            $form = $this->createForm(ApplicationType::class);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $file = $request->files->get('application')['motivationLetterPath'];
-            var_dump($request->get('application')['motivationLetterPath']);
-            $filename = $request->get('application')['motivationLetterPath'];
-            $uploads_directory = $this->getParameter('uploads_directory');
+            $form->handleRequest($request);
 
+            if ($form->isSubmitted() && $form->isValid()) {
+                $file = $request->files->get('application')['motivationLetterPath'];
+                var_dump($request->get('application')['motivationLetterPath']);
+                $filename = $request->get('application')['motivationLetterPath'];
+                $uploads_directory = $this->getParameter('uploads_directory');
 
-            if($file != null){
-                $filename = md5(uniqid()) . '.' . $file->guessExtension();
+                if($file != null){
+                    $filename = md5(uniqid()) . '.' . $file->guessExtension();
 
-                $file->move(
-                    $uploads_directory,
-                    $filename
-                );
-            }
-
-
-            $usr= $this->getUser();
-
-            $application = new Application();
-            $application->setMotivationLetterPath($filename);
-
-            $application->setUser($usr);
-            $application->setDate(new \DateTime('now'));
-
-            $session = $this->get('session');
-            $activities = array();
-            if($session->has('basket')){
-                foreach($session->get('basket') as $item){
-                    $activity = $this->getDoctrine()->getRepository(Activity::class)->findOneBy(array('id'=>$item->getId()));
-                    array_push($activities, $activity);
+                    $file->move(
+                        $uploads_directory,
+                        $filename
+                    );
                 }
+
+                $usr= $this->getUser();
+
+                $application = new Application();
+                $application->setMotivationLetterPath($filename);
+
+                $application->setUser($usr);
+                $application->setDate(new \DateTime('now'));
+
+                $session = $this->get('session');
+                $activities = array();
+                if($session->has('basket')){
+                    foreach($session->get('basket') as $item){
+                        $activity = $this->getDoctrine()->getRepository(Activity::class)->findOneBy(array('id'=>$item->getId()));
+                        array_push($activities, $activity);
+                    }
+                }
+                $application->setActivities($activities);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($application);
+                $em->flush();
+
+                return $this->redirectToRoute('account_basket_clear');
             }
-            $application->setActivities($activities);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($application);
-            $em->flush();
-
-            return $this->redirectToRoute('account_basket_clear');
+            return $this->render('account/basket.html.twig', [
+                'form' => $form->createView(),
+            ]);
         }
-
-
-        return $this->render('account/basket.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        else{
+            throw new AccessDeniedException();
+        }
     }
 
     /**
      * @Route("/account/basket/delete/{id}", requirements={"id": "\d+"}, name="account_basket_delete")
      */
     public function deleteFromBasket(Activity $activity){
+        $roles = $this->getUser()->getRoles();
 
-        if($this->get('session')->isStarted()){
-            $session = $this->get('session');
-            $basket = $session->get('basket');
-            $index = array_search($activity, $basket);
-            array_splice($basket, $index, 1);
-            $session->set('basket', $basket);
+        if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)) {
+            if ($this->get('session')->isStarted()) {
+                $session = $this->get('session');
+                $basket = $session->get('basket');
+                $index = array_search($activity, $basket);
+                array_splice($basket, $index, 1);
+                $session->set('basket', $basket);
+            }
+
+            return $this->redirectToRoute("account_basket");
+        }else{
+            throw new AccessDeniedException();
         }
-
-        return $this->redirectToRoute("account_basket");
     }
 
     /**
      * @Route("/account/basket/clear", name="account_basket_clear")
      */
     public function clearBasket(){
-        if($this->get('session')->isStarted()){
-            $session = $this->get('session');
-            $session->set('basket', array());
-        }
+        $roles = $this->getUser()->getRoles();
 
-        return $this->redirectToRoute('account_basket');
+        if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)) {
+            if ($this->get('session')->isStarted()) {
+                $session = $this->get('session');
+                $session->set('basket', array());
+            }
+
+            return $this->redirectToRoute('account_basket');
+        }else{
+            throw new AccessDeniedException();
+        }
     }
 
     /**
@@ -267,13 +279,19 @@ class AccountController extends AbstractController
      * @Route("/account/applications", name="account_applications")
      */
     public function viewApplications(){
-        $user = $this->getUser();
+        $roles = $this->getUser()->getRoles();
 
-        $applications = $this->getDoctrine()->getRepository(Application::class)->findBy(['user' => $user], ['date' => 'DESC']);
+        if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)) {
+            $user = $this->getUser();
 
-        return $this->render('account/viewApplications.html.twig', [
-            'applications' => $applications
-        ]);
+            $applications = $this->getDoctrine()->getRepository(Application::class)->findBy(['user' => $user], ['date' => 'DESC']);
+
+            return $this->render('account/viewApplications.html.twig', [
+                'applications' => $applications
+            ]);
+        }else{
+            throw new AccessDeniedException();
+        }
     }
 
     private function random_str($length, $keyspace = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ')

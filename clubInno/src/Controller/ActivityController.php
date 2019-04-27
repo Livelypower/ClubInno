@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Tag;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Activity;
@@ -13,20 +14,25 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class ActivityController extends AbstractController
 {
-
     /**
      * @Route("/activity", name="activity")
      */
     public function index()
     {
-        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
-        $user = $this->getUser();
+        $roles = $this->getUser()->getRoles();
 
-        return $this->render('activity/index.html.twig', [
-            'controller_name' => 'ActivityController',
-            'tags' => $tags,
-            'apiToken' => $user->getApiToken(),
-        ]);
+        if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)) {
+            $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
+            $user = $this->getUser();
+
+            return $this->render('activity/index.html.twig', [
+                'controller_name' => 'ActivityController',
+                'tags' => $tags,
+                'apiToken' => $user->getApiToken(),
+            ]);
+        }else{
+            throw new AccessDeniedException();
+        }
     }
 
     /**
@@ -35,7 +41,6 @@ class ActivityController extends AbstractController
     public function showActivity(Activity $activity, $url = "/activity"){
         $files = array();
         $imgs = array();
-
 
         foreach ($activity->getFiles() as $file){
             $pieces = explode(".", $file);
@@ -59,29 +64,35 @@ class ActivityController extends AbstractController
      * @Route("/activity/addBasket/{id}", requirements={"id": "\d+"}, name="activity_addbasket")
      */
     public function addToBasket(Activity $activity){
-        if(!$this->get('session')->isStarted()){
-            $session = new Session();
-            $session->start();
-        }else{
-            $session = $this->get('session');
-        }
+        $roles = $this->getUser()->getRoles();
 
-        if($session->has("basket") && !empty($session->get('basket'))){
-            $basket = $session->get('basket');
-            foreach ($basket as $item) {
-                if($item->getId() != $activity->getId()){
-                    array_push($basket, $activity);
-                    $session->set('basket', $basket);
-                    break;
-                }
+        if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)) {
+            if (!$this->get('session')->isStarted()) {
+                $session = new Session();
+                $session->start();
+            } else {
+                $session = $this->get('session');
             }
+
+            if ($session->has("basket") && !empty($session->get('basket'))) {
+                $basket = $session->get('basket');
+                foreach ($basket as $item) {
+                    if ($item->getId() != $activity->getId()) {
+                        array_push($basket, $activity);
+                        $session->set('basket', $basket);
+                        break;
+                    }
+                }
+            } else {
+                $basket = array($activity);
+                $session->set('basket', $basket);
+            }
+
+
+            return $this->redirectToRoute('activity');
         }else{
-            $basket = array($activity);
-            $session->set('basket', $basket);
+            throw new AccessDeniedException();
         }
-
-
-        return $this->redirectToRoute('activity');
     }
 
 

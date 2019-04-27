@@ -4,12 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Activity;
 use App\Entity\ActivityGroup;
-use App\Entity\User;
 use App\Form\ActivityGroupForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+/**
+ * Require ROLE_ADMIN for *every* controller method in this class.
+ *
+ * @IsGranted("ROLE_ADMIN")
+ */
 class ActivityGroupController extends AbstractController
 {
     /**

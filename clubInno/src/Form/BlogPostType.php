@@ -58,7 +58,7 @@ class BlogPostType extends AbstractType
             ->add('activity', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Activity::class,
-
+                'label' => 'Activité',
                 'choice_label' => 'name',
 
                 // used to render a select box, check boxes or radios
@@ -69,7 +69,7 @@ class BlogPostType extends AbstractType
                 'mapped' => true,
                 'required' => false,
                 'multiple' => true,
-                'label' => 'Files',
+                'label' => 'Des fichiers',
                 'constraints' => [
                     new \Symfony\Component\Validator\Constraints\File([
                         'maxSize' => '2048k',

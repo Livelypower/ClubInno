@@ -160,7 +160,6 @@ class BlogPostController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/blog/{id}/delete", requirements={"id": "\d+"}, name="blog_delete")
      */
