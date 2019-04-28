@@ -42,7 +42,7 @@ $(document).ready(function(){
 function ajaxCall(data, apiToken){
     $.ajax({
         method: "GET",
-        url: "http://localhost:8000/api/activeActivities",
+        url: "http://vps589558.ovh.net/api/activeActivities",
         data: data,
         headers: {
             'X-AUTH-TOKEN':apiToken
@@ -69,7 +69,7 @@ function showActivities(activities){
         if(activity.main_image == null){
             card += "<img src=\"http://lorempixel.com/800/400/technics\" alt=\"\">\n"
         }else{
-            var imageUrl = "http://localhost:8000/uploads/" + activity.main_image;
+            var imageUrl = "http://vps589558.ovh.net/uploads/" + activity.main_image;
             card += "<img src=\"" + imageUrl + "\" alt=\"\">\n"
         }
 
@@ -77,7 +77,7 @@ function showActivities(activities){
             "                    <div class=\"card-content white-text\">\n" +
             "                        <span class=\"card-title\">" + activity.name;
 
-        var activityShowUrl = "http://localhost:8000/activity/" + activity.id;
+        var activityShowUrl = "http://vps589558.ovh.net/activity/" + activity.id;
         card += "</span>\n" +
             "                        <div class=\"row\"></div>\n" +
             "                        <p><b>Inscriptions: </b>" + activity.users.length + "/" + activity.max_amount_students + "</p>\n" +

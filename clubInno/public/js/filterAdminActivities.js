@@ -42,7 +42,7 @@ $(document).ready(function(){
 function ajaxCall(data, apiToken){
     $.ajax({
         method: "GET",
-        url: "http://localhost:8000/api/activities",
+        url: "http://vps589558.ovh.net/api/activities",
         data: data,
         headers: {
             'X-AUTH-TOKEN':apiToken
@@ -69,7 +69,7 @@ function showActivities(activities){
         if(activity.main_image == null){
             card += "<img src=\"http://lorempixel.com/800/400/technics\" alt=\"\">\n"
         }else{
-            var imageUrl = "http://localhost:8000/uploads/" + activity.main_image;
+            var imageUrl = "http://vps589558.ovh.net/uploads/" + activity.main_image;
             card += "<img src=\"" + imageUrl + "\" alt=\"\">\n"
         }
 
@@ -84,8 +84,8 @@ function showActivities(activities){
         }
 
 
-        var currentUrl = "http://localhost:8000/admin/activities";
-        var activityShowUrl = "http://localhost:8000/activity/" + activity.id + "-" + currentUrl;
+        var currentUrl = "http://vps589558.ovh.net/admin/activities";
+        var activityShowUrl = "http://vps589558.ovh.net/activity/" + activity.id + "-" + currentUrl;
         card += "</span>\n" +
             "                        <div class=\"row\"></div>\n" +
             "                        <p><b>Inscriptions: </b>" + activity.users.length + "/" + activity.max_amount_students + "</p>\n" +
@@ -98,9 +98,9 @@ function showActivities(activities){
             "                    <div class=\"card-action\">\n" +
             "                        <a href=\"" + activityShowUrl + "\">Plus d'info</a>\n";
 
-                var toggleUrl = "http://localhost:8000/admin/activity/" + activity.id + "/toggle";
-                var editUrl = "http://localhost:8000/admin/activity/" + activity.id + "/edit";
-                var deleteUrl = "http://localhost:8000/admin/activity/" + activity.id + "/delete";
+                var toggleUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/toggle";
+                var editUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/edit";
+                var deleteUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/delete";
 
                 card +=  "<div class=\"right hide-on-med-and-down\">\n" +
                 "                                <a href=\"" + toggleUrl + "\">toggle</a>\n" +

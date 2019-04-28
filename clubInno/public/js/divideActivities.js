@@ -7,7 +7,7 @@ $(document).ready(function () {
     function getUsers() {
         $.ajax({
             method: "GET",
-            url: "http://localhost:8000/api/admin/users",
+            url: "http://vps589558.ovh.net/api/admin/users",
             headers: {
                 'X-AUTH-TOKEN':apiToken
             },
@@ -25,7 +25,7 @@ $(document).ready(function () {
     function getActis() {
         $.ajax({
             method: "GET",
-            url: "http://localhost:8000/api/admin/activities",
+            url: "http://vps589558.ovh.net/api/admin/activities",
             headers: {
                 'X-AUTH-TOKEN':apiToken
             },
@@ -218,7 +218,7 @@ $(document).ready(function () {
                 registrations.forEach(function(registration) {
                     $.ajax({
                         method: "POST",
-                        url: "http://localhost:8000/api/admin/registration/add",
+                        url: "http://vps589558.ovh.net/api/admin/registration/add",
                         data: registration,
                         headers: {
                             'X-AUTH-TOKEN':apiToken
