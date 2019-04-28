@@ -30,6 +30,7 @@ class BlogPostController extends AbstractController
         return $this->render('blog_post/index.html.twig', [
             'controller_name' => 'BlogPostController',
             'blogPosts' => $blogPosts,
+            'activity' => null,
             'apiToken' => $apiToken
         ]);
     }
@@ -156,6 +157,7 @@ class BlogPostController extends AbstractController
 
         return $this->render('blog_post/index.html.twig', [
             'blogPosts' => $blogs,
+            'activity' => $activity,
             'apiToken' => $apitoken
         ]);
     }

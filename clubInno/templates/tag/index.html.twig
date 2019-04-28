@@ -21,8 +21,8 @@
                             {{ tag.name }}
                         </td>
                         <td>
-                            <a href="{{ path('tag_delete', {'id': tag.id}) }}"><i class="material-icons red-text text-accent-4">delete</i></a>
                             <a href="{{ path('tag_edit', {'id': tag.id}) }}"><i class="material-icons">edit</i></a>
+                            <a href="{{ path('tag_delete', {'id': tag.id}) }}"><i class="material-icons red-text text-accent-4">delete</i></a>
                         </td>
                     </tr>
                 {% endfor %}

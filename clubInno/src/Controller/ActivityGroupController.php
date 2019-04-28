@@ -67,7 +67,6 @@ class ActivityGroupController extends AbstractController
 
             $activityGroup = $form->getData();
 
-            var_dump($activityGroup);
             $em = $this->getDoctrine()->getManager();
             $em->persist($activityGroup);
             $em->flush();

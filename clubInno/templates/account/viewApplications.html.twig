@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tout votre applications{% endblock %}
+{% block title %}Toutes vos applications{% endblock %}
 
 {% block body %}
     {{ parent() }}
@@ -8,7 +8,7 @@
         <div class="col s12">
             <div class="card blue-grey darken-1">
                 <div class="card-content">
-                    <span class="card-title white-text">Tout votre applications</span>
+                    <span class="card-title white-text">Toutes vos applications</span>
                     <div class="row">
                         {% for application in applications %}
                             <div class="col s12 white-text"><h5>Date: {{ application.date | date('d/m/y')}}</h5></div>
@@ -30,9 +30,7 @@
                         {% endfor %}
                     </div>
                 </div>
-                <div class="card-action">
-                    <a href="{{ path('home') }}" class="btn red accent-2">Annuler</a>
-                </div>
+
             </div>
         </div>
     </div>

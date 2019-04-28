@@ -384,6 +384,6 @@ class AdminController extends AbstractController
         }
 
 
-        return $this->redirectToRoute('admin_list_activities');
+        return $this->redirectToRoute('admin_semester');
     }
 }
