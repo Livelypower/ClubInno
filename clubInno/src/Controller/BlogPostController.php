@@ -22,7 +22,7 @@ class BlogPostController extends AbstractController
         $user = $this->getUser();
 
         if ($user == null){
-            $apiTokenoken = null;
+            $apiToken = null;
         } else {
             $apiToken = $user->getApiToken();
         }
