@@ -88,8 +88,16 @@ class ActivityGroupController extends AbstractController
      * @Route("/admin/activities/groups/assign/{id}", name="activity_group_assign")
      */
     public function assign(Activity $activity){
+        $user = $this->getUser();
+
+        if ($user == null){
+            $apiToken = null;
+        } else {
+            $apiToken = $user->getApiToken();
+        }
         return $this->render('activity_group/assign.html.twig', [
-            'activity' => $activity
+            'activity' => $activity,
+            'apiToken' => $apiToken
         ]);
     }
 }

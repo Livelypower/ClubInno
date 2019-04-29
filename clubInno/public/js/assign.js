@@ -61,6 +61,9 @@ $(document).ready(function () {
                 method: "POST",
                 url: "http://localhost:8000/api/admin/activity/groups/addusers/" + groupId + "/",
                 data: {"users": userIds},
+                headers: {
+                    'X-AUTH-TOKEN':apiToken
+                },
                 success: function (response) {
                     console.log(response);
                     M.toast({html: 'Sauvegardé'});

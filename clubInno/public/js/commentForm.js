@@ -78,6 +78,9 @@ $(document).ready(function(){
             method: "POST",
             url: "http://localhost:8000/api/comment/add",
             data: formContent,
+            headers: {
+                'X-AUTH-TOKEN': apiToken
+            },
             success: function (response) {
                 console.log(response);
                 $('#commentBody').val("");
