@@ -46,12 +46,14 @@ $(document).ready(function () {
 
         var count = 1;
         activities.forEach(function(activity) {
-            $("#tableHead").append('<th id="a' + activity.id + '" data-number="' + count + '">' +
-                '<a href="/activity/' + activity.id + '-/admin/listApplications">' + activity.name + '</a>' +
-                ' <span id="span-' + activity.id +'">(' + activity.users.length + '/' + activity.max_amount_students + ')</span>' +
-                '<span id="mark-' + activity.id + '" class="red-text text-darken-3"></span>'+
-                '</th>');
-            count++;
+            if (activity.active === true) {
+                $("#tableHead").append('<th id="a' + activity.id + '" data-number="' + count + '">' +
+                    '<a href="/activity/' + activity.id + '-/admin/listApplications">' + activity.name + '</a>' +
+                    ' <span id="span-' + activity.id +'">(' + activity.users.length + '/' + activity.max_amount_students + ')</span>' +
+                    '<span id="mark-' + activity.id + '" class="red-text text-darken-3"></span>'+
+                    '</th>');
+                count++;
+            }
         });
 
         students.forEach(function(student) {
