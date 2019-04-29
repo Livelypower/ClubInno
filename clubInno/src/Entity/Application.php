@@ -25,7 +25,11 @@ class Application
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Ajoutez une lettre de motivation.")
+     *  * @Assert\File(
+     *      maxSize="2048k",
+     *      maxSizeMessage="Le fichier est trop gros."
+     *     )
      */
     private $motivationLetterPath;
 
@@ -49,8 +53,6 @@ class Application
     {
         return $this->id;
     }
-
-
 
     public function getDate(): ?\DateTimeInterface
     {

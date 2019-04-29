@@ -20,10 +20,10 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\File;
 
 
 class BlogPostType extends AbstractType
@@ -67,12 +67,11 @@ class BlogPostType extends AbstractType
             ])
             ->add('files', FileType::class, [
                 'mapped' => true,
-                'required' => false,
-                'multiple' => true,
+                'multiple' => false,
                 'label' => 'Des fichiers',
                 'constraints' => [
-                    new \Symfony\Component\Validator\Constraints\File([
-                        'maxSize' => '2048k',
+                    new File([
+                        'maxSize' => '1024000',
                         'maxSizeMessage' => 'Le fichier est trop gros'
                     ]),
                 ]

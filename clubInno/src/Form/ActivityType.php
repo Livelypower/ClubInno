@@ -94,7 +94,7 @@ class ActivityType extends AbstractType
             ->add('mainImage', FileType::class, [
                 'mapped' => true,
                 'required' => false,
-                'label' => 'Image'
+                'label' => 'Image',
             ])
             ->add('files', FileType::class, [
                 'mapped' => true,
@@ -114,9 +114,10 @@ class ActivityType extends AbstractType
                     return $file;
                 },
                 function ($file) {
-                   return;
+                   return $file;
                 }
             ));
+
 
         $builder->get('files')
             ->addModelTransformer(new CallbackTransformer(
@@ -131,7 +132,7 @@ class ActivityType extends AbstractType
                     return $files;
                 },
                 function ($files) {
-                    return;
+                    return $files;
                 }
             ));
     }

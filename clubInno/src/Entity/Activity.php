@@ -54,7 +54,11 @@ class Activity
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Image()
+     * @Assert\Image(mimeTypesMessage = "Entrez une image valide.")
+     * @Assert\File(
+     *      maxSize="2048k",
+     *      maxSizeMessage="Le fichier est trop gros!"
+     *     )
      */
     private $mainImage;
 
@@ -66,6 +70,12 @@ class Activity
 
     /**
      * @ORM\Column(type="array", nullable=true)
+     * @Assert\All({
+     *     @Assert\File(
+     *      maxSize="2048k",
+     *      maxSizeMessage="Un des fichiers est trop gros!"
+     *      )
+     *   })
      */
     private $files = [];
 
