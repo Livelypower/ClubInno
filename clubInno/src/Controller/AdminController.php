@@ -104,7 +104,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/editUser/{id}/makeAdmin", requirements={"id": "\d+"}, name="admin_remove_user_admin")
+     * @Route("/admin/editUser/{id}/removeAdmin", requirements={"id": "\d+"}, name="admin_remove_user_admin")
      */
     public function removeAdmin($id)
     {
@@ -125,7 +125,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/editUser/{id}/makeTeacher", requirements={"id": "\d+"}, name="admin_remove_user_teacher")
+     * @Route("/admin/editUser/{id}/removeTeacher", requirements={"id": "\d+"}, name="admin_remove_user_teacher")
      */
     public function removeTeacher($id)
     {
