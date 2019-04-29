@@ -204,6 +204,7 @@ class User implements UserInterface
     public function setOrientation(?string $Orientation): self
     {
         $this->Orientation = $Orientation;
+        return $this;
     }
 
     /**
