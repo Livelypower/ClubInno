@@ -70,7 +70,7 @@ class AdminController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_AMDIN', $roles)) {
-            unset($roles[0]);
+            unset($roles);
             array_push($roles, 'ROLE_ADMIN');
             $user->setRoles($roles);
 
@@ -89,7 +89,7 @@ class AdminController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_TEACHER', $roles)) {
-            unset($roles[0]);
+            unset($roles);
             array_push($roles, 'ROLE_TEACHER');
 
             $user->setRoles($roles);
@@ -109,7 +109,7 @@ class AdminController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_TEACHER', $roles)) {
-            unset($roles[0]);
+            unset($roles);
             array_push($roles, 'ROLE_TEACHER');
             $user->setRoles($roles);
 
@@ -129,7 +129,7 @@ class AdminController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_USER', $roles)) {
-            unset($roles[0]);
+            unset($roles);
             array_push($roles, 'ROLE_USER');
             $user->setRoles($roles);
 
