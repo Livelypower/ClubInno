@@ -104,6 +104,18 @@ class AdminController extends AbstractController
      */
     public function removeAdmin($id)
     {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $roles = $user->getRoles();
+        if (!in_array('ROLE_TEACHER', $roles)) {
+            $roles[0] = null;
+            array_push($roles, 'ROLE_TEACHER');
+            $user->setRoles($roles);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+
         return $this->redirectToRoute('admin_list_users');
     }
 
@@ -112,6 +124,17 @@ class AdminController extends AbstractController
      */
     public function removeTeacher($id)
     {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $roles = $user->getRoles();
+        if (!in_array('ROLE_USER', $roles)) {
+            $roles[0] = null;
+            array_push($roles, 'ROLE_USER');
+            $user->setRoles($roles);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('admin_list_users');
     }
