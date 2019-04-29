@@ -6,6 +6,7 @@ use App\Entity\Semester;
 use App\Entity\Tag;
 use App\Form\ActivityType;
 use App\Form\NewSemesterType;
+use App\Form\QueryUserType;
 use App\Form\SetActiveSemesterForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,11 +55,39 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/listUsers/", name="admin_list_users")
      */
-    public function listUsers()
+    public function listUsers(Request $request)
     {
+        $user = new User();
+
+        $form = $this->createForm(QueryUserType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $firstname = $user->getFirstName();
+            $lastname = $user->getLastName();
+            if ($firstname != null){
+                if ($lastname == null){
+                    $users = $this->getDoctrine()->getRepository(User::class)->findWhereFirstName($firstname);
+                } elseif ($lastname != null){
+                    $users = $this->getDoctrine()->getRepository(User::class)->findWhereFullName($firstname, $lastname);
+                }
+            } elseif ($lastname != null){
+                $users =$this->getDoctrine()->getRepository(User::class)->findWhereLastName($lastname);
+            } else {
+                $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+            }
+            return $this->render('admin/list_users.html.twig', [
+                'users' => $users,
+                'form' => $form->createView()
+            ]);
+        }
+
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         return $this->render('admin/list_users.html.twig', [
-            'users' => $users
+            'users' => $users,
+            'form' => $form->createView()
         ]);
     }
 
