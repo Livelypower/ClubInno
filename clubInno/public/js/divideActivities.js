@@ -69,13 +69,15 @@ $(document).ready(function () {
                 }
             }
             activities.forEach(function(activity) {
-                $("#s" + student.id).append('<td data-clickable-cell="true" id="' + student.id + "-" + activity.id + '"></td>');
-                if(student.applications.length !== 0){
-                    student.applications[0].activities.forEach(function(application){
-                        if(activity.id === application.id){
-                            $("#" + student.id + "-" + application.id).addClass("red");
-                        }
-                    });
+                if (activity.active === true) {
+                    $("#s" + student.id).append('<td data-clickable-cell="true" id="' + student.id + "-" + activity.id + '"></td>');
+                    if(student.applications.length !== 0){
+                        student.applications[0].activities.forEach(function(application){
+                            if(activity.id === application.id){
+                                $("#" + student.id + "-" + application.id).addClass("red");
+                            }
+                        });
+                    }
                 }
             });
             $("#tableBody").append("</tr>");
