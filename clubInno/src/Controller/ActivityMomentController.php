@@ -8,7 +8,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+/**
+ * Require ROLE_ADMIN for *every* controller method in this class.
+ *
+ * @IsGranted("ROLE_ADMIN")
+ */
 class ActivityMomentController extends AbstractController
 {
     /**

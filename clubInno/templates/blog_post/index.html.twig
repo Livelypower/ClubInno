@@ -9,7 +9,7 @@
     {% endif %}
     <div class="row">
         <div class="col s12">
-            <h4>Toutes les blogs</h4>
+            <h4>{% if activity != null %}{{ activity.name }}: {% endif %}Toutes les blogs</h4>
             <table>
                 <thead>
                 <th>Name</th>

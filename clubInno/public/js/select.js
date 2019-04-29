@@ -14,8 +14,18 @@ $(document).ready(function(){
     };
     $('select').formSelect();
     $('.modal').modal();
-    $('.firstDate').datepicker(datePickerObj);
-    $('.secondDate').datepicker(datePickerObj);
+    if($('.firstDate').val() !== null){
+        restrictSecondDate(datePickerObj);
+    }else{
+        $('.firstDate').datepicker(datePickerObj);
+    }
+
+    if($('.secondDate').val() !== null){
+        restrictFirstDate(datePickerObj);
+    }else{
+        $('.secondDate').datepicker(datePickerObj);
+    }
+
 
     $('.timepicker').timepicker({
         twelveHour: false
@@ -27,21 +37,25 @@ $(document).ready(function(){
         direction: 'left'
     });
 
-    $('.firstDate').change(function(){
-        var restrictedDateObj = jQuery.extend({}, datePickerObj);
-        var restrictedDate = $(this).val().split("/");
-        restrictedDateObj.minDate = new Date(restrictedDate[2], restrictedDate[0]-1, restrictedDate[1]);
+    $('.firstDate').change(restrictSecondDate(datePickerObj));
 
-        $(".secondDate").datepicker(restrictedDateObj);
-    });
-
-    $('.secondDate').change(function(){
-        var restrictedDateObj = jQuery.extend({}, datePickerObj);
-        var restrictedDate = $(this).val().split("/");
-        restrictedDateObj.maxDate = new Date(restrictedDate[2], restrictedDate[0]-1, restrictedDate[1]);
-
-        $(".firstDate").datepicker(restrictedDateObj);
-    });
+    $('.secondDate').change(restrictFirstDate(datePickerObj));
 
 });
+
+function restrictFirstDate(datePickerObj){
+    var restrictedDateObj = jQuery.extend({}, datePickerObj);
+    var restrictedDate = $(".secondDate").val().split("/");
+    restrictedDateObj.maxDate = new Date(restrictedDate[2], restrictedDate[0]-1, restrictedDate[1]);
+
+    $(".firstDate").datepicker(restrictedDateObj);
+}
+
+function restrictSecondDate(datePickerObj){
+    var restrictedDateObj = jQuery.extend({}, datePickerObj);
+    var restrictedDate = $(".firstDate").val().split("/");
+    restrictedDateObj.minDate = new Date(restrictedDate[2], restrictedDate[0]-1, restrictedDate[1]);
+
+    $(".secondDate").datepicker(restrictedDateObj);
+}
 

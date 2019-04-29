@@ -22,7 +22,7 @@ class BlogPostController extends AbstractController
         $user = $this->getUser();
 
         if ($user == null){
-            $apiTokenoken = null;
+            $apiToken = null;
         } else {
             $apiToken = $user->getApiToken();
         }
@@ -30,6 +30,7 @@ class BlogPostController extends AbstractController
         return $this->render('blog_post/index.html.twig', [
             'controller_name' => 'BlogPostController',
             'blogPosts' => $blogPosts,
+            'activity' => null,
             'apiToken' => $apiToken
         ]);
     }
@@ -156,10 +157,10 @@ class BlogPostController extends AbstractController
 
         return $this->render('blog_post/index.html.twig', [
             'blogPosts' => $blogs,
+            'activity' => $activity,
             'apiToken' => $apitoken
         ]);
     }
-
 
     /**
      * @Route("/blog/{id}/delete", requirements={"id": "\d+"}, name="blog_delete")

@@ -43,7 +43,7 @@
                             <a class="orange-text text-lighten-2" href="{{ path('activity') }}">Toutes les activités</a></p>
                     {% endif %}
 
-                    {{ form(form) }}
+                    {{ form(form, {'attr': {'novalidate': 'novalidate'}}) }}
 
                 </div>
             </div>
@@ -52,7 +52,6 @@
 
 
         <div class="col s12 m8 offset-m2 ">
-            <a href="#" class="btn red accent-2">Retourner</a>
         </div>
     </div>
 

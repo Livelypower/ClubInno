@@ -3,22 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\Semester;
+use App\Entity\Tag;
 use App\Form\ActivityType;
 use App\Form\NewSemesterType;
 use App\Form\SetActiveSemesterForm;
-use JMS\Serializer\SerializationContext;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 use App\Entity\Application;
 use App\Entity\User;
 use App\Entity\Activity;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\Session\Session;use App\Form\TagType;use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 
 /**
@@ -126,10 +121,12 @@ class AdminController extends AbstractController
      */
     public function listActivities()
     {
-        $activities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
+        $user = $this->getUser();
 
         return $this->render('admin/activity_list.html.twig', [
-            'activities' => $activities
+            'tags' => $tags,
+            'apiToken' => $user->getApiToken(),
         ]);
     }
 
@@ -300,11 +297,43 @@ class AdminController extends AbstractController
             $em->persist($semester);
             $em->flush();
 
-            return $this->redirectToRoute('account');
+            return $this->redirectToRoute('admin_semester');
         }
         return $this->render('semester/new.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @Route("admin/semester/edit/{id}", name="admin_semester_edit")
+     */
+    public function editSemester(Semester $semester, Request $request){
+        $form = $this->createForm(NewSemesterType::class, $semester);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $semester = $form->getData();
+            $semester->setActive(0);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($semester);
+            $em->flush();
+
+            return $this->redirectToRoute('admin_semester');
+        }
+        return $this->render('semester/edit.html.twig', [
+            'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("admin/semester/delete/{id}", name="admin_semester_delete")
+     */
+    public function deleteSemester(Semester $semester){
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($semester);
+        $em->flush();
+
+        return $this->redirectToRoute('admin_semester');
     }
 
     /**
@@ -314,8 +343,8 @@ class AdminController extends AbstractController
     {
         $years = $this->getDoctrine()->getRepository(Semester::class)->findAll();
 
-        return $this->render('semester/setactive.html.twig', [
-            'years' => $years
+        return $this->render('semester/index.html.twig', [
+            'semesters' => $years
         ]);
     }
 
@@ -355,6 +384,6 @@ class AdminController extends AbstractController
         }
 
 
-        return $this->redirectToRoute('admin_list_activities');
+        return $this->redirectToRoute('admin_semester');
     }
 }

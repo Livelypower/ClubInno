@@ -22,6 +22,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Form\CallbackTransformer;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Length;
 
 
 class BlogPostType extends AbstractType
@@ -29,12 +31,34 @@ class BlogPostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('title', TextType::class, ['label' => 'Titre'])
-            ->add('body', TextareaType::class, ['label' => 'Contenu'])
+            ->add('title', TextType::class, [
+                'label' => 'Titre',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez un titre s\'il vous plaît'
+                    ]),
+                    new Length([
+                        'min' => 3,
+                        'minMessage' => 'Le titre du blog doit comporter au moins 3 caractères.',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 255,
+                    ])
+                ]
+                ])
+            ->add('body', TextareaType::class, [
+                'label' => 'Contenu',
+                'empty_data' => '',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Entrez un contenu s\'il vous plaît'
+                    ]),
+                ]
+                ])
             ->add('activity', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Activity::class,
-
+                'label' => 'Activité',
                 'choice_label' => 'name',
 
                 // used to render a select box, check boxes or radios
@@ -45,7 +69,13 @@ class BlogPostType extends AbstractType
                 'mapped' => true,
                 'required' => false,
                 'multiple' => true,
-                'label' => 'Files'
+                'label' => 'Des fichiers',
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\File([
+                        'maxSize' => '2048k',
+                        'maxSizeMessage' => 'Le fichier est trop gros'
+                    ]),
+                ]
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
 

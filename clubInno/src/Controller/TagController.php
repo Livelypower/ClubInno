@@ -59,7 +59,7 @@ class TagController extends AbstractController
     /**
      * @Route("tag/{id}/edit", requirements={"id": "\d+"}, name="tag_edit")
      */
-    public function editProduct(Request $request, Tag $tag){
+    public function editTag(Request $request, Tag $tag){
 
         $form = $this->createForm(TagType::class, $tag);
 

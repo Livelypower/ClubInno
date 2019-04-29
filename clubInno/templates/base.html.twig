@@ -113,7 +113,7 @@
         {% if is_granted('ROLE_ADMIN') %}
                 <li><a href="{{ path('admin_calendar') }}">Calendrier des Admins<i class="medium material-icons">event</i></a></li>
             {% else %}
-                <li><a href="{{ path('calendar') }}">Votre calendrier<i class="medium material-icons">event</i></a></li>
+                <li><a href="{{ path('calendar') }}">Mon calendrier<i class="medium material-icons">event</i></a></li>
         {% endif %}
 
         <li><a href="{{ path('app_logout') }}">Déconnexion <i class="medium material-icons">keyboard_tab</i></a></li>

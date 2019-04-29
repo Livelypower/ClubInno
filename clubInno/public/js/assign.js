@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     $.ajax({
         method: "GET",
-        url: "http://localhost:8000/api/admin/activity/groups/" + activityId + "/",
+        url: "http://vps589558.ovh.net/api/admin/activity/groups/" + activityId + "/",
         headers: {
             'X-AUTH-TOKEN':apiToken
         },
@@ -59,7 +59,7 @@ $(document).ready(function () {
 
             $.ajax({
                 method: "POST",
-                url: "http://localhost:8000/api/admin/activity/groups/addusers/" + groupId + "/",
+                url: "http://vps589558.ovh.net/api/admin/activity/groups/addusers/" + groupId + "/",
                 data: {"users": userIds},
                 headers: {
                     'X-AUTH-TOKEN':apiToken

@@ -11,7 +11,7 @@
                 <div class="card-content">
                     <span class="card-title white-text">Changer des détails du Compte</span>
                     <div class="row">
-                        {{ form_start(accountEditForm, {'attr': {'class': 'white-text'}}) }}
+                        {{ form_start(accountEditForm, {'attr': {'class': 'white-text', 'novalidate': 'novalidate'}}) }}
                         {{ form_row(accountEditForm.email, {'attr': {'class': 'white-text'}}) }}
                         {{ form_row(accountEditForm.firstname, {'attr': {'class': 'white-text'}}) }}
                         {{ form_row(accountEditForm.lastname, {'attr': {'class': 'white-text'}}) }}

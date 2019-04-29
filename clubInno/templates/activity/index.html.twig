@@ -2,46 +2,46 @@
 
 {% block title %}All Activities{% endblock %}
 {% block stylesheets %}
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/activity_list.css') }}"/>
     {{ parent() }}
 {% endblock %}
 
 {% block body %}
     {{ parent() }}
-
     <div class="row">
         <div class="col s12">
             <h4>Toutes les activités</h4>
-
-            {% for activity in activities %}
-                <div class="col s12 m4">
-                    <div class="card large blue-grey darken-1">
-                        <div class="card-image">
-                            {% if activity.mainImage is null %}
-                                <img src="http://lorempixel.com/800/400/technics" alt="">
-                            {% else %}
-                                <img src="{{ asset('uploads/' ~ activity.mainImage) }}" alt="">
-                            {% endif %}
-                        </div>
-                        <div class="card-content white-text">
-                            <span class="card-title">{{ activity.name }}</span>
-                            <div class="row"></div>
-                            <p><b>Inscriptions:</b> {{ activity.users|length }}/{{ activity.maxAmountStudents }}</p>
-                            <br/>
-                            <p>
-                                {{ activity.description }}
-                            </p>
-
-                        </div>
-                        <div class="card-action">
-                            <a href="{{ path("activity_show", {'id': activity.id})}}">Plus d'info</a>
-                        </div>
-                    </div>
-                </div>
-
-            {% endfor %}
         </div>
     </div>
+
+    <div class="row">
+        <div class="col s12">
+            <a href="#" class="btn" id="hideFilters">Hide Filters</a>
+            <form id="filterForm" action="#">
+                <ul>
+                    {% for tag in tags %}
+                        <li>
+                            <label>
+                                <input type="checkbox" id="{{ tag.name }}" value="{{ tag.name }}" />
+                                <span>{{ tag.name }}</span>
+                            </label>
+                        </li>
+                    {% endfor %}
+                    <li>
+                        <a href="#" class="btn grey lighten-1" id="filterActivities">Filter</a>
+                    </li>
+                </ul>
+            </form>
+            <a href="#" class="btn" id="showFilters">Show Filters</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12"  id="activities">
+        </div>
+    </div>
+
+    <div id="data" hidden>{{ apiToken }}</div>
+
 
 
 {% endblock %}
@@ -49,4 +49,5 @@
 {% block javascripts %}
     {{ parent() }}
     <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('js/filterUserActivities.js') }}"></script>
 {% endblock %}

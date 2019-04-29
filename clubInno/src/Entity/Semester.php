@@ -4,12 +4,32 @@ namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
+
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\SemesterRepository")
  */
 class Semester
 {
+    /**
+     * @Assert\Callback
+     */
+    public function validate(ExecutionContextInterface $context, $payload)
+    {
+        // somehow you have an array of "fake names"
+        $startYear = $this->getStartYear();
+        $endYear = $this->getEndYear();
+
+
+        if($startYear+1 != $endYear){
+            $context->buildViolation("L'année de fin doit être exactement une année plus tard que l'année de début.")
+                ->atPath('endYear')
+                ->addViolation();
+        }
+    }
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -19,11 +39,13 @@ class Semester
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $startYear;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
      */
     private $endYear;
 

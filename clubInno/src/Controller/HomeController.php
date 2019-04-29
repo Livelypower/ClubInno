@@ -20,7 +20,7 @@ class HomeController extends AbstractController
 
         $imgs = array();
 
-        if(!empty($blogPost->getFiles())){
+        if($blogPost != null && !empty($blogPost->getFiles())){
             foreach ($blogPost->getFiles() as $file){
                 $pieces = explode(".", $file);
                 $ext = $pieces[1];

@@ -1,7 +1,7 @@
 $(document).ready(function () {
     var apiToken = $("#data").html();
     $.ajax({
-        url: 'http://localhost:8000/api/admin/calendar',
+        url: 'http://vps589558.ovh.net/api/admin/calendar',
         method: 'GET',
         headers: {
             'X-AUTH-TOKEN':apiToken

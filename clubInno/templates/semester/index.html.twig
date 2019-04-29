@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Semestre active{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+
+    <a href="{{ path("admin_semester_new") }}" class="btn green accent-4">Nouveau Semestre</a>
+
+    <div class="row">
+        <div class="col s12">
+            <h4>Indiquez quel semestre est active</h4>
+            <table>
+                <thead>
+                <th>Semestre</th>
+                <th>Activer</th>
+                <th>Action</th>
+                </thead>
+                <tbody>
+                {% for semester in semesters %}
+                    <tr>
+                        <td>{{ semester.stringified }}</td>
+                        <td>
+                            <a href="{{ path('admin_set_active_semester', {'id': semester.id}) }}" class="btn green accent-4">Active</a>
+                        </td>
+                        <td>
+                            <a href="{{ path('admin_semester_edit', {'id': semester.id}) }}"><i class="material-icons">edit</i></a>
+                            <a href="{{ path('admin_semester_delete', {'id': semester.id}) }}"><i class="material-icons red-text text-accent-4">delete</i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="col s12">
+            <a class="btn red accent-2" href="{{ path('account') }}" style="margin-top: 10px">Retourner</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -4,12 +4,17 @@ namespace App\Controller;
 
 use App\Entity\Activity;
 use App\Entity\ActivityGroup;
-use App\Entity\User;
 use App\Form\ActivityGroupForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
+/**
+ * Require ROLE_ADMIN for *every* controller method in this class.
+ *
+ * @IsGranted("ROLE_ADMIN")
+ */
 class ActivityGroupController extends AbstractController
 {
     /**
@@ -55,6 +60,7 @@ class ActivityGroupController extends AbstractController
     public function editActivityGroup(Request $request, ActivityGroup $activityGroup)
     {
         $form = $this->createForm(ActivityGroupForm::class, $activityGroup);
+        $group = $this->getDoctrine()->getRepository(ActivityGroup::class)->find($activityGroup->getId());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -69,7 +75,7 @@ class ActivityGroupController extends AbstractController
         }
         return $this->render('activity_group/edit.html.twig', [
             'form' => $form->createView(),
-            'group' => $activityGroup
+            'group' => $group
         ]);
     }
 
@@ -95,6 +101,7 @@ class ActivityGroupController extends AbstractController
         } else {
             $apiToken = $user->getApiToken();
         }
+
         return $this->render('activity_group/assign.html.twig', [
             'activity' => $activity,
             'apiToken' => $apiToken

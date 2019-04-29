@@ -29,10 +29,9 @@ class ApplicationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('motivationLetterPath', FileType::class, [
-                'mapped' => true,
+            ->add('motivationLetterPath', TextType::class, [
                 'required' => true,
-                'label' => 'Lettre de motivation'
+                'label' => 'Lettre de motivation',
             ])
             ->add('save', SubmitType::class, ['label' => 'Envoyez']);
 
