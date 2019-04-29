@@ -71,6 +71,7 @@ class AdminController extends AbstractController
         $roles = $user->getRoles();
         if (!in_array('ROLE_AMDIN', $roles)) {
             unset($roles);
+            $roles = [];
             array_push($roles, 'ROLE_ADMIN');
             $user->setRoles($roles);
 
@@ -90,6 +91,7 @@ class AdminController extends AbstractController
         $roles = $user->getRoles();
         if (!in_array('ROLE_TEACHER', $roles)) {
             unset($roles);
+            $roles = [];
             array_push($roles, 'ROLE_TEACHER');
 
             $user->setRoles($roles);
@@ -110,6 +112,7 @@ class AdminController extends AbstractController
         $roles = $user->getRoles();
         if (!in_array('ROLE_TEACHER', $roles)) {
             unset($roles);
+            $roles = [];
             array_push($roles, 'ROLE_TEACHER');
             $user->setRoles($roles);
 
@@ -130,6 +133,7 @@ class AdminController extends AbstractController
         $roles = $user->getRoles();
         if (!in_array('ROLE_USER', $roles)) {
             unset($roles);
+            $roles = [];
             array_push($roles, 'ROLE_USER');
             $user->setRoles($roles);
 
