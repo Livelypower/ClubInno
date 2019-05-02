@@ -6,9 +6,11 @@ use App\Entity\Semester;
 use App\Entity\Tag;
 use App\Form\ActivityType;
 use App\Form\NewSemesterType;
+use App\Form\QueryUserType;
 use App\Form\SetActiveSemesterForm;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Application;
 use App\Entity\User;
@@ -55,11 +57,39 @@ class AdminController extends AbstractController
     /**
      * @Route("/admin/listUsers/", name="admin_list_users")
      */
-    public function listUsers()
+    public function listUsers(Request $request)
     {
+        $user = new User();
+
+        $form = $this->createForm(QueryUserType::class, $user);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $firstname = $user->getFirstName();
+            $lastname = $user->getLastName();
+            if ($firstname != null){
+                if ($lastname == null){
+                    $users = $this->getDoctrine()->getRepository(User::class)->findWhereFirstName($firstname);
+                } elseif ($lastname != null){
+                    $users = $this->getDoctrine()->getRepository(User::class)->findWhereFullName($firstname, $lastname);
+                }
+            } elseif ($lastname != null){
+                $users =$this->getDoctrine()->getRepository(User::class)->findWhereLastName($lastname);
+            } else {
+                $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+            }
+            return $this->render('admin/list_users.html.twig', [
+                'users' => $users,
+                'form' => $form->createView()
+            ]);
+        }
+
         $users = $this->getDoctrine()->getRepository(User::class)->findAll();
         return $this->render('admin/list_users.html.twig', [
-            'users' => $users
+            'users' => $users,
+            'form' => $form->createView()
         ]);
     }
 
@@ -71,6 +101,8 @@ class AdminController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_AMDIN', $roles)) {
+            unset($roles);
+            $roles = [];
             array_push($roles, 'ROLE_ADMIN');
             $user->setRoles($roles);
 
@@ -89,6 +121,29 @@ class AdminController extends AbstractController
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_TEACHER', $roles)) {
+            unset($roles);
+            $roles = [];
+            array_push($roles, 'ROLE_TEACHER');
+
+            $user->setRoles($roles);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('admin_list_users');
+    }
+
+    /**
+     * @Route("/admin/editUser/{id}/removeAdmin", requirements={"id": "\d+"}, name="admin_remove_user_admin")
+     */
+    public function removeAdmin($id)
+    {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $roles = $user->getRoles();
+        if (!in_array('ROLE_TEACHER', $roles)) {
+            unset($roles);
+            $roles = [];
             array_push($roles, 'ROLE_TEACHER');
             $user->setRoles($roles);
 
@@ -101,18 +156,22 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/editUser/{id}/makeAdmin", requirements={"id": "\d+"}, name="admin_remove_user_admin")
-     */
-    public function removeAdmin($id)
-    {
-        return $this->redirectToRoute('admin_list_users');
-    }
-
-    /**
-     * @Route("/admin/editUser/{id}/makeTeacher", requirements={"id": "\d+"}, name="admin_remove_user_teacher")
+     * @Route("/admin/editUser/{id}/removeTeacher", requirements={"id": "\d+"}, name="admin_remove_user_teacher")
      */
     public function removeTeacher($id)
     {
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $roles = $user->getRoles();
+        if (!in_array('ROLE_USER', $roles)) {
+            unset($roles);
+            $roles = [];
+            array_push($roles, 'ROLE_USER');
+            $user->setRoles($roles);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($user);
+            $em->flush();
+        }
 
         return $this->redirectToRoute('admin_list_users');
     }
@@ -199,22 +258,22 @@ class AdminController extends AbstractController
      */
     public function editActivity(Request $request, Activity $activity)
     {
-        $filename = $activity->getMainImage();
-        $filenames = $activity->getFiles();
+        if($activity->getMainImage() != null){
+            $oldFile = new File($this->getParameter('uploads_directory').'/'.$activity->getMainImage());
 
-        $files = array();
-        if ($filename != null) {
-            $activity->setMainImage($this->getParameter('uploads_directory') . '/' . $filename);
+            $activity->setMainImage($oldFile);
         }
 
-        if ($filenames != null && !empty($filenames)) {
-            foreach ($filenames as $fln) {
-                $fl = $this->getParameter('uploads_directory') . '/' . $fln;
-                array_push($files, $fl);
+        $oldFiles = array();
+
+        if ($activity->getFiles() != null && !empty($activity->getFiles())) {
+            foreach ($activity->getFiles() as $fln) {
+                $fl =  new File($this->getParameter('uploads_directory').'/'.$fln);
+                array_push($oldFiles, $fl);
             }
-            $activity->setFiles($files);
+            $activity->setFiles($oldFiles);
         } else {
-            $filenames = array();
+            $oldFiles = array();
         }
 
         $form = $this->createForm(ActivityType::class, $activity);
@@ -223,8 +282,13 @@ class AdminController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $file = $form->get('mainImage')->getData();
+            if($file == null){
+                $file = $oldFile;
+            }
             $files = $form->get('files')->getData();
-            $uploads_directory = $this->getParameter('uploads_directory');
+            if($files == null || empty($files)){
+                $files = $oldFiles;
+            }
 
             $filenames = array();
             $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
@@ -234,7 +298,7 @@ class AdminController extends AbstractController
                     $this->getParameter('uploads_directory'),
                     $fileName
                 );
-                foreach ($files as $fl){
+               foreach ($files as $fl){
                     $name = $this->generateUniqueFileName() . '.' . $fl->guessExtension();
                     array_push($filenames, $name);
                     $fl->move(
@@ -246,28 +310,9 @@ class AdminController extends AbstractController
                 // ... handle exception if something happens during file upload
             }
 
-            /*if ($file != null) {
-                $filename = md5(uniqid()) . '.' . $file->guessExtension();
-
-                $file->move(
-                    $uploads_directory,
-                    $filename
-                );
-            }
-
-            if ($files != null && !empty($files)) {
-                foreach ($files as $f) {
-                    $fn = md5(uniqid()) . '.' . $f->guessExtension();
-                    array_push($filenames, $fn);
-                    $f->move(
-                        $uploads_directory,
-                        $fn
-                    );
-                }
-            }*/
 
             $activity = $form->getData();
-            $activity->setMainImage($filename);
+            $activity->setMainImage($fileName);
             $activity->setFiles($filenames);
 
             $em = $this->getDoctrine()->getManager();
@@ -278,7 +323,8 @@ class AdminController extends AbstractController
         }
 
         return $this->render('activity/edit.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'image' => $activity->getMainImage()
         ]);
     }
 

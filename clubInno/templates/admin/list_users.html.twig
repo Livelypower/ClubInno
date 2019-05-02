@@ -8,6 +8,21 @@
     <div class="row">
         <div class="col s12">
             <h4>Toutes les utilisateurs</h4>
+            <div class="col s12">
+                <div class="row">
+                    {{ form_start(form, {'attr': {'class': 'white-text', 'novalidate': 'novalidate'}}) }}
+                    <div class="col s3">
+                        {{ form_row(form.firstname) }}
+                    </div>
+                    <div class="col s3">
+                        {{ form_row(form.lastname) }}
+                    </div>
+                </div>
+                <div class="row">
+                    {{ form_widget(form.save, {'attr': {'class': 'btn green accent-4'}}) }}
+                    {{ form_end(form) }}
+                </div>
+            </div>
             <table>
                 <thead>
                 <th>Name</th>

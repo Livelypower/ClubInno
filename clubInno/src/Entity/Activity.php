@@ -166,16 +166,14 @@ class Activity
         return $this->tags;
     }
 
-    public function getMainImage(): ?string
+    public function getMainImage()
     {
         return $this->mainImage;
     }
 
-    public function setMainImage(?string $mainImage): self
+    public function setMainImage($mainImage)
     {
         $this->mainImage = $mainImage;
-
-        return $this;
     }
 
     public function getFiles(): ?array

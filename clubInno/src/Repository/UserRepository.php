@@ -19,6 +19,34 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
+    public function findWhereFirstName($firstname){
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.firstName = :val')
+            ->setParameter('val', $firstname)
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWhereLastName($lastname){
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.lastName = :val')
+            ->setParameter('val', $lastname)
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findWhereFullName($firstname, $lastname){
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.firstName = :val')
+            ->andWhere('u.lastName = :val2')
+            ->setParameter('val', $firstname)
+            ->setParameter('val2', $lastname)
+            ->orderBy('u.lastName', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

@@ -104,7 +104,7 @@ class ActivityType extends AbstractType
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
 
-        $builder->get('mainImage')
+       /* $builder->get('mainImage')
             ->addModelTransformer(new CallbackTransformer(
                 function ($filename) {
                     if($filename == null){
@@ -134,6 +134,6 @@ class ActivityType extends AbstractType
                 function ($files) {
                     return $files;
                 }
-            ));
+            ));*/
     }
 }

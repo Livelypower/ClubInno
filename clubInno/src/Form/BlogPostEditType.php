@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Length;
 
 
-class BlogPostType extends AbstractType
+class BlogPostEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -45,7 +45,7 @@ class BlogPostType extends AbstractType
                         'max' => 255,
                     ])
                 ]
-                ])
+            ])
             ->add('body', TextareaType::class, [
                 'label' => 'Contenu',
                 'empty_data' => '',
@@ -54,7 +54,7 @@ class BlogPostType extends AbstractType
                         'message' => 'Entrez un contenu s\'il vous plaît'
                     ]),
                 ]
-                ])
+            ])
             ->add('activity', EntityType::class, [
                 // looks for choices from this entity
                 'class' => Activity::class,
@@ -64,28 +64,6 @@ class BlogPostType extends AbstractType
                 'multiple' => false
                 // 'expanded' => true,
             ])
-            ->add('files', FileType::class, [
-                'mapped' => true,
-                'multiple' => true,
-                'label' => 'Des fichiers'
-            ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
-
-        $builder->get('files')
-            ->addModelTransformer(new CallbackTransformer(
-                function ($filenames) {
-                    $files = array();
-                    if($filenames == null || empty($filenames)){
-                        return null;
-                    }
-                    foreach ($filenames as $filename){
-                        array_push($files, new File($filename));
-                    }
-                    return $files;
-                },
-                function ($files) {
-                    return $files;
-                }
-            ));
     }
 }

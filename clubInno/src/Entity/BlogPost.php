@@ -158,4 +158,9 @@ class BlogPost
 
         return $this;
     }
+
+    public function addFiles($files)
+    {
+        $this->files = array_merge($this->files, $files);
+    }
 }

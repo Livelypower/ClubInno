@@ -46,12 +46,14 @@ $(document).ready(function () {
 
         var count = 1;
         activities.forEach(function(activity) {
-            $("#tableHead").append('<th id="a' + activity.id + '" data-number="' + count + '">' +
-                '<a href="/activity/' + activity.id + '-/admin/listApplications">' + activity.name + '</a>' +
-                ' <span id="span-' + activity.id +'">(' + activity.users.length + '/' + activity.max_amount_students + ')</span>' +
-                '<span id="mark-' + activity.id + '" class="red-text text-darken-3"></span>'+
-                '</th>');
-            count++;
+            if (activity.active === true) {
+                $("#tableHead").append('<th id="a' + activity.id + '" data-number="' + count + '">' +
+                    '<a href="/activity/' + activity.id + '-/admin/listApplications">' + activity.name + '</a>' +
+                    ' <span id="span-' + activity.id +'">(' + activity.users.length + '/' + activity.max_amount_students + ')</span>' +
+                    '<span id="mark-' + activity.id + '" class="red-text text-darken-3"></span>'+
+                    '</th>');
+                count++;
+            }
         });
 
         students.forEach(function(student) {
@@ -67,13 +69,15 @@ $(document).ready(function () {
                 }
             }
             activities.forEach(function(activity) {
-                $("#s" + student.id).append('<td data-clickable-cell="true" id="' + student.id + "-" + activity.id + '"></td>');
-                if(student.applications.length !== 0){
-                    student.applications[0].activities.forEach(function(application){
-                        if(activity.id === application.id){
-                            $("#" + student.id + "-" + application.id).addClass("red");
-                        }
-                    });
+                if (activity.active === true) {
+                    $("#s" + student.id).append('<td data-clickable-cell="true" id="' + student.id + "-" + activity.id + '"></td>');
+                    if(student.applications.length !== 0){
+                        student.applications[0].activities.forEach(function(application){
+                            if(activity.id === application.id){
+                                $("#" + student.id + "-" + application.id).addClass("red");
+                            }
+                        });
+                    }
                 }
             });
             $("#tableBody").append("</tr>");
