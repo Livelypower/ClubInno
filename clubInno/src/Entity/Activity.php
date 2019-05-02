@@ -188,6 +188,11 @@ class Activity
         return $this;
     }
 
+    public function addFiles($files)
+    {
+        $this->files = array_merge($this->files, $files);
+    }
+
     /**
      * @return Collection|User[]
      */

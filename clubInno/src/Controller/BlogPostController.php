@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Activity;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
-use App\Form\AddFilesType;
+use App\Form\BlogAddFilesType;
 use App\Form\BlogPostEditType;
 use App\Form\BlogPostType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -228,7 +228,7 @@ class BlogPostController extends AbstractController
     public function editBlogFiles(Request $request, BlogPost $blogPost){
         $files = $blogPost->getFiles();
 
-        $form = $this->createForm(AddFilesType::class);
+        $form = $this->createForm(BlogAddFilesType::class);
 
         $form->handleRequest($request);
 

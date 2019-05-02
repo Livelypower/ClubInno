@@ -16,8 +16,11 @@
                     {{ form_row(form.tags, {'attr': {'class': 'white-text wit'}}) }}
                     {{ form_row(form.maxAmountStudents,{'attr': {'class': 'white-text'}}) }}
                     {{ form_row(form.semester, {'attr': {'class': 'white-text wit'}}) }}
-                    {{ form_row(form.mainImage) }}
-                    {{ form_row(form.files) }}
+                    <div class="row">
+                        <div class="col s12">
+                            <a class="btn" href="{{ path('activity_edit_files', {'id': activity.id}) }}">Modifier des fichiers</a>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col s12">
                             {{ form_widget(form.save, {'attr': {'class': 'btn green accent-4'}}) }}

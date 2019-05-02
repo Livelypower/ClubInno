@@ -4,7 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Semester;
 use App\Entity\Tag;
+use App\Form\ActivityEditType;
+use App\Form\ActivityFilesEditType;
 use App\Form\ActivityType;
+use App\Form\BlogAddFilesType;
 use App\Form\NewSemesterType;
 use App\Form\QueryUserType;
 use App\Form\SetActiveSemesterForm;
@@ -258,62 +261,12 @@ class AdminController extends AbstractController
      */
     public function editActivity(Request $request, Activity $activity)
     {
-        if($activity->getMainImage() != null){
-            $oldFile = new File($this->getParameter('uploads_directory').'/'.$activity->getMainImage());
-
-            $activity->setMainImage($oldFile);
-        }
-
-        $oldFiles = array();
-
-        if ($activity->getFiles() != null && !empty($activity->getFiles())) {
-            foreach ($activity->getFiles() as $fln) {
-                $fl =  new File($this->getParameter('uploads_directory').'/'.$fln);
-                array_push($oldFiles, $fl);
-            }
-            $activity->setFiles($oldFiles);
-        } else {
-            $oldFiles = array();
-        }
-
-        $form = $this->createForm(ActivityType::class, $activity);
+        $form = $this->createForm(ActivityEditType::class, $activity);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $file = $form->get('mainImage')->getData();
-            if($file == null){
-                $file = $oldFile;
-            }
-            $files = $form->get('files')->getData();
-            if($files == null || empty($files)){
-                $files = $oldFiles;
-            }
-
-            $filenames = array();
-            $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-
-            try {
-                $file->move(
-                    $this->getParameter('uploads_directory'),
-                    $fileName
-                );
-               foreach ($files as $fl){
-                    $name = $this->generateUniqueFileName() . '.' . $fl->guessExtension();
-                    array_push($filenames, $name);
-                    $fl->move(
-                        $this->getParameter('uploads_directory'),
-                        $name
-                    );
-                }
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
-            }
-
-
             $activity = $form->getData();
-            $activity->setMainImage($fileName);
-            $activity->setFiles($filenames);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($activity);
@@ -324,8 +277,87 @@ class AdminController extends AbstractController
 
         return $this->render('activity/edit.html.twig', [
             'form' => $form->createView(),
-            'image' => $activity->getMainImage()
+            'activity' => $activity
         ]);
+    }
+
+    /**
+     * @Route("admin/activity/{id}/edit/files", requirements={"id": "\d+"}, name="activity_edit_files")
+     */
+    public function editActivityFiles(Request $request, Activity $activity){
+        $mainImage = $activity->getMainImage();
+        $files = $activity->getFiles();
+
+        $form = $this->createForm(ActivityFilesEditType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $mainImage = $form->get('mainImage')->getData();
+            $files = $form->get('files')->getData();
+            $filenames = array();
+
+            $filename = $this->generateUniqueFileName() . '.' . $mainImage->guessExtension();
+
+            try {
+                $mainImage->move(
+                    $this->getParameter('uploads_directory'),
+                    $filename
+                );
+                foreach ($files as $file){
+                    $name = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+                    array_push($filenames, $name);
+                    $file->move(
+                        $this->getParameter('uploads_directory'),
+                        $name
+                    );
+                }
+            } catch (FileException $e) {
+                // ... handle exception if something happens during file upload
+            }
+
+            $activity->addFiles($filenames);
+            $activity->setMainImage($filename);
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($activity);
+            $em->flush();
+
+            $files = $activity->getFiles();
+            $mainImage = $activity->getMainImage();
+        }
+
+        return $this->render('activity/activity_edit_files.html.twig',[
+            'form' => $form->createView(),
+            'files' => $files,
+            'mainImage' => $mainImage,
+            'id' => $activity->getId()
+        ]);
+    }
+
+    /**
+     * @Route("/admin/activity/{id}/delete/file/{name}", requirements={"id": "\d+"}, name="activity_file_delete")
+     */
+    public function deleteBlogFile(Request $request, Activity $activity, $name){
+        $files = $activity->getFiles();
+        $mainImage = $activity->getMainImage();
+
+        $index = array_search($name,$files);
+        if($index !== FALSE){
+            unset($files[$index]);
+        }
+
+        $activity->setFiles($files);
+        if($mainImage == $name){
+            $activity->setMainImage("");
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($activity);
+        $em->flush();
+
+        return $this->redirectToRoute('activity_edit_files', array(
+            'id' => $activity->getId()
+        ));
     }
 
     /**
