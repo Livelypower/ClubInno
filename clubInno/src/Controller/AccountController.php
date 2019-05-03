@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Semester;
 use App\Entity\User;
 use App\Form\AccountEditForm;
 use App\Form\ApplicationType;
@@ -170,10 +171,13 @@ class AccountController extends AbstractController
                     // ... handle exception if something happens during file upload
                 }
 
+                $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active' => 1));
+
                 $usr= $this->getUser();
                 $application->setMotivationLetterPath($fileName);
                 $application->setUser($usr);
                 $application->setDate(new \DateTime('now'));
+                $application->setSemester($semester);
 
                 $session = $this->get('session');
                 $activities = array();

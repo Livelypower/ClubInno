@@ -45,6 +45,12 @@ class Application
      */
     private $user;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Semester", inversedBy="applications")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $semester;
+
     public function __construct(){
         $this->activities = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -99,6 +105,18 @@ class Application
    public function setUser(?User $user): self
    {
        $this->user = $user;
+
+       return $this;
+   }
+
+   public function getSemester(): ?Semester
+   {
+       return $this->semester;
+   }
+
+   public function setSemester($semester): self
+   {
+       $this->semester = $semester;
 
        return $this;
    }

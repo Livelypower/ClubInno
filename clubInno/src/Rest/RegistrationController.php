@@ -11,6 +11,7 @@ namespace App\Rest;
 use App\Entity\ActivityGroup;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
+use App\Entity\Semester;
 use App\Entity\User;
 use App\Entity\Activity;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -69,4 +70,22 @@ class RegistrationController  extends AbstractFOSRestController
         // In case our POST was a success we need to return a 201 HTTP CREATED response
         return View::create($user, Response::HTTP_CREATED);
     }
+
+    /**
+     * Returns active semester
+     * @Rest\Get("/admin/semester")
+     * @param Request $request
+     * @return View
+     */
+    public function getActiveSemester(Request $request): View
+    {
+        $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active' => 1));
+
+
+        // In case our POST was a success we need to return a 201 HTTP CREATED response
+        return View::create($semester, Response::HTTP_OK);
+
+    }
+
+
 }

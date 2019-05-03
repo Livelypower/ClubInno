@@ -1,6 +1,7 @@
 $(document).ready(function () {
     var students;
     var activities;
+    var semester;
     var apiToken = $("#data").html();
     getUsers();
 
@@ -13,7 +14,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 students = response;
-                getActis();
+                getActiveSemester();
             },
             error: function (response) {
                 console.log(response);
@@ -22,7 +23,27 @@ $(document).ready(function () {
         });
     }
 
-    function getActis() {
+    function getActiveSemester() {
+        $.ajax({
+            method: "GET",
+            url: "http://localhost:8000/api/admin/semester",
+            headers: {
+                'X-AUTH-TOKEN':apiToken
+            },
+            success: function (response) {
+                semester = response;
+                activities = semester.activities;
+                console.log(semester);
+                all()
+            },
+            error: function (response) {
+                console.log(response);
+                console.log('call failed')
+            }
+        });
+    }
+
+    /*function getActis() {
         $.ajax({
             method: "GET",
             url: "http://localhost:8000/api/admin/activities",
@@ -38,7 +59,7 @@ $(document).ready(function () {
                 console.log('call failed')
             }
         });
-    }
+    }*/
 
     function all(){
         var lastSaved = 0;
@@ -57,10 +78,23 @@ $(document).ready(function () {
         });
 
         students.forEach(function(student) {
-            if(student.roles[0] === "ROLE_USER" && student.applications.length !== 0){
-                var url = "http://localhost:8000/uploads/" + student.applications[0].motivation_letter_path;
-                console.log(student._orientation);
-                if(student.registrations.length !== 0){
+            console.log(student);
+            var applications = [];
+            var registrations = [];
+            student.applications.forEach(function(application){
+                if(application.semester.id === semester.id){
+                    applications.push(application);
+                }
+            });
+            student.registrations.forEach(function(registration){
+               if(registration.semester.id === semester.id){
+                   registrations.push(registration);
+               }
+            });
+
+            if(student.roles[0] === "ROLE_USER" && applications.length !== 0){
+                var url = "http://localhost:8000/uploads/" + applications[0].motivation_letter_path;
+                if(registrations.length !== 0){
                     $("#tableBody").append('<tr id="s' + student.id + '" class="registrated"><td>' + student.email + " (" + student._orientation
                         + ')<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
                 }else{
@@ -71,11 +105,13 @@ $(document).ready(function () {
             activities.forEach(function(activity) {
                 if (activity.active === true) {
                     $("#s" + student.id).append('<td data-clickable-cell="true" id="' + student.id + "-" + activity.id + '"></td>');
-                    if(student.applications.length !== 0){
-                        student.applications[0].activities.forEach(function(application){
-                            if(activity.id === application.id){
-                                $("#" + student.id + "-" + application.id).addClass("red");
-                            }
+                    if(applications.length !== 0){
+                        applications.forEach(function(application){
+                            application.activities.forEach(function(application){
+                                if(activity.id === application.id){
+                                    $("#" + student.id + "-" + application.id).addClass("red");
+                                }
+                            });
                         });
                     }
                 }
@@ -84,16 +120,30 @@ $(document).ready(function () {
         });
 
         students.forEach(function(student) {
+            var applications = [];
+            var registrations = [];
+            student.applications.forEach(function(application){
+                if(application.semester.id === semester.id){
+                    applications.push(application);
+                }
+            });
+            student.registrations.forEach(function(registration){
+                if(registration.semester.id === semester.id){
+                    registrations.push(registration);
+                }
+            });
             activities.forEach(function(activity) {
-                if(student.registrations.length !== 0 ){
-                    student.registrations.forEach(function(registration){
+                if(registrations.length !== 0 ){
+                    registrations.forEach(function(registration){
                         if(registration.id === activity.id){
                             var matched = false;
-                            if(student.applications.length !== 0 && student.applications[0].length !== 0){
-                                student.applications[0].activities.forEach(function(application){
-                                    if(application.id === registration.id){
-                                        matched = true;
-                                    }
+                            if(applications.length !== 0){
+                                applications.forEach(function(application){
+                                    application.activities.forEach(function(application){
+                                        if(application.id === registration.id){
+                                            matched = true;
+                                        }
+                                    });
                                 });
                             }
                             if(matched){

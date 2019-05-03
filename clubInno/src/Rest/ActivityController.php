@@ -166,4 +166,5 @@ class ActivityController extends AbstractFOSRestController
         return View::create($activities, Response::HTTP_OK);
     }
 
+
 }
