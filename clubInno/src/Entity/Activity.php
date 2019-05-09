@@ -99,6 +99,12 @@ class Activity
      */
     private $activityGroups;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="createdActivities")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $creator;
+
     public function __construct()
     {
         $this->applications = new \Doctrine\Common\Collections\ArrayCollection();
@@ -283,5 +289,17 @@ class Activity
     public function setActivityGroups($activityGroups): void
     {
         $this->activityGroups = $activityGroups;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
+
+        return $this;
     }
 }

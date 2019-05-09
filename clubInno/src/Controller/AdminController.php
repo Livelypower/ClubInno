@@ -179,19 +179,7 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_list_users');
     }
 
-    /**
-     * @Route("/admin/activities", name="admin_list_activities")
-     */
-    public function listActivities()
-    {
-        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
-        $user = $this->getUser();
 
-        return $this->render('admin/activity_list.html.twig', [
-            'tags' => $tags,
-            'apiToken' => $user->getApiToken(),
-        ]);
-    }
 
     /**
      * @Route("admin/activity/new", name="activity_new")

@@ -86,6 +86,11 @@ class User implements UserInterface
      */
     private $apiToken;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Activity", mappedBy="creator")
+     */
+    private $createdActivities;
+
 
     public function __construct()
     {
@@ -94,6 +99,7 @@ class User implements UserInterface
         $this->applications = new ArrayCollection();
         $this->registrations = new ArrayCollection();
         $this->activityGroups = new ArrayCollection();
+        $this->createdActivities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -333,6 +339,37 @@ class User implements UserInterface
     public function setApiToken(string $apiToken): self
     {
         $this->apiToken = $apiToken;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Activity[]
+     */
+    public function getCreatedActivities(): Collection
+    {
+        return $this->createdActivities;
+    }
+
+    public function addCreatedActivity(Activity $createdActivity): self
+    {
+        if (!$this->createdActivities->contains($createdActivity)) {
+            $this->createdActivities[] = $createdActivity;
+            $createdActivity->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreatedActivity(Activity $createdActivity): self
+    {
+        if ($this->createdActivities->contains($createdActivity)) {
+            $this->createdActivities->removeElement($createdActivity);
+            // set the owning side to null (unless already changed)
+            if ($createdActivity->getCreator() === $this) {
+                $createdActivity->setCreator(null);
+            }
+        }
 
         return $this;
     }

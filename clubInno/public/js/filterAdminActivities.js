@@ -8,7 +8,7 @@ $(document).ready(function(){
     checkFilters(filters);
     var apiToken = $("#data").html();
     var data = {'filters': filters};
-    ajaxCall(data, apiToken);
+    getActivities(data, apiToken);
 
     $("#filterActivities").click(function(){
         filters = [];
@@ -39,18 +39,17 @@ $(document).ready(function(){
 
 });
 
-function ajaxCall(data, apiToken){
+function getActivities(data, apiToken){
     $.ajax({
         method: "GET",
-        url: "http://vps589558.ovh.net/api/activities",
+        url: "http://localhost:8000/api/activities",
         data: data,
         headers: {
             'X-AUTH-TOKEN':apiToken
         },
         success: function (response) {
             console.log('ok');
-            console.log(response);
-            showActivities(response);
+            getUser(apiToken, response);
         },
         error: function (response) {
             console.log(response);
@@ -59,7 +58,33 @@ function ajaxCall(data, apiToken){
     });
 }
 
-function showActivities(activities){
+function getUser(apiToken, activities){
+    $.ajax({
+        method: "GET",
+        url: "http://localhost:8000/api/currentUser",
+        headers: {
+            'X-AUTH-TOKEN':apiToken
+        },
+        success: function (response) {
+            console.log('ok');
+            console.log(response);
+            showActivities(activities, response);
+        },
+        error: function (response) {
+            console.log(response);
+            console.log('call failed')
+        }
+    });
+}
+
+function showActivities(activities, user){
+    var role;
+    if(user.roles.includes('ROLE_ADMIN')){
+        role = 'admin';
+    }else if(user.roles.includes('ROLE_TEACHER')){
+        role = 'teacher';
+    }
+
     var html = "";
 
     activities.forEach(function(activity){
@@ -69,7 +94,7 @@ function showActivities(activities){
         if(activity.main_image == null){
             card += "<img src=\"http://lorempixel.com/800/400/technics\" alt=\"\">\n"
         }else{
-            var imageUrl = "http://vps589558.ovh.net/uploads/" + activity.main_image;
+            var imageUrl = "http://localhost:8000/uploads/" + activity.main_image;
             card += "<img src=\"" + imageUrl + "\" alt=\"\">\n"
         }
 
@@ -84,8 +109,8 @@ function showActivities(activities){
         }
 
 
-        var currentUrl = "http://vps589558.ovh.net/admin/activities";
-        var activityShowUrl = "http://vps589558.ovh.net/activity/" + activity.id + "-" + currentUrl;
+        var currentUrl = "http://localhost:8000/admin/activities";
+        var activityShowUrl = "http://localhost:8000/activity/" + activity.id + "-" + currentUrl;
         card += "</span>\n" +
             "                        <div class=\"row\"></div>\n" +
             "                        <p><b>Inscriptions: </b>" + activity.users.length + "/" + activity.max_amount_students + "</p>\n" +
@@ -98,17 +123,24 @@ function showActivities(activities){
             "                    <div class=\"card-action\">\n" +
             "                        <a href=\"" + activityShowUrl + "\">Plus d'info</a>\n";
 
-                var toggleUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/toggle";
-                var editUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/edit";
-                var deleteUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/delete";
+                var toggleUrl = "http://localhost:8000/admin/activity/" + activity.id + "/toggle";
+                var editUrl = "http://localhost:8000/admin/activity/" + activity.id + "/edit";
+                var deleteUrl = "http://localhost:8000/admin/activity/" + activity.id + "/delete";
 
-                card +=  "<div class=\"right hide-on-med-and-down\">\n" +
-                "                                <a href=\"" + toggleUrl + "\">toggle</a>\n" +
-                "                                <a href=\"" + editUrl + "\">edit</a>\n" +
-                "                                <a href=\"" + deleteUrl + "\">delete</a>\n" +
-                "                            </div>\n";
+                card +=  "<div class=\"right hide-on-med-and-down\">\n";
 
-            card += "                    </div>\n" +
+                if(role === 'admin'){
+                    card += "                                <a href=\"" + toggleUrl + "\">toggle</a>\n";
+                }
+
+                console.log(checkIfCreated(user.created_activities, activity));
+                if(role === 'admin' || checkIfCreated(user.created_activities, activity)){
+                    card +=  "                                <a href=\"" + editUrl + "\">edit</a>\n" +
+                        "                                <a href=\"" + deleteUrl + "\">delete</a>\n";
+                }
+
+            card += "                            </div>\n" +
+                "                    </div>\n" +
             "                </div>\n" +
             "            </div>\n";
 
@@ -116,6 +148,16 @@ function showActivities(activities){
     });
 
     $('#activities').html(html);
+}
+
+function checkIfCreated(activities, activity){
+    var created = false;
+    activities.forEach(function(created_activity){
+        if(created_activity.id === activity.id){
+            created =  true;
+        }
+    });
+  return created;
 }
 
 function checkFilters(filters){

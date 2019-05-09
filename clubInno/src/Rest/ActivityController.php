@@ -166,5 +166,18 @@ class ActivityController extends AbstractFOSRestController
         return View::create($activities, Response::HTTP_OK);
     }
 
+    /**
+     * Returns current user
+     * @Rest\Get("/currentUser")
+     * @return View
+     */
+    public function getCurrentUser(): View
+    {
+        $user = $this->getUser();
+
+        // In case our GET was a success we need to return a 200 HTTP OK response with the request object
+        return View::create($user, Response::HTTP_OK);
+    }
+
 
 }
