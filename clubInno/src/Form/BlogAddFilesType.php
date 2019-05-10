@@ -12,6 +12,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
 
 class BlogAddFilesType extends AbstractType
@@ -24,9 +25,11 @@ class BlogAddFilesType extends AbstractType
                 'multiple' => true,
                 'label' => 'Des fichiers',
                 'constraints' => [
-                    new File([
-                        'maxSize' => "2048k",
-                        'maxSizeMessage' => "Le fichier est trop gros!"
+                    new All([
+                        New File([
+                            'maxSize' => "2048k",
+                            'maxSizeMessage' => "Un des fichiers est trop gros!"
+                        ])
                     ])
                 ]
             ])

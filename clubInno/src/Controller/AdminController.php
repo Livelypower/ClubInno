@@ -20,12 +20,13 @@ use App\Entity\User;
 use App\Entity\Activity;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 
 /**
- * Require ROLE_ADMIN for *every* controller method in this class.
+ * Require ROLE_TEACHER for *every* controller method in this class.
  *
- * @IsGranted("ROLE_ADMIN")
+ * @IsGranted("ROLE_TEACHER")
  */
 class AdminController extends AbstractController
 {
@@ -42,6 +43,7 @@ class AdminController extends AbstractController
      */
     public function listApplications()
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = $this->getUser();
         return $this->render('admin/application_list.html.twig',[
             'apiToken' => $user->getApiToken()
@@ -58,10 +60,26 @@ class AdminController extends AbstractController
     }
 
     /**
+     * @Route("/admin/activities", name="admin_list_activities")
+     */
+    public function listActivities()
+    {
+        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
+        $user = $this->getUser();
+
+        return $this->render('admin/activity_list.html.twig', [
+            'tags' => $tags,
+            'apiToken' => $user->getApiToken(),
+        ]);
+    }
+
+    /**
      * @Route("/admin/listUsers/", name="admin_list_users")
      */
     public function listUsers(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user = new User();
 
         $form = $this->createForm(QueryUserType::class, $user);
@@ -101,6 +119,8 @@ class AdminController extends AbstractController
      */
     public function makeAdmin($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_AMDIN', $roles)) {
@@ -121,6 +141,8 @@ class AdminController extends AbstractController
      */
     public function makeTeacher($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_TEACHER', $roles)) {
@@ -142,6 +164,8 @@ class AdminController extends AbstractController
      */
     public function removeAdmin($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_TEACHER', $roles)) {
@@ -163,6 +187,8 @@ class AdminController extends AbstractController
      */
     public function removeTeacher($id)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $roles = $user->getRoles();
         if (!in_array('ROLE_USER', $roles)) {
@@ -249,84 +275,101 @@ class AdminController extends AbstractController
      */
     public function editActivity(Request $request, Activity $activity)
     {
-        $form = $this->createForm(ActivityEditType::class, $activity);
+        $user = $this->getUser();
+        if($user->getId() == $activity->getCreator()->getId() || in_array('ROLE_ADMIN', $user->getRoles())){
+            $form = $this->createForm(ActivityEditType::class, $activity);
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $activity = $form->getData();
+            if ($form->isSubmitted() && $form->isValid()) {
+                $activity = $form->getData();
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($activity);
-            $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($activity);
+                $em->flush();
 
-            return $this->redirectToRoute('admin_list_activities');
+                return $this->redirectToRoute('admin_list_activities');
+            }
+
+            return $this->render('activity/edit.html.twig', [
+                'form' => $form->createView(),
+                'activity' => $activity
+            ]);
+        }else{
+            throw new AccessDeniedException;
         }
-
-        return $this->render('activity/edit.html.twig', [
-            'form' => $form->createView(),
-            'activity' => $activity
-        ]);
     }
 
     /**
      * @Route("admin/activity/{id}/edit/files", requirements={"id": "\d+"}, name="activity_edit_files")
      */
     public function editActivityFiles(Request $request, Activity $activity){
-        $mainImage = $activity->getMainImage();
-        $files = $activity->getFiles();
+        $user = $this->getUser();
+        if($user->getId() == $activity->getCreator()->getId() || in_array('ROLE_ADMIN', $user->getRoles())){
+            $mainImage = $activity->getMainImage();
+            $files = $activity->getFiles();
 
-        $form = $this->createForm(ActivityFilesEditType::class);
+            $form = $this->createForm(ActivityFilesEditType::class);
 
-        $form->handleRequest($request);
+            $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $mainImage = $form->get('mainImage')->getData();
-            $files = $form->get('files')->getData();
-            $filenames = array();
-
-            $filename = $this->generateUniqueFileName() . '.' . $mainImage->guessExtension();
-
-            try {
-                $mainImage->move(
-                    $this->getParameter('uploads_directory'),
-                    $filename
-                );
-                foreach ($files as $file){
-                    $name = $this->generateUniqueFileName() . '.' . $file->guessExtension();
-                    array_push($filenames, $name);
-                    $file->move(
-                        $this->getParameter('uploads_directory'),
-                        $name
-                    );
+            if ($form->isSubmitted() && $form->isValid()) {
+                if($form->get('mainImage')->getData() != null){
+                    $filename = $this->generateUniqueFileName() . '.' . $mainImage->guessExtension();
+                    $mainImage = $form->get('mainImage')->getData();
+                }else{
+                    $filename = $mainImage;
                 }
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
+                $files = $form->get('files')->getData();
+                $filenames = array();
+
+
+                try {
+                    if($form->get('mainImage')->getData() != null){
+                        $mainImage->move(
+                            $this->getParameter('uploads_directory'),
+                            $filename
+                        );
+                    }
+                    foreach ($files as $file){
+                        $name = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+                        array_push($filenames, $name);
+                        $file->move(
+                            $this->getParameter('uploads_directory'),
+                            $name
+                        );
+                    }
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+
+                $activity->addFiles($filenames);
+                $activity->setMainImage($filename);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($activity);
+                $em->flush();
+
+                $files = $activity->getFiles();
+                $mainImage = $activity->getMainImage();
             }
 
-            $activity->addFiles($filenames);
-            $activity->setMainImage($filename);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($activity);
-            $em->flush();
-
-            $files = $activity->getFiles();
-            $mainImage = $activity->getMainImage();
+            return $this->render('activity/activity_edit_files.html.twig',[
+                'form' => $form->createView(),
+                'files' => $files,
+                'mainImage' => $mainImage,
+                'id' => $activity->getId()
+            ]);
+        }else{
+            throw new AccessDeniedException;
         }
-
-        return $this->render('activity/activity_edit_files.html.twig',[
-            'form' => $form->createView(),
-            'files' => $files,
-            'mainImage' => $mainImage,
-            'id' => $activity->getId()
-        ]);
     }
 
     /**
      * @Route("/admin/activity/{id}/delete/file/{name}", requirements={"id": "\d+"}, name="activity_file_delete")
      */
     public function deleteBlogFile(Request $request, Activity $activity, $name){
+
         $files = $activity->getFiles();
         $mainImage = $activity->getMainImage();
 
@@ -353,11 +396,17 @@ class AdminController extends AbstractController
      */
     public function deleteActivity(Activity $activity)
     {
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($activity);
-        $em->flush();
+        $user = $this->getUser();
+        if($user->getId() == $activity->getCreator()->getId() || in_array('ROLE_ADMIN', $user->getRoles())){
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($activity);
+            $em->flush();
 
-        return $this->redirectToRoute('admin_list_activities');
+            return $this->redirectToRoute('admin_list_activities');
+        }else {
+            throw new AccessDeniedException;
+        }
+
     }
 
     /**
@@ -365,6 +414,7 @@ class AdminController extends AbstractController
      */
     public function toggleActivity(Activity $activity)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         if ($activity->getActive() == 1){
             $activity->setActive(0);
         } else {
@@ -382,6 +432,8 @@ class AdminController extends AbstractController
      */
     public function newSemester(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $semester = new Semester();
         $form = $this->createForm(NewSemesterType::class, $semester);
         $form->handleRequest($request);
@@ -404,6 +456,8 @@ class AdminController extends AbstractController
      * @Route("admin/semester/edit/{id}", name="admin_semester_edit")
      */
     public function editSemester(Semester $semester, Request $request){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $form = $this->createForm(NewSemesterType::class, $semester);
         $form->handleRequest($request);
 
@@ -425,6 +479,8 @@ class AdminController extends AbstractController
      * @Route("admin/semester/delete/{id}", name="admin_semester_delete")
      */
     public function deleteSemester(Semester $semester){
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $em = $this->getDoctrine()->getManager();
         $em->remove($semester);
         $em->flush();
@@ -437,6 +493,8 @@ class AdminController extends AbstractController
      */
     public function semester(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $years = $this->getDoctrine()->getRepository(Semester::class)->findAll();
 
         return $this->render('semester/index.html.twig', [
@@ -449,6 +507,8 @@ class AdminController extends AbstractController
      */
     public function setActiveSemester(int $id)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $activeSemester = $this->getDoctrine()->getRepository(Semester::class)->find($id);
         $allSemesters = $this->getDoctrine()->getRepository(Semester::class)->findAll();
         $activitiesToSetActive = $this->getDoctrine()->getRepository(Activity::class)->findBy(['semester' => $activeSemester]);
@@ -482,4 +542,6 @@ class AdminController extends AbstractController
 
         return $this->redirectToRoute('admin_semester');
     }
+
+
 }

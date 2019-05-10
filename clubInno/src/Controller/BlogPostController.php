@@ -169,7 +169,6 @@ class BlogPostController extends AbstractController
      * @Route("/blog/{id}/delete", requirements={"id": "\d+"}, name="blog_delete")
      */
     public function deleteBlog(BlogPost $blogPost){
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = $this->getUser();
 
         if(in_array('ROLE_ADMIN', $user->getRoles()) || $user->getId() == $blogPost->getUser()->getId()){
@@ -192,7 +191,6 @@ class BlogPostController extends AbstractController
      * @Route("/blog/{id}/edit", requirements={"id": "\d+"}, name="blog_edit")
      */
     public function editBlog(Request $request, BlogPost $blogPost){
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $user = $this->getUser();
 
         if(in_array('ROLE_ADMIN', $user->getRoles()) || $user == $blogPost->getUser()) {
@@ -226,66 +224,77 @@ class BlogPostController extends AbstractController
      * @Route("/blog/{id}/edit/files", requirements={"id": "\d+"}, name="blog_edit_files")
      */
     public function editBlogFiles(Request $request, BlogPost $blogPost){
-        $files = $blogPost->getFiles();
+        $user = $this->getUser();
 
-        $form = $this->createForm(BlogAddFilesType::class);
+        if(in_array('ROLE_ADMIN', $user->getRoles()) || $user == $blogPost->getUser()) {
+            $files = $blogPost->getFiles();
 
-        $form->handleRequest($request);
+            $form = $this->createForm(BlogAddFilesType::class);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $files = $form->get('files')->getData();
-            $filenames = array();
+            $form->handleRequest($request);
 
+            if ($form->isSubmitted() && $form->isValid()) {
+                $files = $form->get('files')->getData();
+                $filenames = array();
 
-            try {
-                foreach ($files as $file){
-                    $name = $this->generateUniqueFileName() . '.' . $file->guessExtension();
-                    array_push($filenames, $name);
-                    $file->move(
-                        $this->getParameter('uploads_directory'),
-                        $name
-                    );
+                try {
+                    foreach ($files as $file){
+                        $name = $this->generateUniqueFileName() . '.' . $file->guessExtension();
+                        array_push($filenames, $name);
+                        $file->move(
+                            $this->getParameter('uploads_directory'),
+                            $name
+                        );
+                    }
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
                 }
-            } catch (FileException $e) {
-                // ... handle exception if something happens during file upload
+
+                $blogPost->addFiles($filenames);
+
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($blogPost);
+                $em->flush();
+
+                $files = $blogPost->getFiles();
             }
 
-            $blogPost->addFiles($filenames);
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($blogPost);
-            $em->flush();
-
-            $files = $blogPost->getFiles();
+            return $this->render('blog_post/edit_files.html.twig',[
+                'form' => $form->createView(),
+                'files' => $files,
+                'id' => $blogPost->getId()
+            ]);
+        }else{
+            throw new AccessDeniedException();
         }
-
-        return $this->render('blog_post/edit_files.html.twig',[
-            'form' => $form->createView(),
-            'files' => $files,
-            'id' => $blogPost->getId()
-        ]);
     }
 
     /**
      * @Route("/blog/{id}/delete/file/{name}", requirements={"id": "\d+"}, name="blog_file_delete")
      */
     public function deleteBlogFile(Request $request, BlogPost $blogPost, $name){
-        $files = $blogPost->getFiles();
+        $user = $this->getUser();
 
-        $index = array_search($name,$files);
-        if($index !== FALSE){
-            unset($files[$index]);
+        if(in_array('ROLE_ADMIN', $user->getRoles()) || $user == $blogPost->getUser()) {
+            $files = $blogPost->getFiles();
+
+            $index = array_search($name,$files);
+            if($index !== FALSE){
+                unset($files[$index]);
+            }
+
+
+            $blogPost->setFiles($files);
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($blogPost);
+            $em->flush();
+
+            return $this->redirectToRoute('blog_edit_files', array(
+                'id' => $blogPost->getId()
+            ));
+        }else{
+            throw new AccessDeniedException();
         }
-
-
-        $blogPost->setFiles($files);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($blogPost);
-        $em->flush();
-
-        return $this->redirectToRoute('blog_edit_files', array(
-            'id' => $blogPost->getId()
-        ));
     }
 
 

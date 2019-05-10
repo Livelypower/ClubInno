@@ -14,21 +14,6 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 class ActivityController extends AbstractController
 {
-
-    /**
-     * @Route("/admin/activities", name="admin_list_activities")
-     */
-    public function listActivities()
-    {
-        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
-        $user = $this->getUser();
-
-        return $this->render('admin/activity_list.html.twig', [
-            'tags' => $tags,
-            'apiToken' => $user->getApiToken(),
-        ]);
-    }
-
     /**
      * @Route("/activity", name="activity")
      */
@@ -74,6 +59,7 @@ class ActivityController extends AbstractController
             'url' => $url
         ]);
     }
+
 
     /**
      * @Route("/activity/addBasket/{id}", requirements={"id": "\d+"}, name="activity_addbasket")
