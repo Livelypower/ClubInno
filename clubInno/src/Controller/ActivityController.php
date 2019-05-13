@@ -60,7 +60,6 @@ class ActivityController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/activity/addBasket/{id}", requirements={"id": "\d+"}, name="activity_addbasket")
      */
@@ -95,6 +94,5 @@ class ActivityController extends AbstractController
             throw new AccessDeniedException();
         }
     }
-
 
 }

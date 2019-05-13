@@ -57,7 +57,7 @@ class TagController extends AbstractController
     }
 
     /**
-     * @Route("tag/{id}/edit", requirements={"id": "\d+"}, name="tag_edit")
+     * @Route("tag/edit/{id}", requirements={"id": "\d+"}, name="tag_edit")
      */
     public function editTag(Request $request, Tag $tag){
 
@@ -81,7 +81,7 @@ class TagController extends AbstractController
     }
 
     /**
-     * @Route("/tag/{id}/delete", requirements={"id": "\d+"}, name="tag_delete")
+     * @Route("/tag/delete/{id}", requirements={"id": "\d+"}, name="tag_delete")
      */
     public function deleteTag(Request $request, Tag $tag){
         $em = $this->getDoctrine()->getManager();

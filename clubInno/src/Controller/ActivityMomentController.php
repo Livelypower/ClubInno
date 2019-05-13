@@ -90,5 +90,4 @@ class ActivityMomentController extends AbstractController
         return $this->redirectToRoute("activity_moment");
     }
 
-
 }

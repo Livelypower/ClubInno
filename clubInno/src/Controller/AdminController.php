@@ -204,9 +204,7 @@ class AdminController extends AbstractController
 
         return $this->redirectToRoute('admin_list_users');
     }
-
-
-
+    
     /**
      * @Route("admin/activity/new", name="activity_new")
      */
@@ -271,7 +269,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("admin/activity/{id}/edit", requirements={"id": "\d+"}, name="activity_edit")
+     * @Route("admin/activity/edit/{id}", requirements={"id": "\d+"}, name="activity_edit")
      */
     public function editActivity(Request $request, Activity $activity)
     {
@@ -301,7 +299,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("admin/activity/{id}/edit/files", requirements={"id": "\d+"}, name="activity_edit_files")
+     * @Route("admin/activity/edit/{id}/files", requirements={"id": "\d+"}, name="activity_edit_files")
      */
     public function editActivityFiles(Request $request, Activity $activity){
         $user = $this->getUser();
@@ -366,7 +364,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/activity/{id}/delete/file/{name}", requirements={"id": "\d+"}, name="activity_file_delete")
+     * @Route("/admin/activity/delete/{id}/file/{name}", requirements={"id": "\d+"}, name="activity_file_delete")
      */
     public function deleteBlogFile(Request $request, Activity $activity, $name){
 
@@ -392,7 +390,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("admin/activity/{id}/delete", requirements={"id": "\d+"}, name="activity_delete")
+     * @Route("admin/activity/delete/{id}", requirements={"id": "\d+"}, name="activity_delete")
      */
     public function deleteActivity(Activity $activity)
     {
@@ -410,7 +408,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("admin/activity/{id}/toggle", requirements={"id": "\d+"}, name="activity_toggle")
+     * @Route("admin/activity/toggle/{id}", requirements={"id": "\d+"}, name="activity_toggle")
      */
     public function toggleActivity(Activity $activity)
     {
@@ -542,6 +540,5 @@ class AdminController extends AbstractController
 
         return $this->redirectToRoute('admin_semester');
     }
-
 
 }
