@@ -247,6 +247,7 @@ class AdminController extends AbstractController
             $activity = $form->getData();
             $activity->setMainImage($fileName);
             $activity->setFiles($filenames);
+            $activity->setCreator($this->getUser());
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($activity);

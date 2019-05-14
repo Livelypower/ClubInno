@@ -1,27 +1,30 @@
 $(document).ready(function(){
     $("#filterForm").hide();
     $("#hideFilters").hide();
-    var filters = [];
+    var own = false;
+
     if (localStorage.getItem('adminFilters') !== null) {
-        filters = JSON.parse(localStorage.getItem('adminFilters'));
+        var data = JSON.parse(localStorage.getItem('adminFilters'));
     }
-    checkFilters(filters);
+    checkFilters(data);
+
     var apiToken = $("#data").html();
-    var data = {'filters': filters};
     getActivities(data, apiToken);
 
     $("#filterActivities").click(function(){
-        filters = [];
-        $('input[type=checkbox]').each(function () {
+        var filters = [];
+        $('#filters input:checkbox').each(function () {
             if(this.checked){
                 filters.push($(this).val());
             }
         });
-        console.log(filters);
-        checkFilters(filters);
-        localStorage.setItem('adminFilters',JSON.stringify(filters));
-        data = {'filters': filters};
-        ajaxCall(data, apiToken);
+
+        own = $('#ownActivities').prop('checked');
+
+        data = {'filters': filters, 'own': own};
+        checkFilters(data);
+        localStorage.setItem('adminFilters',JSON.stringify(data));
+        getActivities(data, apiToken);
     });
 
     $('#showFilters').click(function () {
@@ -40,15 +43,17 @@ $(document).ready(function(){
 });
 
 function getActivities(data, apiToken){
+    console.log(data);
     $.ajax({
         method: "GET",
-        url: "http://vps589558.ovh.net/api/activities",
+        url: "http://localhost:8000/api/activities",
         data: data,
         headers: {
             'X-AUTH-TOKEN':apiToken
         },
         success: function (response) {
-            console.log('ok');
+            console.log("RESPONSE");
+            console.log(response);
             getUser(apiToken, response);
         },
         error: function (response) {
@@ -61,13 +66,12 @@ function getActivities(data, apiToken){
 function getUser(apiToken, activities){
     $.ajax({
         method: "GET",
-        url: "http://vps589558.ovh.net/api/currentUser",
+        url: "http://localhost:8000/api/currentUser",
         headers: {
             'X-AUTH-TOKEN':apiToken
         },
         success: function (response) {
-            console.log('ok');
-            console.log(response);
+
             showActivities(activities, response);
         },
         error: function (response) {
@@ -94,7 +98,7 @@ function showActivities(activities, user){
         if(activity.main_image == null){
             card += "<img src=\"http://lorempixel.com/800/400/technics\" alt=\"\">\n"
         }else{
-            var imageUrl = "http://vps589558.ovh.net/uploads/" + activity.main_image;
+            var imageUrl = "http://localhost:8000/uploads/" + activity.main_image;
             card += "<img src=\"" + imageUrl + "\" alt=\"\">\n"
         }
 
@@ -109,10 +113,10 @@ function showActivities(activities, user){
         }
 
 
-        var currentUrl = "http://vps589558.ovh.net/admin/activities";
-        var activityShowUrl = "http://vps589558.ovh.net/activity/" + activity.id + "-" + currentUrl;
+        var currentUrl = "http://localhost:8000/admin/activities";
+        var activityShowUrl = "http://localhost:8000/activity/" + activity.id + "-" + currentUrl;
         card += "</span>\n" +
-            "                        <div class=\"row\"></div>\n" +
+            "                        <div class=\"row\"><div class='col s12 grey-text text-lighten-1'><blockquote>Créé par: " + activity.creator.email + "</blockquote></div></div>\n" +
             "                        <p><b>Inscriptions: </b>" + activity.users.length + "/" + activity.max_amount_students + "</p>\n" +
             "                        <br/>\n" +
             "                        <p>\n" +
@@ -123,9 +127,9 @@ function showActivities(activities, user){
             "                    <div class=\"card-action\">\n" +
             "                        <a href=\"" + activityShowUrl + "\">Plus d'info</a>\n";
 
-                var toggleUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/toggle";
-                var editUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/edit";
-                var deleteUrl = "http://vps589558.ovh.net/admin/activity/" + activity.id + "/delete";
+                var toggleUrl = "http://localhost:8000/admin/activity/toggle/" + activity.id;
+                var editUrl = "http://localhost:8000/admin/activity/edit/" + activity.id ;
+                var deleteUrl = "http://localhost:8000/admin/activity/delete/" + activity.id;
 
                 card +=  "<div class=\"right hide-on-med-and-down\">\n";
 
@@ -133,7 +137,6 @@ function showActivities(activities, user){
                     card += "                                <a href=\"" + toggleUrl + "\">toggle</a>\n";
                 }
 
-                console.log(checkIfCreated(user.created_activities, activity));
                 if(role === 'admin' || checkIfCreated(user.created_activities, activity)){
                     card +=  "                                <a href=\"" + editUrl + "\">edit</a>\n" +
                         "                                <a href=\"" + deleteUrl + "\">delete</a>\n";
@@ -160,14 +163,20 @@ function checkIfCreated(activities, activity){
   return created;
 }
 
-function checkFilters(filters){
-    filters.forEach(function(filter){
-       $("#"+filter).prop("checked", true);
-       console.log($("#"+filter).val());
-    });
-    if(filters.length !== 0){
-        $("#filterForm").show();
-        $("#hideFilters").show();
-        $("#showFilters").hide();
+function checkFilters(data){
+    console.log(data);
+    if(data.length !== 0){
+        var filters = data.filters;
+        var own = data.own;
+        filters.forEach(function(filter){
+            $("#"+filter).prop("checked", true);
+        });
+        $("#ownActivities").prop("checked", own);
+        if(filters.length !== 0 || own){
+            $("#filterForm").show();
+            $("#hideFilters").show();
+            $("#showFilters").hide();
+        }
     }
+
 }

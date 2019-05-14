@@ -3,6 +3,13 @@ $(document).ready(function () {
     var activities;
     var semester;
     var apiToken = $("#data").html();
+
+    $("#filterActivities").click(function(){
+        var data = {'filters': [], 'own': true};
+        getActivities(data, apiToken);
+    });
+
+
     getUsers();
 
     function getUsers() {
@@ -43,6 +50,30 @@ $(document).ready(function () {
         });
     }
 
+    function getActivities(data, apiToken){
+        $.ajax({
+            method: "GET",
+            url: "http://localhost:8000/api/activities",
+            data: data,
+            headers: {
+                'X-AUTH-TOKEN':apiToken
+            },
+            success: function (response) {
+                activities = [];
+                response.forEach(function(activity){
+                   if(activity.active === true && activity.semester.id === semester.id){
+                       activities.push(activity);
+                   }
+                });
+                all();
+            },
+            error: function (response) {
+                console.log(response);
+                console.log('call failed')
+            }
+        });
+    }
+
     /*function getActis() {
         $.ajax({
             method: "GET",
@@ -62,6 +93,10 @@ $(document).ready(function () {
     }*/
 
     function all(){
+        $("#tableBody").empty();
+        $("#tableHead").html(
+            "<th>Etudiant</th>"
+        );
         var lastSaved = 0;
         var alreadySaved = false;
 
@@ -78,7 +113,6 @@ $(document).ready(function () {
         });
 
         students.forEach(function(student) {
-            console.log(student);
             var applications = [];
             var registrations = [];
             student.applications.forEach(function(application){

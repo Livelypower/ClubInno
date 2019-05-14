@@ -105,7 +105,7 @@ class ActivityController extends AbstractFOSRestController
     }
 
     /**
-     * Returns all users
+     * Returns all activities
      * @Rest\Get("/activities")
      * @param Request $request
      * @return View
@@ -113,8 +113,17 @@ class ActivityController extends AbstractFOSRestController
     public function getActivities(Request $request): View
     {
         $filters = $request->get('filters');
+        $own = $request->get('own');
+        $user = $this->getUser();
+        $allActivities = array();
 
-        $allActivities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+
+        if($own == 'true'){
+            $allActivities = $this->getDoctrine()->getRepository(Activity::class)->findBy(array('creator' => $user));
+        }else{
+            $allActivities = $this->getDoctrine()->getRepository(Activity::class)->findAll();
+        }
+
         $activities = array();
 
         if(empty($filters)){
@@ -132,7 +141,7 @@ class ActivityController extends AbstractFOSRestController
         }
 
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
-        return View::create($activities, Response::HTTP_OK);
+        return View::create($allActivities, Response::HTTP_OK);
     }
 
     /**
