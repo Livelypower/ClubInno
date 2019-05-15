@@ -2,17 +2,49 @@ $(document).ready(function () {
     var students;
     var activities;
     var semester;
+    $("#filterForm").hide();
+    $("#hideFilters").hide();
     var apiToken = $("#data").html();
+    var id = $("#userid").html();
+    var data = {'filters': [], 'own': false, 'id': id};
+
+    if (localStorage.getItem('applicationFilters') !== null) {
+        data = JSON.parse(localStorage.getItem('applicationFilters'));
+        if(data.id !== id){
+            data = [];
+        }
+    }
+    checkFilters(data);
 
     $("#filterActivities").click(function(){
-        var data = {'filters': [], 'own': true};
+        var filters = [];
+        $('#filters input:checkbox').each(function () {
+            if(this.checked){
+                filters.push($(this).val());
+            }
+        });
+
+        var own = $('#ownActivities').prop('checked');
+        data = {'filters': filters, 'own': own, 'id': id};
+        localStorage.setItem('applicationFilters',JSON.stringify(data));
         getActivities(data, apiToken);
+    });
+    $('#showFilters').click(function () {
+        $(this).hide();
+        $("#filterForm").show();
+        $("#hideFilters").show();
+    });
+    $('#hideFilters').click(function(){
+        $(this).hide();
+        $("#filterForm").hide();
+        $("#showFilters").show();
     });
 
 
-    getUsers();
 
-    function getUsers() {
+    getUsers(data);
+
+    function getUsers(data) {
         $.ajax({
             method: "GET",
             url: "http://localhost:8000/api/admin/users",
@@ -21,7 +53,7 @@ $(document).ready(function () {
             },
             success: function (response) {
                 students = response;
-                getActiveSemester();
+                getActiveSemester(data);
             },
             error: function (response) {
                 console.log(response);
@@ -29,8 +61,7 @@ $(document).ready(function () {
             }
         });
     }
-
-    function getActiveSemester() {
+    function getActiveSemester(data) {
         $.ajax({
             method: "GET",
             url: "http://localhost:8000/api/admin/semester",
@@ -39,9 +70,9 @@ $(document).ready(function () {
             },
             success: function (response) {
                 semester = response;
-                activities = semester.activities;
+                //activities = semester.activities;
                 console.log(semester);
-                all()
+                getActivities(data, apiToken)
             },
             error: function (response) {
                 console.log(response);
@@ -49,8 +80,8 @@ $(document).ready(function () {
             }
         });
     }
-
     function getActivities(data, apiToken){
+        console.log(data);
         $.ajax({
             method: "GET",
             url: "http://localhost:8000/api/activities",
@@ -59,6 +90,7 @@ $(document).ready(function () {
                 'X-AUTH-TOKEN':apiToken
             },
             success: function (response) {
+                console.log(response);
                 activities = [];
                 response.forEach(function(activity){
                    if(activity.active === true && activity.semester.id === semester.id){
@@ -73,24 +105,6 @@ $(document).ready(function () {
             }
         });
     }
-
-    /*function getActis() {
-        $.ajax({
-            method: "GET",
-            url: "http://localhost:8000/api/admin/activities",
-            headers: {
-                'X-AUTH-TOKEN':apiToken
-            },
-            success: function (response) {
-                activities = response;
-                all()
-            },
-            error: function (response) {
-                console.log(response);
-                console.log('call failed')
-            }
-        });
-    }*/
 
     function all(){
         $("#tableBody").empty();
@@ -405,5 +419,21 @@ $(document).ready(function () {
             saveConfig();
         });
     }
-
 });
+
+function checkFilters(data){
+    if(data.length !== 0){
+        var filters = data.filters;
+        var own = data.own;
+        filters.forEach(function(filter){
+            $("#"+filter).prop("checked", true);
+        });
+        $("#ownActivities").prop("checked", own);
+        if(filters.length !== 0 || own){
+            $("#filterForm").show();
+            $("#hideFilters").show();
+            $("#showFilters").hide();
+        }
+    }
+
+}

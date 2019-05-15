@@ -1,10 +1,15 @@
 $(document).ready(function(){
     $("#filterForm").hide();
     $("#hideFilters").hide();
+    var id = $("#userid").html();
     var own = false;
+    var data = [];
 
     if (localStorage.getItem('adminFilters') !== null) {
-        var data = JSON.parse(localStorage.getItem('adminFilters'));
+        data = JSON.parse(localStorage.getItem('adminFilters'));
+        if(data.id !== id){
+            data = [];
+        }
     }
     checkFilters(data);
 
@@ -21,7 +26,7 @@ $(document).ready(function(){
 
         own = $('#ownActivities').prop('checked');
 
-        data = {'filters': filters, 'own': own};
+        data = {'filters': filters, 'own': own, 'id': id};
         checkFilters(data);
         localStorage.setItem('adminFilters',JSON.stringify(data));
         getActivities(data, apiToken);
@@ -54,7 +59,7 @@ function getActivities(data, apiToken){
         success: function (response) {
             console.log("RESPONSE");
             console.log(response);
-            getUser(apiToken, response);
+            getUser(apiToken, response, data.id);
         },
         error: function (response) {
             console.log(response);
@@ -63,15 +68,18 @@ function getActivities(data, apiToken){
     });
 }
 
-function getUser(apiToken, activities){
+function getUser(apiToken, activities, id){
+    var data = {'id': id};
+
     $.ajax({
         method: "GET",
         url: "http://localhost:8000/api/currentUser",
+        data: data,
         headers: {
             'X-AUTH-TOKEN':apiToken
         },
         success: function (response) {
-
+            console.log(response);
             showActivities(activities, response);
         },
         error: function (response) {
@@ -137,6 +145,7 @@ function showActivities(activities, user){
                     card += "                                <a href=\"" + toggleUrl + "\">toggle</a>\n";
                 }
 
+                console.log(user);
                 if(role === 'admin' || checkIfCreated(user.created_activities, activity)){
                     card +=  "                                <a href=\"" + editUrl + "\">edit</a>\n" +
                         "                                <a href=\"" + deleteUrl + "\">delete</a>\n";
@@ -164,7 +173,6 @@ function checkIfCreated(activities, activity){
 }
 
 function checkFilters(data){
-    console.log(data);
     if(data.length !== 0){
         var filters = data.filters;
         var own = data.own;

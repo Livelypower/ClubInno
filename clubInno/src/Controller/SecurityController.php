@@ -36,5 +36,6 @@ class SecurityController extends AbstractController
             $session = $this->get('session');
             $session->remove('lastUrl');
         }
+
     }
 }

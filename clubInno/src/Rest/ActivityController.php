@@ -114,7 +114,8 @@ class ActivityController extends AbstractFOSRestController
     {
         $filters = $request->get('filters');
         $own = $request->get('own');
-        $user = $this->getUser();
+        $id = $request->get('id');
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
         $allActivities = array();
 
 
@@ -141,7 +142,7 @@ class ActivityController extends AbstractFOSRestController
         }
 
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
-        return View::create($allActivities, Response::HTTP_OK);
+        return View::create($activities, Response::HTTP_OK);
     }
 
     /**
@@ -180,9 +181,10 @@ class ActivityController extends AbstractFOSRestController
      * @Rest\Get("/currentUser")
      * @return View
      */
-    public function getCurrentUser(): View
+    public function getCurrentUser(Request $request): View
     {
-        $user = $this->getUser();
+        $id = $request->get('id');
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
 
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
         return View::create($user, Response::HTTP_OK);

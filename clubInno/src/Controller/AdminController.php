@@ -44,9 +44,11 @@ class AdminController extends AbstractController
     public function listApplications()
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
         $user = $this->getUser();
         return $this->render('admin/application_list.html.twig',[
-            'apiToken' => $user->getApiToken()
+            'apiToken' => $user->getApiToken(),
+            'tags' => $tags
         ]);
     }
 
