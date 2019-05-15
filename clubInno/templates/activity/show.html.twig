@@ -92,7 +92,7 @@
                         {% if activity.users is not empty %}
                         <ul>
                             {% for user in activity.users %}
-                                <li><span class="orange-text text-lighten-2">{{ user.firstname }} {{ user.lastname }}</span></li>
+                                <li><span class="orange-text text-lighten-2">{{ user.firstname }} {{ user.lastname }} ({{ user.orientation }})</span></li>
                             {% endfor %}
                         </ul>
                         {% else %}

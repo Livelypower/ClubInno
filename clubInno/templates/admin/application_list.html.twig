@@ -22,6 +22,15 @@
             <div class="col s12">
                 <a href="#" class="btn" id="hideFilters">Masquer les filters</a>
                 <form id="filterForm" action="#">
+                    <ul>
+                        <li>
+                            <label>
+                                <input type="checkbox" id="ownActivities" value="true" />
+                                <span>Afficher seulement vos activités</span>
+                            </label>
+                        </li>
+                    </ul>
+                    <h5>Des tags</h5>
                     <ul id="filters">
                         {% for tag in tags %}
                             <li>
@@ -32,13 +41,16 @@
                             </li>
                         {% endfor %}
                     </ul>
-                    <ul>
-                        <li>
-                            <label>
-                                <input type="checkbox" id="ownActivities" value="true" />
-                                <span>Afficher seulement vos activités</span>
-                            </label>
-                        </li>
+                    <h5>Des orientations</h5>
+                    <ul id="orientations">
+                        {% for ori in orientations %}
+                            <li>
+                                <label>
+                                    <input type="checkbox" id="{{ ori }}" value="{{ ori }}" />
+                                    <span>{{ ori }}</span>
+                                </label>
+                            </li>
+                        {% endfor %}
                     </ul>
                     <a href="#" class="btn grey lighten-1" id="filterActivities">Filtrer</a>
                 </form>

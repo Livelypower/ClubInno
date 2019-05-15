@@ -122,10 +122,24 @@ class CommentController extends AbstractFOSRestController
      * Retrieves all User Objects
      * @Rest\Get("/admin/users")
      */
-    public function getUsers(): View
+    public function getUsers(Request $request): View
     {
-        //$blogPost = $this->getDoctrine()->getRepository(BlogPost::class)->find($blogPostId);
-        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $oris = $request->get('orientations');
+        $allUsers = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $users = array();
+
+        if(empty($oris)){
+            $users = $allUsers;
+        }else{
+            foreach($allUsers as $user){
+                if(in_array($user->getOrientation(), $oris)){
+                    array_push($users, $user);
+                }
+            }
+        }
+
+
+
         // In case our GET was a success we need to return a 200 HTTP OK response with the request object
         return View::create($users, Response::HTTP_OK);
     }
