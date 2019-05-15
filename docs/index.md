@@ -2,7 +2,7 @@
 ## Index and content
 
 ### Controllers
-- [AccountController](docs/AccountController.md)
+- [AccountController](./AccountController.md)
 
 ### DataFixtures
 
