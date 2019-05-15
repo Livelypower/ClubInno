@@ -45,11 +45,37 @@ class AdminController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $tags = $this->getDoctrine()->getRepository(Tag::class)->findAll();
+        $users = $this->getDoctrine()->getRepository(User::class)->findAll();
+        $orientations = array();
+        foreach ($users as $usr){
+            if($this->hasActiveApplications($usr)){
+                if(!in_array($usr->getOrientation(), $orientations) && $usr->getOrientation() != ""){
+                    array_push($orientations, $usr->getOrientation());
+                }
+            }
+        }
+
         $user = $this->getUser();
         return $this->render('admin/application_list.html.twig',[
             'apiToken' => $user->getApiToken(),
-            'tags' => $tags
+            'tags' => $tags,
+            'orientations' => $orientations
         ]);
+    }
+
+    public function hasActiveApplications($user){
+        $active = false;
+        $applications = $user->getApplications();
+        $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active' => 1));
+
+        if(!empty($applications)){
+            foreach ($applications as $application){
+                if($application->getSemester()->getId() == $semester->getId()){
+                    $active = true;
+                }
+            }
+        }
+        return $active;
     }
 
     /**

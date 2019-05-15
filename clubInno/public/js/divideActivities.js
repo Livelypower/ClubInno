@@ -6,12 +6,12 @@ $(document).ready(function () {
     $("#hideFilters").hide();
     var apiToken = $("#data").html();
     var id = $("#userid").html();
-    var data = {'filters': [], 'own': false, 'id': id};
+    var data = {'filters': [], 'orientations': [], 'own': false, 'id': id};
 
     if (localStorage.getItem('applicationFilters') !== null) {
         data = JSON.parse(localStorage.getItem('applicationFilters'));
         if(data.id !== id){
-            data = [];
+            data = {'filters': [], 'orientations': [], 'own': false, 'id': id};
         }
     }
     checkFilters(data);
@@ -23,11 +23,17 @@ $(document).ready(function () {
                 filters.push($(this).val());
             }
         });
+        var oris = [];
+        $('#orientations input:checkbox').each(function () {
+            if(this.checked){
+                oris.push($(this).val());
+            }
+        });
 
         var own = $('#ownActivities').prop('checked');
-        data = {'filters': filters, 'own': own, 'id': id};
+        data = {'filters': filters, 'orientations': oris, 'own': own, 'id': id};
         localStorage.setItem('applicationFilters',JSON.stringify(data));
-        getActivities(data, apiToken);
+        getUsers(data, apiToken);
     });
     $('#showFilters').click(function () {
         $(this).hide();
@@ -48,6 +54,7 @@ $(document).ready(function () {
         $.ajax({
             method: "GET",
             url: "http://localhost:8000/api/admin/users",
+            data: data,
             headers: {
                 'X-AUTH-TOKEN':apiToken
             },
@@ -424,16 +431,20 @@ $(document).ready(function () {
 function checkFilters(data){
     if(data.length !== 0){
         var filters = data.filters;
+        var oris = data.orientations;
         var own = data.own;
         filters.forEach(function(filter){
-            $("#"+filter).prop("checked", true);
+            $("[id = filter]").prop("checked", true);
+        });
+        oris.forEach(function(ori){
+            console.log(ori);
+            $("[id = '" + ori + "']").prop("checked", true);
         });
         $("#ownActivities").prop("checked", own);
-        if(filters.length !== 0 || own){
+        if(filters.length !== 0 || own || oris.length !== 0){
             $("#filterForm").show();
             $("#hideFilters").show();
             $("#showFilters").hide();
         }
     }
-
 }
