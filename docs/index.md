@@ -14,7 +14,6 @@
 - [SecurityController](./Controllers/SecurityController.md)
 - [TagController](./Controllers/TagController.md)
 
-
 ### DataFixtures
 
 ### Entities
