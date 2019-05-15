@@ -2,71 +2,71 @@
 ## AccountController
 
 ### Content
-- index()
-- editAccount()
-- changePassword()
-- basket()
-- deleteFromBasket()
-- clearbasket()
-- forgotPassword()
-- viewApplications()
-- random_str()
-- generateUniqueFileName()
+- [index](#index)
+- [editAccount](#editAccount)
+- [changePassword](#changePassword)
+- [basket](#basket)
+- [deleteFromBasket](#deleteFromBasket)
+- [clearBasket](#clearBasket)
+- [forgotPassword](#forgotPassword)
+- [viewApplications](#viewApplications)
+- [random_str](#random_str)
+- [generateUniqueFileName](#generateUniqueFileName)
 
-#### index()
+#### index
 Returns the profile page of the user you are currently logged in as.
 
 Route:
 > [domain].[ext]/account
 
 
-#### editAccount()
+#### editAccount
 Redirects you to the profile edit page, where you can change your account details.
 Makes use of the [AccountEditForm](../Forms/AccountEditForm.md).
 
 Route:
 > [domain].[ext]/account/aditAccount
 
-#### changePassword()
+#### changePassword
 Redirects you to the password change form.
 Uses the [ChangePasswordForm](../Forms/ChangePasswordForm.md).
 
 Route:
 > [domain].[ext]/account/changePassword
 
-### basket()
+#### basket
 Shows you the contents of your basket.
 
 Route:
 > [domain].[ext]/account/basket
 
-#### deleteFromBasket()
+#### deleteFromBasket
 Removes a specified Activity from your basket.
 
 Route:
 > [domain].[ext]/account/basket/delete/{activityId}
 
-#### clearbasket()
+#### clearBasket
 Removes all Activities from your basket.
 
 Route:
 > [domain].[ext]/account/basket/clear
 
-#### forgotPassword()
+#### forgotPassword
 Redirects you to the password forgotten form.
 Uses the [PasswordForgottenForm](../Forms/PasswordForgottenForm.md).
 
 Route:
 > [domain].[ext]/account/forgotPassword
 
-#### viewApplications()
+#### viewApplications
 Shows you all the applications you sent in from your basket.
 
 Route:
 > [domain].[ext]/account/applications
 
-#### random_str()
-Generates a string of random characters. Used in forgotPassword().
+#### random_str
+Generates a string of random characters. Used in forgotPassword.
 
 Variables:
 ```
@@ -85,7 +85,7 @@ $this->random_str(32);
 $this->random_str(32, azerty123);
 ```
 
-#### generateUniqueFileName()
+#### generateUniqueFileName
 Generates a unique name for files.
 
 Usage:
