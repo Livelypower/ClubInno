@@ -11,11 +11,14 @@
                     <span class="card-title white-text">Toutes vos applications</span>
                     <div class="row">
                         {% for application in applications %}
-                            <div class="col s12 white-text"><h5>Date: {{ application.date | date('d/m/y')}}</h5></div>
+                            <div class="col s12 white-text">
+                                <h6>Date: {{ application.date | date('d/m/y')}}</h6>
+                                <h6>Semester: {{ application.semester.startYear }}-{{ application.semester.endYear }}</h6>
+                            </div>
                             <div class="col s12 white-text">
                                 <ul>
                                     {% for activity in application.activities %}
-                                        <li><strong>{{ activity.name }}</strong></li>
+                                        <li><strong>Activity:</strong> {{ activity.name }}</li>
                                         <ul>
                                             {% for tag in activity.tags %}
                                                 <li><div class="chip">{{ tag.name }}</div></li>
@@ -25,7 +28,7 @@
                                 </ul>
                             </div>
                             <div class="col s12 white-text" style="padding-bottom: 10px">
-                                Lettre de motivation: <a href="{{ application.motivationLetterPath }}">lettre de motivation</a>
+                                Lettre de motivation: <a href="{{ asset('uploads/' ~ application.motivationLetterPath) }}">lettre de motivation</a>
                             </div>
                         {% endfor %}
                     </div>
