@@ -3,6 +3,8 @@
 {% block title %}All Blogposts{% endblock %}
 
 {% block body %}
+    {% set currentPath = path(app.request.attributes.get('_route'),
+        app.request.attributes.get('_route_params')) %}
     {{ parent() }}
     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
         <a href="{{ path("blog_new") }}" class="btn green accent-4">Nouveau BlogPost</a>
@@ -10,9 +12,14 @@
     <div class="row">
         <div class="col s12">
             <h4>{% if activity != null %}{{ activity.name }}: {% endif %}Toutes les blogs</h4>
+            {{ form_start(form, {'attr': {'class': 'white-text'}}) }}
+            {{ form_row(form.activities, {'attr': {'class': 'white-text'}}) }}
+            {{ form_widget(form.save, {'attr': {'class': 'btn green accent-4'}}) }}
+            {{ form_end(form) }}
             <table>
                 <thead>
-                <th>Name</th>
+                <th>Nom</th>
+                <th>Activité</th>
                 {% if app.user %}
                     <th>Action</th>
                 {% endif %}
@@ -22,6 +29,11 @@
                     <tr>
                         <td>
                             <a href="{{ path('blog_show', {'id': post.id}) }}">{{ post.title }} by {{ post.user.firstname }} {{ post.user.lastname }} at {{ post.datetime | date('d/m/y H:i') }}</a>
+                        </td>
+                        <td>
+                            <a href="{{ path('activity_show', {'id': post.activity.id, 'url': currentPath}) }}">
+                                {{ post.activity.name }}
+                            </a>
                         </td>
                         {% if app.user %}
                         <td>
@@ -45,4 +57,5 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <script type="text/javascript" src="{{ asset('js/select.js') }}"></script>
 {% endblock %}

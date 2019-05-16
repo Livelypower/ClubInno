@@ -9,6 +9,7 @@ use App\Form\ApplicationType;
 use App\Entity\Application;
 use App\Form\ChangePasswordForm;
 use App\Form\PasswordForgottenForm;
+use App\Form\SemesterFilterType;
 use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -282,16 +283,32 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/applications", name="account_applications")
      */
-    public function viewApplications(){
+    public function viewApplications(Request $request){
         $roles = $this->getUser()->getRoles();
 
         if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)) {
             $user = $this->getUser();
-
             $applications = $this->getDoctrine()->getRepository(Application::class)->findBy(['user' => $user], ['date' => 'DESC']);
+            $semesters = $this->getDoctrine()->getRepository(Semester::class)->findAll();
+
+            $form = $this->createForm(SemesterFilterType::class);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $semestersForm = $form->get('semesters')->getData();
+
+                if($semestersForm != null || !empty($semestersForm)){
+                    $semesters = array();
+                    foreach ($semestersForm as $semesterForm){
+                        $semester = $this->getDoctrine()->getRepository(Semester::class)->find($semesterForm->getId());
+                        array_push($semesters, $semester);
+                    }
+                }
+            }
 
             return $this->render('account/viewApplications.html.twig', [
-                'applications' => $applications
+                'applications' => $applications,
+                'semesters' => $semesters,
+                'form' => $form->createView()
             ]);
         }else{
             throw new AccessDeniedException();

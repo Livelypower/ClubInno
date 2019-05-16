@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Activity;
 use App\Entity\BlogPost;
 use App\Entity\Comment;
+use App\Form\ActivityFilterType;
 use App\Form\BlogAddFilesType;
 use App\Form\BlogPostEditType;
 use App\Form\BlogPostType;
@@ -19,10 +20,28 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/blog", name="blog")
      */
-    public function index()
+    public function index(Request $request)
     {
         $blogPosts = $this->getDoctrine()->getRepository(BlogPost::class)->findAll();
         $user = $this->getUser();
+
+        $form = $this->createForm(ActivityFilterType::class);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $activities = $form->get('activities')->getData();
+
+            if($activities[0] != null || !empty($activities[0]) || count($activities[0]) != 0){
+                $blogPosts = array();
+                foreach ($activities as $activity){
+                    if(!empty($activity->getBlogPosts())){
+                        foreach($activity->getBlogPosts() as $blog){
+                            $blogPost = $this->getDoctrine()->getRepository(BlogPost::class)->find($blog->getId());
+                            array_push($blogPosts, $blogPost);
+                        }
+                    }
+                }
+            }
+        }
 
         if ($user == null){
             $apiToken = null;
@@ -34,7 +53,8 @@ class BlogPostController extends AbstractController
             'controller_name' => 'BlogPostController',
             'blogPosts' => $blogPosts,
             'activity' => null,
-            'apiToken' => $apiToken
+            'apiToken' => $apiToken,
+            'form' => $form->createView()
         ]);
     }
 
