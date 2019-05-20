@@ -145,10 +145,6 @@ class AccountController extends AbstractController
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                //$file = $request->files->get('application')['motivationLetterPath'];
-                //$filename = $request->get('application')['motivationLetterPath'];
-                //$uploads_directory = $this->getParameter('uploads_directory');
-
                 $file = $form->get('motivationLetterPath')->getData();
                 $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
 

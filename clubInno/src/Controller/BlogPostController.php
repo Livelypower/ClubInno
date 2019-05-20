@@ -178,7 +178,7 @@ class BlogPostController extends AbstractController
         }
 
 
-        return $this->render('blog_post/index.html.twig', [
+        return $this->render('blog_post/showPerActivity.html.twig', [
             'blogPosts' => $blogs,
             'activity' => $activity,
             'apiToken' => $apitoken

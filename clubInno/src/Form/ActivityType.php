@@ -55,14 +55,9 @@ class ActivityType extends AbstractType
                 'empty_data' => ''
             ])
             ->add('tags', EntityType::class, [
-                // looks for choices from this entity
                 'label' => 'Des tags',
                 'class' => Tag::class,
-
-                // uses the User.username property as the visible option string
                 'choice_label' => 'name',
-
-                // used to render a select box, check boxes or radios
                 'multiple' => true,
                 'required' => false,
                 'empty_data' => '',
@@ -103,37 +98,5 @@ class ActivityType extends AbstractType
                 'label' => 'Des fichiers'
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
-
-       /* $builder->get('mainImage')
-            ->addModelTransformer(new CallbackTransformer(
-                function ($filename) {
-                    if($filename == null){
-                        return null;
-                    }
-                    $file = new File($filename);
-                    return $file;
-                },
-                function ($file) {
-                   return $file;
-                }
-            ));
-
-
-        $builder->get('files')
-            ->addModelTransformer(new CallbackTransformer(
-                function ($filenames) {
-                    $files = array();
-                    if($filenames == null || empty($filenames)){
-                        return null;
-                    }
-                    foreach ($filenames as $filename){
-                        array_push($files, new File($filename));
-                    }
-                    return $files;
-                },
-                function ($files) {
-                    return $files;
-                }
-            ));*/
     }
 }

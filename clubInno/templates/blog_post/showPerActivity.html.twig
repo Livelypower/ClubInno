@@ -12,19 +12,13 @@
     <div class="row">
         <div class="col s12">
             <h4>{% if activity != null %}{{ activity.name }}: {% endif %}Toutes les blogs</h4>
-            {% if form %}
-                {{ form_start(form, {'attr': {'class': 'white-text'}}) }}
-                {{ form_row(form.activities, {'attr': {'class': 'white-text'}}) }}
-                {{ form_widget(form.save, {'attr': {'class': 'btn green accent-4'}}) }}
-                {{ form_end(form) }}
-            {% endif %}
 
             {% if blogPosts is not empty %}
                 <table>
                     <thead>
                     <th>Nom</th>
                     <th>Activité</th>
-                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_TEACHER') %}
+                    {% if app.user %}
                         <th>Action</th>
                     {% endif %}
                     </thead>
@@ -42,9 +36,9 @@
                             {% if app.user %}
                                 <td>
                                     {% if post.user.id == app.user.id or 'ROLE_ADMIN' in app.user.roles %}
-                                        <a href="{{ path('blog_edit', {'id': post.id}) }}"><i class="material-icons">edit</i></a>
+                                        <a href="{{ path('blog_edit', {'id': post.id}) }}"><i class="material-icons ">edit</i></a>
                                         <a href="{{ path('blog_delete', {'id': post.id}) }}"><i class="material-icons red-text text-accent-4">delete</i></a>
-                                    {% elseif 'ROLE_TEACHER' in app.user.roles %}
+                                    {% else %}
                                         <a class="grey-text lighten-1"><i class="material-icons">edit</i></a>
                                         <a class="grey-text lighten-1"><i class="material-icons">delete</i></a>
                                     {% endif %}
@@ -60,6 +54,13 @@
 
         </div>
     </div>
+
+    <div class="row">
+        <div class="col s12">
+            <a href="{{ path('blog') }}" class="btn red accent-2">Toutes les blogs</a>
+        </div>
+    </div>
+
     <div id="data" hidden>{{ apiToken }}</div>
 {% endblock %}
 

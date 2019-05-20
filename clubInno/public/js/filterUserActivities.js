@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    var baseUrl = "localhost:8000";
     $("#filterForm").hide();
     $("#hideFilters").hide();
     var filters = [];
@@ -8,7 +9,7 @@ $(document).ready(function(){
     checkFilters(filters);
     var apiToken = $("#data").html();
     var data = {'filters': filters};
-    ajaxCall(data, apiToken);
+    ajaxCall(data, apiToken, baseUrl);
 
     $("#filterActivities").click(function(){
         filters = [];
@@ -21,7 +22,7 @@ $(document).ready(function(){
         checkFilters(filters);
         localStorage.setItem('userFilters',JSON.stringify(filters));
         data = {'filters': filters};
-        ajaxCall(data, apiToken);
+        ajaxCall(data, apiToken, baseUrl);
     });
 
     $('#showFilters').click(function () {
@@ -39,10 +40,11 @@ $(document).ready(function(){
 
 });
 
-function ajaxCall(data, apiToken){
+function ajaxCall(data, apiToken, baseUrl){
+    var url = "http://" + baseUrl + "/api/activeActivities"
     $.ajax({
         method: "GET",
-        url: "http://vps589558.ovh.net/api/activeActivities",
+        url: url,
         data: data,
         headers: {
             'X-AUTH-TOKEN':apiToken
@@ -50,7 +52,7 @@ function ajaxCall(data, apiToken){
         success: function (response) {
             console.log('ok');
             console.log(response);
-            showActivities(response);
+            showActivities(response, baseUrl);
         },
         error: function (response) {
             console.log(response);
@@ -59,7 +61,7 @@ function ajaxCall(data, apiToken){
     });
 }
 
-function showActivities(activities){
+function showActivities(activities, baseUrl){
     var html = "";
 
     activities.forEach(function(activity){
@@ -69,7 +71,7 @@ function showActivities(activities){
         if(activity.main_image == null){
             card += "<img src=\"http://lorempixel.com/800/400/technics\" alt=\"\">\n"
         }else{
-            var imageUrl = "http://vps589558.ovh.net/uploads/" + activity.main_image;
+            var imageUrl = "http://" + baseUrl + "/uploads/" + activity.main_image;
             card += "<img src=\"" + imageUrl + "\" alt=\"\">\n"
         }
 
@@ -77,7 +79,7 @@ function showActivities(activities){
             "                    <div class=\"card-content white-text\">\n" +
             "                        <span class=\"card-title\">" + activity.name;
 
-        var activityShowUrl = "http://vps589558.ovh.net/activity/" + activity.id;
+        var activityShowUrl = "http://" + baseUrl + "/activity/" + activity.id;
         card += "</span>\n" +
             "                        <div class=\"row\"></div>\n" +
             "                        <p><b>Inscriptions: </b>" + activity.users.length + "/" + activity.max_amount_students + "</p>\n" +
