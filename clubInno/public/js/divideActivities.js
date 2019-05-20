@@ -225,7 +225,7 @@ $(document).ready(function () {
                 var count = getStudentsPerActivity(activity.id);
 
                 if(count >= activity.max_amount_students){
-                    var number = $("#" + activity.id).data('number');
+                    var number = $("#a" + activity.id).data('number');
                     number++;
                     $('td:nth-child(' + number  + ')').show();
                     $('th:nth-child(' + number + ')').show();
@@ -237,8 +237,9 @@ $(document).ready(function () {
             activities.forEach(function(activity){
                 var count = getStudentsPerActivity(activity.id);
 
+
                 if(count >= activity.max_amount_students){
-                    var number = $("#" + activity.id).data('number');
+                    var number = $("#a" + activity.id).data('number');
                     number++;
                     $('td:nth-child(' + number  + ')').hide();
                     $('th:nth-child(' + number + ')').hide();
@@ -397,7 +398,7 @@ $(document).ready(function () {
         }
 
         function getStudentsPerActivity(activityId){
-            var header = $("#" + activityId).text();
+            var header = $("#a" + activityId).text();
             var count = header.substring(
                 header.lastIndexOf("(") + 1,
                 header.lastIndexOf("/")
@@ -434,7 +435,7 @@ function checkFilters(data){
         var oris = data.orientations;
         var own = data.own;
         filters.forEach(function(filter){
-            $("[id = filter]").prop("checked", true);
+            $("[id = '" +filter + "']").prop("checked", true);
         });
         oris.forEach(function(ori){
             console.log(ori);

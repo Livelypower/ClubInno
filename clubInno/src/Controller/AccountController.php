@@ -139,6 +139,16 @@ class AccountController extends AbstractController
 
         if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)){
             $application = new Application();
+            $user = $this->getUser();
+            $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active'=>1));
+
+            $currentActivity = null;
+
+            foreach ($user->getRegistrations() as $registration){
+                if($registration->getSemester()->getId() == $semester->getId()){
+                    $currentActivity = $registration;
+                }
+            }
 
             $form = $this->createForm(ApplicationType::class, $application);
 
@@ -184,6 +194,7 @@ class AccountController extends AbstractController
 
             return $this->render('account/basket.html.twig', [
                 'form' => $form->createView(),
+                'currentActivity' => $currentActivity
             ]);
         }
         else{

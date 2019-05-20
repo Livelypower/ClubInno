@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    var baseUrl = "localhost:8000";
     var apiToken = $('#data').html();
     $('#openCommentForm').click(function(){
         if($('#userId').val() != ""){
@@ -76,7 +77,7 @@ $(document).ready(function(){
         console.log(formContent);
         $.ajax({
             method: "POST",
-            url: "http://vps589558.ovh.net/api/comment/add",
+            url: "http://" + baseUrl + "/api/comment/add",
             data: formContent,
             headers: {
                 'X-AUTH-TOKEN': apiToken
@@ -98,7 +99,7 @@ $(document).ready(function(){
         var blogPost = $('#postId').val();
         $.ajax({
             method: "GET",
-            url: "http://vps589558.ovh.net/api/blog/"+blogPost+"/comments",
+            url: "http://" + baseUrl + "/api/blog/"+blogPost+"/comments",
             headers: {
                 'X-AUTH-TOKEN':apiToken
             },
@@ -165,7 +166,7 @@ $(document).ready(function(){
     function deleteComment(commentId){
         $.ajax({
             method: "DELETE",
-            url: "http://vps589558.ovh.net/api/comment/delete/" + commentId,
+            url: "http://" + baseUrl+ "/api/comment/delete/" + commentId,
             headers: {
                 'X-AUTH-TOKEN':apiToken
             },
@@ -189,7 +190,7 @@ $(document).ready(function(){
         };
         $.ajax({
             method: "PATCH",
-            url: "http://vps589558.ovh.net/api/comment/update/" + id,
+            url: "http://" + baseUrl + "/api/comment/update/" + id,
             data: formContent,
             headers: {
                 'X-AUTH-TOKEN':apiToken

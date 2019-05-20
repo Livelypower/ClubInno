@@ -76,7 +76,11 @@
                                 </div>
                             </div>
                         {% else %}
-                            <p>Aucune activité pour le semestre actif.</p>
+                            {% if activity is null %}
+                                <p>Aucune activité pour le semestre actif.</p>
+                            {% elseif group is null %}
+                                <p>Aucune groupe pour votre activité.</p>
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div id="blogs" class="col s12">
@@ -98,7 +102,11 @@
                                 {% endfor %}
                             {% endif %}
                         {% else %}
-                            <p>Aucune activité pour le semestre actif.</p>
+                            {% if activity is null %}
+                                <p>Aucune activité pour le semestre actif.</p>
+                            {% elseif group is null %}
+                                <p>Aucune groupe pour votre activité.</p>
+                            {% endif %}
                         {% endif %}
                     </div>
                     <div id="calendier" class="col s12">
@@ -132,7 +140,11 @@
                                 {% endfor %}
                             {% endif %}
                         {% else %}
-                            <p>Aucune activité pour le semestre actif.</p>
+                            {% if activity is null %}
+                                <p>Aucune activité pour le semestre actif.</p>
+                            {% elseif group is null %}
+                                <p>Aucune groupe pour votre activité.</p>
+                            {% endif %}
                         {% endif %}
                     </div>
                 {% elseif role == 'ROLE_ADMIN' %}
