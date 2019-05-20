@@ -36,7 +36,7 @@
                             {% endif %}
 
 
-                            {% if is_granted('ROLE_USER') %}
+                            {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') and not is_granted('ROLE_TEACHER')%}
                             {% set inlist = false %}
                                 {% for item in app.session.get('basket') %}
                                         {% if item.id == activity.id %}

@@ -3,12 +3,12 @@ $(document).ready(function(){
     $("#hideFilters").hide();
     var id = $("#userid").html();
     var own = false;
-    var data = [];
+    var data = {'filters': [], 'own': own, 'id': id};
 
     if (localStorage.getItem('adminFilters') !== null) {
         data = JSON.parse(localStorage.getItem('adminFilters'));
         if(data.id !== id){
-            data = [];
+            data = {'filters': [], 'own': own, 'id': id};
         }
     }
     checkFilters(data);

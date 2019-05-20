@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    var baseUrl = "localhost:8000";
     var students;
     var activities;
     var semester;
@@ -53,7 +54,7 @@ $(document).ready(function () {
     function getUsers(data) {
         $.ajax({
             method: "GET",
-            url: "http://localhost:8000/api/admin/users",
+            url: "http://" + baseUrl + "/api/admin/users",
             data: data,
             headers: {
                 'X-AUTH-TOKEN':apiToken
@@ -71,13 +72,12 @@ $(document).ready(function () {
     function getActiveSemester(data) {
         $.ajax({
             method: "GET",
-            url: "http://localhost:8000/api/admin/semester",
+            url: "http://" + baseUrl + "/api/admin/semester",
             headers: {
                 'X-AUTH-TOKEN':apiToken
             },
             success: function (response) {
                 semester = response;
-                //activities = semester.activities;
                 console.log(semester);
                 getActivities(data, apiToken)
             },
@@ -91,7 +91,7 @@ $(document).ready(function () {
         console.log(data);
         $.ajax({
             method: "GET",
-            url: "http://localhost:8000/api/activities",
+            url: "http://" + baseUrl + "/api/activities",
             data: data,
             headers: {
                 'X-AUTH-TOKEN':apiToken
@@ -148,7 +148,7 @@ $(document).ready(function () {
             });
 
             if(student.roles[0] === "ROLE_USER" && applications.length !== 0){
-                var url = "http://localhost:8000/uploads/" + applications[0].motivation_letter_path;
+                var url = "http://" + baseUrl + "/uploads/" + applications[0].motivation_letter_path;
                 if(registrations.length !== 0){
                     $("#tableBody").append('<tr id="s' + student.id + '" class="registrated"><td>' + student.email + " (" + student._orientation
                         + ')<a title="Lettre de motivation" href="' + url + '" download><i class="material-icons right">mail</i></a>' + '</td>');
@@ -328,7 +328,7 @@ $(document).ready(function () {
                 registrations.forEach(function(registration) {
                     $.ajax({
                         method: "POST",
-                        url: "http://localhost:8000/api/admin/registration/add",
+                        url: "http://" + baseUrl +"/api/admin/registration/add",
                         data: registration,
                         headers: {
                             'X-AUTH-TOKEN':apiToken
