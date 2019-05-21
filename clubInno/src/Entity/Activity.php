@@ -5,8 +5,6 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ActivityRepository")
@@ -54,11 +52,6 @@ class Activity
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
-     * @Assert\Image(mimeTypesMessage = "Entrez une image valide.")
-     * @Assert\File(
-     *      maxSize="2048k",
-     *      maxSizeMessage="Le fichier est trop gros!"
-     *     )
      */
     private $mainImage;
 
@@ -70,12 +63,6 @@ class Activity
 
     /**
      * @ORM\Column(type="array", nullable=true)
-     * @Assert\All({
-     *     @Assert\File(
-     *      maxSize="2048k",
-     *      maxSizeMessage="Un des fichiers est trop gros!"
-     *      )
-     *   })
      */
     private $files = [];
 
@@ -88,14 +75,12 @@ class Activity
      * Many activities have one semester. This is the owning side.
      * @ORM\ManyToOne(targetEntity="Semester", inversedBy="activities")
      * @ORM\JoinColumn(name="semester_id", referencedColumnName="id")
-     * @Assert\NotBlank()
      */
     private $semester;
 
     /**
      * One Activity has many ActivityGroups. This is the inverse side.
      * @ORM\OneToMany(targetEntity="ActivityGroup", cascade={"persist", "remove"}, mappedBy="activity")
-     * @Assert\NotBlank()
      */
     private $activityGroups;
 

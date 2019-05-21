@@ -25,9 +25,9 @@
             </div>
             <table>
                 <thead>
-                <th>Name</th>
+                <th>Nom</th>
                 <th>Email</th>
-                <th>Roles</th>
+                <th>Rôles</th>
                 <th>Action</th>
                 </thead>
                 <tbody>
@@ -54,8 +54,8 @@
                             </ul>
                         </td>
                         <td>
-                            <a href="{{ path('admin_make_user_admin', {'id': user.id}) }}" class="btn blue lighten-2">Make admin</a>
-                            <a href="{{ path('admin_make_user_teacher', {'id': user.id}) }}" class="btn blue lighten-2">Make teacher</a>
+                            <a href="{{ path('admin_make_user_admin', {'id': user.id}) }}" class="btn blue lighten-2">Faire admin</a>
+                            <a href="{{ path('admin_make_user_teacher', {'id': user.id}) }}" class="btn blue lighten-2">Faire teacher</a>
                         </td>
                     </tr>
                 {% endfor %}

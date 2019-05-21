@@ -15,19 +15,15 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use App\Entity\Tag;
-use App\Entity\Image;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints\All;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\GreaterThan;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints\Type;
 
 
 class ActivityType extends AbstractType
@@ -90,12 +86,29 @@ class ActivityType extends AbstractType
                 'mapped' => true,
                 'required' => false,
                 'label' => 'Image',
+                'constraints' => [
+                    new Image([
+                        'mimeTypesMessage' => "Entrez une image valide."
+                    ]),
+                    new File([
+                        'maxSize' => "2048k",
+                        'maxSizeMessage' => "Le fichier est trop gros!"
+                    ])
+                ]
             ])
             ->add('files', FileType::class, [
                 'mapped' => true,
                 'required' => false,
                 'multiple' => true,
-                'label' => 'Des fichiers'
+                'label' => 'Des fichiers',
+                'constraints' => [
+                    new All([
+                        New File([
+                            'maxSize' => "2048k",
+                            'maxSizeMessage' => "Un des fichiers est trop gros!"
+                        ])
+                    ])
+                ]
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
     }

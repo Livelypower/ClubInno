@@ -51,7 +51,5 @@ class ActivityFilesEditType extends AbstractType
                 ]
             ])
             ->add('save', SubmitType::class, ['label' => 'Sauvegarder']);
-
-
     }
 }

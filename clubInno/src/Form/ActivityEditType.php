@@ -67,7 +67,6 @@ class ActivityEditType extends AbstractType
                 'required' => false,
                 'empty_data' => '',
                 'invalid_message' => 'Sélectionnez au moins un tag.'
-
             ])
             ->add('maxAmountStudents', NumberType::class, [
                 'label' => 'Max étudiants',

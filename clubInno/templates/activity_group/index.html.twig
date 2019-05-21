@@ -1,14 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Toutes les Groupes{% endblock %}
+{% block title %}Toutes les groupes{% endblock %}
 
 {% block body %}
     {{ parent() }}
-    <a href="{{ path("activity_group_new") }}" class="btn green accent-4">Nouveau Groupe</a>
+    <a href="{{ path("activity_group_new") }}" class="btn green accent-4">Nouveau groupe</a>
 
     <div class="row">
         <div class="col s12">
-            <h4>Toutes les Groupes</h4>
+            <h4>Toutes les groupes</h4>
 
             <ul class="collapsible popout">
                 {% for activity in activities %}

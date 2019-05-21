@@ -218,6 +218,7 @@ class BlogPostController extends AbstractController
 
             $form->handleRequest($request);
 
+
             if ($form->isSubmitted() && $form->isValid()) {
                 $blogPost = $form->getData();
                 $blogPost->setUser($user);

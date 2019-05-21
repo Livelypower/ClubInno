@@ -142,13 +142,13 @@ function showActivities(activities, user){
                 card +=  "<div class=\"right hide-on-med-and-down\">\n";
 
                 if(role === 'admin'){
-                    card += "                                <a href=\"" + toggleUrl + "\">toggle</a>\n";
+                    card += "                                <a href=\"" + toggleUrl + "\">basculer</a>\n";
                 }
 
                 console.log(user);
                 if(role === 'admin' || checkIfCreated(user.created_activities, activity)){
-                    card +=  "                                <a href=\"" + editUrl + "\">edit</a>\n" +
-                        "                                <a href=\"" + deleteUrl + "\">delete</a>\n";
+                    card +=  "                                <a href=\"" + editUrl + "\">modifier</a>\n" +
+                        "                                <a href=\"" + deleteUrl + "\">effacer</a>\n";
                 }
 
             card += "                            </div>\n" +

@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de Compte{% endblock %}
+{% block title %}Détails du compte{% endblock %}
 
 {% block body %}
     {{ parent() }}
@@ -26,12 +26,12 @@
                             {% if role == 'ROLE_USER' %}
                                 <ul>
                                     <li><a href="{{ path('edit_account') }}" class="orange-text text-lighten-2">Modifier profil</a></li>
-                                    <li><a href="{{ path('calendar') }}" class="orange-text text-lighten-2">Calendier</a></li>
+                                    <li><a href="{{ path('calendar') }}" class="orange-text text-lighten-2">Calendrier</a></li>
                                 </ul>
                             {% elseif role == 'ROLE_ADMIN' %}
                                 <ul>
                                     <li><a href="{{ path('edit_account') }}" class="orange-text text-lighten-2">Modifier profil</a></li>
-                                    <li><a href="{{ path('admin_calendar') }}" class="orange-text text-lighten-2">Calendier</a></li>
+                                    <li><a href="{{ path('admin_calendar') }}" class="orange-text text-lighten-2">Calendrier</a></li>
                                     <li><a href="{{ path('admin_list_users') }}" class="orange-text text-lighten-2">Utilisateurs</a></li>
                                     <li><a href="{{ path('admin_list_activities') }}" class="orange-text text-lighten-2">Activités</a></li>
                                     <li><a href="{{ path('admin_semester') }}" class="orange-text text-lighten-2">Semestres</a></li>
@@ -49,7 +49,7 @@
                     <ul class="tabs">
                         <li class="tab col s4"><a href="#activity">Activité</a></li>
                         <li class="tab col s4"><a href="#blogs">Blogs</a></li>
-                        <li class="tab col s4"><a href="#calendier">Calendier</a></li>
+                        <li class="tab col s4"><a href="#calendier">Calendrier</a></li>
                     </ul>
                     <div id="activity" class="col s12">
                         {% if activity is not null and  group is not null %}

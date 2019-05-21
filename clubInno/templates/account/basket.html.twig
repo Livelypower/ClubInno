@@ -18,11 +18,11 @@
             <div class="card blue-grey darken-1">
                 <div class="card-content white-text">
                     {% if currentActivity is not null %}
-                        Vous êtes déjà affecté à une activité ce semsetre.
+                        Vous êtes déjà affecté à une activité ce semestre.
                         Voir votre <a class="orange-text text-lighten-2" href="{{ path('account') }}">profil</a> pour plus d'info.
                     {% else %}
                         {% if basket is not empty %}
-                            <h6>Vos activitiés selectionnées: </h6>
+                            <h6>Vos activités selectionnées: </h6>
 
                             <ul class="collection black-text">
                                 {% for item in basket %}
@@ -43,7 +43,7 @@
                             <br/>
 
                         {% else %}
-                            <p class="white-text">Votre panier est vide. Pour voir toutes les activités, pousser ici:
+                            <p class="white-text">Votre panier est vide. Pour voir toutes les activités, cliquez ici:
                                 <a class="orange-text text-lighten-2" href="{{ path('activity') }}">Toutes les activités</a></p>
                         {% endif %}
                         {{ form(form, {'attr': {'novalidate': 'novalidate'}}) }}
