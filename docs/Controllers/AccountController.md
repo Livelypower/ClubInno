@@ -3,7 +3,7 @@
 
 ### Content
 - [index](#index)
-- [edit](#editaccount)
+- [editAccount](#editaccount)
 - [changePassword](#changepassword)
 - [basket](#basket)
 - [deleteFromBasket](#deletefrombasket)

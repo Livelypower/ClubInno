@@ -4,8 +4,8 @@
 ### Content
 - [index](#index)
 - [new](#new)
-- [editActivityGroup](#editActivityGroup)
-- [deleteActivityGroup](#deleteActivityGroup)
+- [editActivityGroup](#editactivitygroup)
+- [deleteActivityGroup](#deleteactivitygroup)
 - [assign](#assign)
 
 #### index

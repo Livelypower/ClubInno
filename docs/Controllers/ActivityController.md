@@ -3,8 +3,8 @@
 
 ### Content
 - [index](#index)
-- [showActivity](#showActivity)
-- [addToBasket](#addToBasket)
+- [showActivity](#showactivity)
+- [addToBasket](#addtobasket)
 
 #### index
 Redirects to the index page of the activities, showing them all in an overview.

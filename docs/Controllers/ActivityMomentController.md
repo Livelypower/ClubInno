@@ -3,9 +3,9 @@
 
 ### Content
 - [index](#index)
-- [newActivityMoment](#newActivityMoment)
-- [editActivityMoment](#editActivityMoment)
-- [deleteActivityMoment](#deleteActivityMoment)
+- [newActivityMoment](#newactivitymoment)
+- [editActivityMoment](#editactivitymoment)
+- [deleteActivityMoment](#deleteactivitymoment)
 
 
 #### index
