@@ -3,7 +3,7 @@
 
 ### Content
 - [index](#index)
-- [editAccount](#editAccount)
+- [editaccount](#editaccount)
 - [changePassword](#changePassword)
 - [basket](#basket)
 - [deleteFromBasket](#deleteFromBasket)
@@ -20,7 +20,7 @@ Route:
 > [domain].[ext]/account
 
 
-#### editAccount
+#### editaccount
 Redirects you to the profile edit page, where you can change your account details.
 Makes use of the [AccountEditForm](../Forms/AccountEditForm.md).
 
