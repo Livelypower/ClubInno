@@ -4,14 +4,14 @@
 ### Content
 - [index](#index)
 - [editaccount](#editaccount)
-- [changePassword](#changePassword)
+- [changePassword](#changepassword)
 - [basket](#basket)
-- [deleteFromBasket](#deleteFromBasket)
-- [clearBasket](#clearBasket)
-- [forgotPassword](#forgotPassword)
-- [viewApplications](#viewApplications)
+- [deleteFromBasket](#deletefrombasket)
+- [clearBasket](#clearbasket)
+- [forgotPassword](#forgotpassword)
+- [viewApplications](#viewapplications)
 - [random_str](#random_str)
-- [generateUniqueFileName](#generateUniqueFileName)
+- [generateUniqueFileName](#generateuniquefilename)
 
 #### index
 Returns the profile page of the user you are currently logged in as.
@@ -20,7 +20,7 @@ Route:
 > [domain].[ext]/account
 
 
-#### editaccount
+#### editAccount
 Redirects you to the profile edit page, where you can change your account details.
 Makes use of the [AccountEditForm](../Forms/AccountEditForm.md).
 
