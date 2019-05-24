@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var baseUrl = "localhost:8000";
+    var baseUrl = "vps589558.ovh.net";
     $("#filterForm").hide();
     $("#hideFilters").hide();
     var filters = [];
