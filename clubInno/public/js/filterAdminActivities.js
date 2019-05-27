@@ -101,7 +101,7 @@ function showActivities(activities, user){
 
     activities.forEach(function(activity){
         var card = "      <div class=\"col s12 m4\">\n" +
-            "                <div class=\"card large blue-grey darken-1\">\n" +
+            "                <div class=\"card custom blue-grey darken-1\">\n" +
             "                    <div class=\"card-image\">\n";
         if(activity.main_image == null){
             card += "<img src=\"http://lorempixel.com/800/400/technics\" alt=\"\">\n"
