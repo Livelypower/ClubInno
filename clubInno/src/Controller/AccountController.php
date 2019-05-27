@@ -28,12 +28,11 @@ class AccountController extends AbstractController
      */
     public function index()
     {
-        $activeActivities = $this->getDoctrine()->getRepository(Activity::class)->findBy(array('active' => true));
+        $activeSemester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active' => true));
         $user = $this->getUser();
         $activeGroup = null;
         $activeRegistration = null;
-        if($activeActivities != null){
-            $activeSemester = $activeActivities[0]->getSemester();
+        if($activeSemester != null){
 
             foreach($user->getRegistrations() as $registration){
                 if($registration->getSemester() == $activeSemester){
