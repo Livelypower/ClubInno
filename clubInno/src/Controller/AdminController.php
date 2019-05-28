@@ -31,14 +31,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 class AdminController extends AbstractController
 {
     /**
-     * @Route("/admin", name="admin")
-     */
-    public function index()
-    {
-        return $this->render('admin/index.html.twig');
-    }
-
-    /**
      * @Route("/admin/listApplications", name="admin_application_list")
      */
     public function listApplications()
@@ -79,15 +71,6 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/applicationDetail/{id}", requirements={"id": "\d+"}, name="admin_application_show")
-     */
-    public function applicationDetail(Application $application)
-    {
-
-        return $this->render('admin/application_show.html.twig');
-    }
-
-    /**
      * @Route("/admin/activities", name="admin_list_activities")
      */
     public function listActivities()
@@ -102,7 +85,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("/admin/listUsers/", name="admin_list_users")
+     * @Route("/admin/listUsers", name="admin_list_users")
      */
     public function listUsers(Request $request)
     {
@@ -516,7 +499,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("admin/semester/setactive", name="admin_semester")
+     * @Route("admin/semester", name="admin_semester")
      */
     public function semester(Request $request)
     {
@@ -530,7 +513,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @Route("admin/semester/setactive/{id}/", requirements={"id": "\d+"}, name="admin_set_active_semester")
+     * @Route("admin/semester/setactive/{id}", requirements={"id": "\d+"}, name="admin_set_active_semester")
      */
     public function setActiveSemester(int $id)
     {

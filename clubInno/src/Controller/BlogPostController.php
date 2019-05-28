@@ -159,7 +159,7 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/blog/activity/{id}", requirements={"id": "\d+"}, name="blog_activity")
      */
-    public function showBlogsPostsPerActivity(Activity $activity){
+    public function showBlogPostsPerActivity(Activity $activity){
         $allBlogs = $this->getDoctrine()->getRepository(BlogPost::class)->findAll();
         $blogs = array();
 
@@ -188,7 +188,7 @@ class BlogPostController extends AbstractController
     /**
      * @Route("/blog/delete/{id}", requirements={"id": "\d+"}, name="blog_delete")
      */
-    public function deleteBlog(BlogPost $blogPost){
+    public function deleteBlogPost(BlogPost $blogPost){
         $user = $this->getUser();
 
         if(in_array('ROLE_ADMIN', $user->getRoles()) || $user->getId() == $blogPost->getUser()->getId()){
@@ -290,7 +290,7 @@ class BlogPostController extends AbstractController
     }
 
     /**
-     * @Route("/blog/delete/{id}file/{name}", requirements={"id": "\d+"}, name="blog_file_delete")
+     * @Route("/blog/delete/{id}/file/{name}", requirements={"id": "\d+"}, name="blog_file_delete")
      */
     public function deleteBlogFile(Request $request, BlogPost $blogPost, $name){
         $user = $this->getUser();
