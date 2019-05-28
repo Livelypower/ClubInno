@@ -105,10 +105,10 @@
     <li><a href="{{ path('account') }}">Mon profil <i class="medium material-icons">account_circle</i></a></li>
     {% if is_granted('ROLE_USER') and not is_granted('ROLE_ADMIN') %}
             <li><a href="{{ path('account_basket') }}">Mon panier <i class="medium material-icons">shopping_basket</i></a></li>
-            <li><a href="{{ path('account_applications') }}">Mes applications <i class="medium material-icons">developer_board</i></a></li>
+            <li><a href="{{ path('account_applications') }}">Mes candidatures <i class="medium material-icons">developer_board</i></a></li>
         {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
-            <li><a href="{{ path('admin_application_list') }}">Toutes les applications <i class="medium material-icons">shopping_basket</i></a></li>
+            <li><a href="{{ path('admin_application_list') }}">Toutes les candidatures <i class="medium material-icons">shopping_basket</i></a></li>
         {% endif %}
         {% if is_granted('ROLE_ADMIN') %}
                 <li><a href="{{ path('admin_calendar') }}">Calendrier des admins<i class="medium material-icons">event</i></a></li>
