@@ -141,8 +141,9 @@ class AccountController extends AbstractController
             $application = new Application();
             $user = $this->getUser();
             $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active'=>1));
-
+            $currentActivities = null;
             $currentActivity = null;
+            $error = '';
 
             foreach ($user->getRegistrations() as $registration){
                 if($registration->getSemester()->getId() == $semester->getId()){
@@ -150,51 +151,83 @@ class AccountController extends AbstractController
                 }
             }
 
-            $form = $this->createForm(ApplicationType::class, $application);
+            foreach ($user->getApplications() as $application){
+                if($application->getSemester()->getId() == $semester->getId()){
+                    if(!empty($application->getActivities())){
+                        $currentActivities = $application->getActivities();
+                    }
+                }
+            }
+
+            $form = $this->createForm(ApplicationType::class);
 
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
-                $file = $form->get('motivationLetterPath')->getData();
-                $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
-
-                try {
-                    $file->move(
-                        $this->getParameter('uploads_directory'),
-                        $fileName
-                    );
-                } catch (FileException $e) {
-                    // ... handle exception if something happens during file upload
-                }
-
-                $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active' => 1));
-
-                $usr= $this->getUser();
-                $application->setMotivationLetterPath($fileName);
-                $application->setUser($usr);
-                $application->setDate(new \DateTime('now'));
-                $application->setSemester($semester);
-
                 $session = $this->get('session');
-                $activities = array();
-                if($session->has('basket')){
-                    foreach($session->get('basket') as $item){
-                        $activity = $this->getDoctrine()->getRepository(Activity::class)->findOneBy(array('id'=>$item->getId()));
-                        array_push($activities, $activity);
+                if($session->has("basket")){
+                    if(count($session->get('basket')) != 0 || count($currentActivities) != 0){
+                        $file = $form->get('motivationLetterPath')->getData();
+                        $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+
+                        try {
+                            $file->move(
+                                $this->getParameter('uploads_directory'),
+                                $fileName
+                            );
+                        } catch (FileException $e) {
+                            // ... handle exception if something happens during file upload
+                        }
+
+                        $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active' => 1));
+
+                        $usr= $this->getUser();
+                        $application->setMotivationLetterPath($fileName);
+                        $application->setUser($usr);
+                        $application->setDate(new \DateTime('now'));
+                        $application->setSemester($semester);
+
+
+                        $activities = array();
+                        if($session->has('basket')){
+                            foreach($session->get('basket') as $item){
+                                $activity = $this->getDoctrine()->getRepository(Activity::class)->findOneBy(array('id'=>$item->getId()));
+                                array_push($activities, $activity);
+                            }
+                            if($currentActivities != null){
+                                foreach($currentActivities as $item){
+                                    $activity = $this->getDoctrine()->getRepository(Activity::class)->findOneBy(array('id'=>$item->getId()));
+                                    if(!in_array($activity, $activities)){
+                                        array_push($activities, $activity);
+                                    }
+                                }
+                            }
+
+                        }
+                        $application->setActivities($activities);
+
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($application);
+                        $em->flush();
+                    }
+                    else{
+                        $error = "Choisir une activité.";
+                        return $this->render('account/basket.html.twig', [
+                            'form' => $form->createView(),
+                            'error' => $error,
+                            'currentActivity' => $currentActivity,
+                            'currentActivities' => $currentActivities
+                        ]);
                     }
                 }
-                $application->setActivities($activities);
-
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($application);
-                $em->flush();
-
                 return $this->redirectToRoute('account_basket_clear');
             }
 
             return $this->render('account/basket.html.twig', [
                 'form' => $form->createView(),
-                'currentActivity' => $currentActivity
+                'error' => $error,
+                'currentActivity' => $currentActivity,
+                'currentActivities' => $currentActivities
             ]);
         }
         else{
@@ -234,6 +267,81 @@ class AccountController extends AbstractController
                 $session = $this->get('session');
                 $session->set('basket', array());
             }
+
+            return $this->redirectToRoute('account_basket');
+        }else{
+            throw new AccessDeniedException();
+        }
+    }
+
+    /**
+     * @Route("/account/basket/delete/cand/{id}", requirements={"id": "\d+"}, name="account_basket_delete_cand")
+     */
+    public function deleteFromCandidature(Activity $activity){
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+        $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active'=>1));
+
+        if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)) {
+            $currentActivities = null;
+            foreach ($user->getApplications() as $application){
+                if($application->getSemester()->getId() == $semester->getId()){
+                    $currentApplication = $application;
+                    if(!empty($application->getActivities())){
+                        $currentActivities = $application->getActivities();
+                    }
+                }
+            }
+
+            $ctr = 0;
+
+            foreach($currentActivities as $currentActivity){
+                if($activity->getId() == $currentActivity->getId()){
+                    unset($currentActivities[$ctr]);
+                }
+                $ctr++;
+            }
+
+            $application = $this->getDoctrine()->getRepository(Application::class)->find($currentApplication->getId());
+
+
+            if(count($currentActivities) == 0){
+                $em = $this->getDoctrine()->getManager();
+                $em->remove($application);
+                $em->flush();
+            }else{
+                $application->setActivities($currentActivities);
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($application);
+                $em->flush();
+            }
+
+            return $this->redirectToRoute("account_basket");
+        }else{
+            throw new AccessDeniedException();
+        }
+    }
+
+    /**
+     * @Route("/account/basket/clear/cand", name="account_basket_clear_cand")
+     */
+    public function clearCandidature(){
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+        $semester = $this->getDoctrine()->getRepository(Semester::class)->findOneBy(array('active'=>1));
+
+        if(in_array('ROLE_USER', $roles) && !in_array('ROLE_ADMIN', $roles) && !in_array('ROLE_TEACHER', $roles)) {
+
+            foreach ($user->getApplications() as $application){
+                if($application->getSemester()->getId() == $semester->getId()){
+                    $currentApplication = $application;
+                }
+            }
+
+            $application = $this->getDoctrine()->getRepository(Application::class)->find($currentApplication->getId());
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($application);
+            $em->flush();
 
             return $this->redirectToRoute('account_basket');
         }else{

@@ -2,10 +2,13 @@
 
 namespace App\Security;
 
+use App\Entity\Semester;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
+use function Sodium\add;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
@@ -97,4 +100,16 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     {
         return $this->urlGenerator->generate('app_login');
     }
+
+   /* private function addToBasket($activities){
+        if (!$this->get('session')->isStarted()) {
+            $session = new Session();
+            $session->start();
+        } else {
+            $session = $this->get('session');
+        }
+
+        $basket = $activities;
+        $session->set('basket', $basket);
+    }*/
 }

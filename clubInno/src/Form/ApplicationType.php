@@ -9,20 +9,12 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use App\Entity\Tag;
-use App\Entity\Image;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 class ApplicationType extends AbstractType
 {
@@ -31,7 +23,16 @@ class ApplicationType extends AbstractType
         $builder
             ->add('motivationLetterPath', FileType::class, [
                 'required' => true,
-                'label' => 'Lettre de motivation'
+                'label' => 'Lettre de motivation',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Ajoutez une lettre de motivation.'
+                    ]),
+                    New File([
+                        'maxSize' => "2048k",
+                        'maxSizeMessage' =>"Le fichier est trop gros!"
+                    ])
+                ]
             ])
             ->add('save', SubmitType::class, ['label' => 'Envoyez']);
 
